@@ -47,7 +47,7 @@ class _SellerSignUpPageState extends State<SellerSignUpPage> {
                   'As a Seller we need an additional information for you please fill below form complete the registration',
               textSize: 24,
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             SellerSignUpForm(

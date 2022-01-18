@@ -13,23 +13,6 @@ class UserController {
     return _auth.currentUser;
   }
 
-  Future<bool> isAlreadyLogged(String number) async {
-    await FirebaseFirestore.instance
-        .collection(FirebaseCollections.Users)
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        print(doc["mobileNumber"]);
-        if (doc["mobileNumber"] == number)
-          return true;
-        else
-          return false;
-      });
-    });
-
-    return null;
-  }
-
   Future<bool> addUser(UserModel user) async {
     // Call the user's CollectionReference to add a new user
     var res = false;

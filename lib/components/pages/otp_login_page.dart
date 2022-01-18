@@ -93,7 +93,7 @@ class _OtpLoginPage extends State<OtpLoginPage> {
   }
 
   Future<bool> isNumberAlreadyHaveAccount() async {
-    var number = '+94 076 8407950'; //_numberController.text ;
+    var number = TESTNUMBER; //_numberController.text ;
     var res = await userController.isNumberAlreadyHaveAccount(number);
     print("res:isNumberAlreadyHaveAccount ${res}");
     if (res) {

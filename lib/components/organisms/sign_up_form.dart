@@ -40,7 +40,7 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   Future<bool> isNumberAlreadyHaveAccount() async {
-    var number = '+94 076 8407950'; //_numberController.text ;
+    var number = TESTNUMBER; //phoneNumberController.textt ;
     var res = await userController.isNumberAlreadyHaveAccount(number);
     print("res:isNumberAlreadyHaveAccount ${res}");
     if (res) {
@@ -58,7 +58,7 @@ class _SignUpFormState extends State<SignUpForm> {
     var param = {
       'name': nameController.text,
       'address': addressController.text,
-      'phoneNumber': phoneNumberController.text,
+      'phoneNumber': TESTNUMBER, //phoneNumberController.text,
       'city': city,
       'role': role
     };

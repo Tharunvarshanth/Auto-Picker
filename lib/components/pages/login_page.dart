@@ -1,6 +1,7 @@
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
+import 'package:auto_picker/components/pages/google_signin_login_page.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -57,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                             navigate(context, RouteGenerator.otpLogin);
                           },
                         )),
-                    SizedBox(
+                    const SizedBox(
                       //Use of SizedBox
                       height: 20,
                     ),
@@ -69,7 +70,16 @@ class _LoginPageState extends State<LoginPage> {
                           text: 'LOGIN WITH EMAIL',
                           paddingVertical: 20,
                           paddingHorizontal: 50,
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const GoogleLinkingPage(
+                                  isLinkingPage: false,
+                                ),
+                              ),
+                            );
+                          },
                         ))
                   ]),
               Row(

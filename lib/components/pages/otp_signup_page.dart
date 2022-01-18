@@ -4,6 +4,7 @@ import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/single_digit_field.dart';
+import 'package:auto_picker/components/pages/google_signin_login_page.dart';
 import 'package:auto_picker/components/pages/home_page.dart';
 import 'package:auto_picker/models/account.dart';
 import 'package:auto_picker/models/mechanic.dart';
@@ -57,7 +58,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
   }
 
   Future<bool> isNumberAlreadyHaveAccount() async {
-    var number = '+94 076 8407950'; //_numberController.text ;
+    var number = TESTNUMBER; //_numberController.text ;
     var res = await userController.isNumberAlreadyHaveAccount(number);
     print("res:isNumberAlreadyHaveAccount ${res}");
     if (res) {
@@ -119,9 +120,14 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
       isLoading = false;
     });
     if (resUser && resOther) {
-      userInfo.saveUser(true, fireUser, widget.params["phoneNumber"], "");
-      navigate(context, RouteGenerator.homePage);
-      //Navigate to home
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const GoogleLinkingPage(
+            isLinkingPage: true,
+          ),
+        ),
+      );
     } else {
       // error pop up
     }
@@ -133,7 +139,14 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
     });
     if (resUser && resOther) {
       userInfo.saveUser(true, fireUser, widget.params["phoneNumber"], "");
-      navigate(context, RouteGenerator.homePage);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const GoogleLinkingPage(
+            isLinkingPage: true,
+          ),
+        ),
+      );
       //Navigate to home
     } else {
       // error pop up
@@ -184,7 +197,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
   }
 
   void _verifyPhone() async {
-    var testingNumber = "+94 077 2732976";
+    var testingNumber = TESTNUMBER;
     await auth.verifyPhoneNumber(
       phoneNumber: testingNumber,
       timeout: const Duration(seconds: 60),
