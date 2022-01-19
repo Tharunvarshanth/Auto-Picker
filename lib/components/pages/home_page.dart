@@ -55,10 +55,15 @@ class _HomePageState extends State<HomePage> {
           isLogged: isLogged,
           showBackButton: false,
         ),
-        body: Center(
-            child: GenericButton(
-          text: 'Logout',
-          onPressed: () => signOut(),
-        )));
+        body: Column(children: [
+          GenericButton(
+            text: 'Logout',
+            onPressed: () => signOut(),
+          ),
+          GenericButton(
+            text: 'Profile',
+            onPressed: () => navigate(context, RouteGenerator.profilePage),
+          ),
+        ]));
   }
 }

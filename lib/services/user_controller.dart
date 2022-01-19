@@ -40,14 +40,18 @@ class UserController {
     return res;
   }
 
-  Future<UserModel> getUser(String uid) async {
+  getUser(String uid) async {
+    var res;
     await users.doc(uid).get().then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
-        print('Document exists on the database');
-        return documentSnapshot;
+        print('Document data: ${documentSnapshot.data()}');
+        res = documentSnapshot.data();
+      } else {
+        print('Document does not exist on the database');
+        res = false;
       }
-      return null;
     });
+    return res;
   }
 
   Future<List<UserModel>> getUsers() async {

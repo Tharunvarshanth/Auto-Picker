@@ -32,4 +32,4 @@ class FirebaseCollections {
   static const OrdersList = 'ordersList';
 }
 
-const TESTNUMBER = "+94772732976";
+const TESTNUMBER = "+94768407950";

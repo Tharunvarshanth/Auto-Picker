@@ -32,10 +32,26 @@ class Mechanic {
     return this.id;
   }
 
+  factory Mechanic.fromJson(dynamic json) {
+    return Mechanic(
+      json["workingAddress"],
+      json["id"],
+      json["workingCity"],
+      json["workingTime_To"],
+      json["workingTime_From"],
+      json["specialist"],
+      json["accountCreatedDate"],
+      json["isBlocked"],
+      json["location_lat"],
+      json["location_lon"],
+    );
+  }
+
   Map<String, Object> toJson() {
     return {
       'workingAddress': workingAddress,
       'id': id,
+      'workingCity': workingCity,
       'workingTime_To': workingTime_To,
       'workingTime_From': workingTime_From,
       'specialist': specialist,

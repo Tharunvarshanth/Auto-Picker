@@ -21,6 +21,18 @@ class Seller {
     this.id = id;
   }
 
+  factory Seller.fromJson(dynamic json) {
+    return Seller(
+      json["shopName"],
+      json["id"],
+      json["address"],
+      json["city"],
+      json["contactDetails"],
+      json["accountCreatedDate"],
+      json["isBlocked"],
+    );
+  }
+
   String getId() {
     return this.id;
   }

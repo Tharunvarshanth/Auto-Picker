@@ -5,6 +5,7 @@ import 'package:auto_picker/components/pages/map_page.dart';
 import 'package:auto_picker/components/pages/mechanics_signup_page.dart';
 import 'package:auto_picker/components/pages/otp_login_page.dart';
 import 'package:auto_picker/components/pages/otp_signup_page.dart';
+import 'package:auto_picker/components/pages/profile_page.dart';
 import 'package:auto_picker/components/pages/seller_signup_page.dart';
 import 'package:auto_picker/components/pages/sign_up_page.dart';
 import 'package:auto_picker/components/pages/splash_page.dart';
@@ -25,6 +26,7 @@ class RouteGenerator {
   static const String sellerSignup = '/sellerSignUp';
   static const String mapLatLonGetter = '/mapLatLonGetter';
   static const String googleLinkLogin = '/googleLinkLogin';
+  static const String profilePage = 'profilePage';
 
   RouteGenerator._() {}
 
@@ -53,6 +55,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => MapLatLonPage());
       case googleLinkLogin:
         return MaterialPageRoute(builder: (_) => const GoogleLinkingPage());
+      case profilePage:
+        return MaterialPageRoute(builder: (_) => const ProfilePage());
       case testPage:
         return MaterialPageRoute(builder: (_) => const TestPage());
       default:

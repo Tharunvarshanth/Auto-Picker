@@ -7,7 +7,7 @@ class CustomAppBar extends StatefulWidget with PreferredSizeWidget {
   final String title;
   final bool isLogged;
   final bool showBackButton;
-  const CustomAppBar({this.title, this.isLogged, this.showBackButton});
+  const CustomAppBar({this.title, this.isLogged = true, this.showBackButton});
 
   @override
   _AppBarState createState() => _AppBarState();
