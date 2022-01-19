@@ -177,7 +177,12 @@ class _OtpLoginPage extends State<OtpLoginPage> {
     return Scaffold(
         body: SafeArea(
       child: Stack(children: [
-        if (isLoading) CircularProgressIndicator(),
+        if (isLoading)
+          Container(
+              alignment: Alignment.center,
+              child: CircularProgressIndicator(
+                color: AppColors.blue,
+              )),
         IconButton(
           padding: EdgeInsets.all(12),
           iconSize: 40,

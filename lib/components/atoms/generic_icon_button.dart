@@ -10,7 +10,6 @@ class Home extends StatelessWidget {
           child: GenericIconButton(
         onPressed: () {},
         text: ('this is text'),
-        iconLeft: false,
       )),
     );
   }
@@ -25,7 +24,7 @@ class GenericIconButton extends StatelessWidget {
   Color shadowColor;
   double borderRadius;
   EdgeInsets padding;
-  bool iconLeft;
+  Icon iconLeft;
   GenericIconButton(
       {Key key,
       this.backgroundColor,
@@ -35,7 +34,7 @@ class GenericIconButton extends StatelessWidget {
       this.shadowColor,
       this.borderRadius,
       this.padding,
-      this.iconLeft = true,
+      this.iconLeft,
       this.text})
       : super(key: key);
 
@@ -43,8 +42,8 @@ class GenericIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       onPressed: onPressed,
-      icon: iconLeft ? Icon(Icons.share) : Text(text),
-      label: iconLeft ? Text(text) : Icon(Icons.share),
+      icon: iconLeft != null ? iconLeft : Text(text),
+      label: iconLeft != null ? Text(text) : iconLeft,
       style: ElevatedButton.styleFrom(
           shadowColor: shadowColor ?? Colors.grey,
           elevation: 15,
