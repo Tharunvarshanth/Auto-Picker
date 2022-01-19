@@ -138,7 +138,8 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
       isLoading = false;
     });
     if (resUser && resOther) {
-      userInfo.saveUser(true, fireUser, widget.params["phoneNumber"], "");
+      userInfo.saveUser(true, fireUser, widget.params["phoneNumber"], "",
+          widget.params["role"]);
       Navigator.push(
         context,
         MaterialPageRoute(

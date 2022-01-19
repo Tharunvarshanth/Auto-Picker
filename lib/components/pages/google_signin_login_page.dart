@@ -54,8 +54,12 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
     if (linkauthresult != null) {
       var existing = FirebaseAuth.instance.currentUser;
       print("existingUser ${existing.phoneNumber}  ${existing.email}  ");
-      userInfo.saveUser(
-          true, existingUser.uid, existing.phoneNumber, existing.email);
+      await userController.updateUserField(
+          existingUser.uid, 'email', existing.email);
+
+      var user = await userController.getUser((existingUser.uid));
+      userInfo.saveUser(true, existingUser.uid, existing.phoneNumber,
+          existing.email, user['role']);
       navigate(context, RouteGenerator.homePage);
     } else {
       //error popup
@@ -79,9 +83,9 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
     // Once signed in, return the UserCredential
     var userCred = await FirebaseAuth.instance.signInWithCredential(credential);
     var existingUser = FirebaseAuth.instance.currentUser;
-    print("existingUser ${existingUser.phoneNumber}  ${existingUser.email}  ");
-    await userInfo.saveUser(
-        true, existingUser.uid, existingUser.phoneNumber, existingUser.email);
+    var user = await userController.getUser((existingUser.uid));
+    await userInfo.saveUser(true, existingUser.uid, existingUser.phoneNumber,
+        existingUser.email, user['role']);
     if (userCred != null) {
       navigate(context, RouteGenerator.homePage);
     } else {
