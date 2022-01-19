@@ -107,7 +107,7 @@ class _OtpLoginPage extends State<OtpLoginPage> {
   }
 
   void _verifyPhone() async {
-    var testingNumber = "+94 076 8407950";
+    var testingNumber = TESTNUMBER;
     await auth.verifyPhoneNumber(
       phoneNumber: testingNumber,
       timeout: const Duration(seconds: 60),
@@ -217,6 +217,11 @@ class _OtpLoginPage extends State<OtpLoginPage> {
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
+                              GenericText(
+                                text: 'Otp Login',
+                                isBold: true,
+                                textSize: 30,
+                              ),
                               SingleDigitField(
                                 widthPercentage: 0.1,
                                 fontSize: 16,
