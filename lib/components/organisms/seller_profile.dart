@@ -1,4 +1,7 @@
+import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/text_description.dart';
+import 'package:auto_picker/components/atoms/text_description_with_button.dart';
+import 'package:auto_picker/components/pages/add_new_product.dart';
 import 'package:auto_picker/models/seller.dart';
 import 'package:flutter/material.dart';
 
@@ -21,6 +24,22 @@ class _SellerProfilePageState extends State<SellerProfilePage> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        const SizedBox(
+          height: 5,
+        ),
+        GenericText(
+          text: 'Shop Controll',
+          textSize: 30,
+          isBold: true,
+        ),
+        TextDescriptionWithButton(
+          title: 'Add New Product',
+          description: 'You can add new products to your shop collections',
+          onPress: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddNewProductPage()),
+          ),
+        ),
         TextDescription(
           title: widget.seller.address,
           description: 'Shop Address',

@@ -85,10 +85,12 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         body: SingleChildScrollView(
           child: isLoading
-              ? Container(
-                  alignment: Alignment.center,
-                  child: const CircularProgressIndicator(
-                    color: AppColors.blue,
+              ? SizedBox(
+                  height: MediaQuery.of(context).size.height / 1.3,
+                  child: const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.blue,
+                    ),
                   ))
               : Container(
                   padding: EdgeInsets.fromLTRB(7.5, 20, 7.5, 10),
