@@ -61,22 +61,24 @@ class _HomePageState extends State<HomePage> {
             text: 'Logout',
             onPressed: () => signOut(),
           ),
-          GenericButton(
-            text: 'Profile',
-            onPressed: () => navigate(context, RouteGenerator.profilePage),
-          ),
-          GenericButton(
-            text: 'Payment',
-            onPressed: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AdvertisementPaymentPage(
-                      params: {'adId': '728vjzix16tEfYpBZNNQ'}),
-                ),
-              )
-            },
-          ),
+          if (isLogged)
+            GenericButton(
+              text: 'Profile',
+              onPressed: () => navigate(context, RouteGenerator.profilePage),
+            ),
+          if (isLogged)
+            GenericButton(
+              text: 'Payment',
+              onPressed: () => {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AdvertisementPaymentPage(
+                        params: {'adId': '728vjzix16tEfYpBZNNQ'}),
+                  ),
+                )
+              },
+            ),
         ]));
   }
 }
