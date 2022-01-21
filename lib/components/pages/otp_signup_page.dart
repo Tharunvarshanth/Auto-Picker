@@ -20,7 +20,6 @@ import 'package:auto_picker/utilities/constands.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sms_autofill/sms_autofill.dart';
 
 class OtpSignUpPage extends StatefulWidget {
   final Map<String, String> params;
@@ -138,7 +137,8 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
       isLoading = false;
     });
     if (resUser && resOther) {
-      userInfo.saveUser(true, fireUser, widget.params["phoneNumber"], "");
+      userInfo.saveUser(true, fireUser, widget.params["phoneNumber"], "",
+          widget.params["role"]);
       Navigator.push(
         context,
         MaterialPageRoute(

@@ -1,4 +1,6 @@
+import 'package:auto_picker/themes/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class Home extends StatelessWidget {
   const Home({Key key}) : super(key: key);
@@ -24,7 +26,7 @@ class GenericIconButton extends StatelessWidget {
   Color shadowColor;
   double borderRadius;
   EdgeInsets padding;
-  Icon iconLeft;
+  String iconLeft;
   GenericIconButton(
       {Key key,
       this.backgroundColor,
@@ -42,19 +44,19 @@ class GenericIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       onPressed: onPressed,
-      icon: iconLeft != null ? iconLeft : Text(text),
+      icon: SvgPicture.asset(iconLeft),
       label: iconLeft != null ? Text(text) : iconLeft,
       style: ElevatedButton.styleFrom(
           shadowColor: shadowColor ?? Colors.grey,
           elevation: 15,
-          primary: backgroundColor ?? Colors.white,
+          primary: backgroundColor ?? AppColors.white,
           onPrimary: textColor ?? Colors.blue,
           padding: padding ??
               const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(borderRadius ?? 5),
               side: BorderSide(
-                  color: borderColor ?? Colors.grey,
+                  color: borderColor ?? backgroundColor ?? AppColors.white,
                   width: 1,
                   style: BorderStyle.solid))),
     );

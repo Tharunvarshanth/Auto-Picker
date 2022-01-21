@@ -50,8 +50,6 @@ dependencies:
   payhere_mobilesdk_flutter: ^1.2.1
   super_tooltip: ^1.0.1
   carousel_slider: ^4.0.0
-  otp_autofill: ^2.1.0
-  sms_autofill: ^2.2.0
   date_time_picker: ^2.1.0
   flutter_localizations: 
     sdk: flutter
@@ -60,6 +58,10 @@ dependencies:
   google_maps_flutter: ^2.1.1
   geocode: ^1.0.1
   http: ^0.13.4
+  circular_profile_avatar: ^2.0.5
+  flutter_svg: ^1.0.2
+  multi_image_picker2: ^5.0.02
+  simple_moment: ^1.1.1
 
 dev_dependencies:
   flutter_test:

@@ -50,14 +50,17 @@ class SellerController {
     });
   }
 
-  Future<Seller> getSeller(String uid) async {
+  getSeller(String uid) async {
+    var res;
     await sellers.doc(uid).get().then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
         print('Document exists on the database');
-        return documentSnapshot;
+        res = documentSnapshot.data();
+      } else {
+        res = null;
       }
-      return null;
     });
+    return res;
   }
 
   Future<List<Seller>> getSellers() async {

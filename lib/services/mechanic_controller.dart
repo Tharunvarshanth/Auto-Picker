@@ -18,14 +18,17 @@ class MechanicController {
     return res;
   }
 
-  Future<Mechanic> getMechanic(String uid) async {
+  getMechanic(String uid) async {
+    var res;
     await mechanics.doc(uid).get().then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
         print('Document exists on the database');
-        return documentSnapshot;
+        res = documentSnapshot.data();
+      } else {
+        res = false;
       }
-      return null;
     });
+    return res;
   }
 
   Future<List<Mechanic>> getMechanics() async {

@@ -61,6 +61,15 @@ class _OtpLoginPage extends State<OtpLoginPage> {
   }
 
   //testng devices
+  void redirect(UserCredential user) async {
+    var _user = await userController.getUser((user.user.uid));
+    print(_user['role']);
+    await userInfo.saveUser(
+        true, user.user.uid, user.user.phoneNumber, '', _user["role"]);
+    navigate(context, RouteGenerator.homePage);
+  }
+
+  //testng devices
   void autoOtpSubmit() async {
     setState(() {
       isLoading = true;
@@ -73,10 +82,7 @@ class _OtpLoginPage extends State<OtpLoginPage> {
                 //sign in was success
                 if (user != null)
                   {
-                    print("sign in user:1 ${user.user.phoneNumber}"),
-                    await userInfo.saveUser(
-                        true, user.user.uid, user.user.phoneNumber, ''),
-                    navigate(context, RouteGenerator.homePage)
+                    redirect(user),
                   }
               })
           // ignore: invalid_return_type_for_catch_error
@@ -118,8 +124,9 @@ class _OtpLoginPage extends State<OtpLoginPage> {
         });
         auth.signInWithCredential(credential).then((value) async {
           if (value.user != null) {
+            var user = await userController.getUser((value.user.uid));
             await userInfo.saveUser(
-                true, value.user.uid, value.user.phoneNumber, '');
+                true, value.user.uid, value.user.phoneNumber, '', user["role"]);
             navigate(context, RouteGenerator.homePage);
           }
         });
@@ -218,15 +225,19 @@ class _OtpLoginPage extends State<OtpLoginPage> {
               : Column(
                   children: [
                     Padding(
+                      padding: EdgeInsets.all(50),
+                      child: GenericText(
+                        text: 'Otp Login',
+                        isBold: true,
+                        textSize: 30,
+                      ),
+                    ),
+                    Padding(
                         padding: EdgeInsets.fromLTRB(0, 50, 0, 50),
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              GenericText(
-                                text: 'Otp Login',
-                                isBold: true,
-                                textSize: 30,
-                              ),
+                              SizedBox(height: 10),
                               SingleDigitField(
                                 widthPercentage: 0.1,
                                 fontSize: 16,

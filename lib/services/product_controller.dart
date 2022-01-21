@@ -6,19 +6,29 @@ class ProductController {
   static CollectionReference products =
       FirebaseFirestore.instance.collection(FirebaseCollections.Products);
 
-  Future<bool> addProduct(Product product) async {
+  Future<dynamic> addProduct(Product product) async {
+    var res;
     await products
         .doc(product.getUId())
         .collection(FirebaseCollections.ProductsList)
-        .doc()
-        .set(product.toJson())
+        .add(product.toJson())
         .then((value) {
-      print("addProduct:success");
-      return true;
+      print("add product ${value.id}");
+      res = value.id;
     }).catchError((onError) {
       print("addProduct: $onError");
-      return false;
+      res = null;
     });
+    return res;
+  }
+
+  getRecentlyAddedProduct(String uid, Product product) async {
+    var res;
+    await products
+        .doc(uid)
+        .collection(FirebaseCollections.ProductsList)
+        .where('imagesList', isNull: true)
+        .get();
   }
 
 //Need to do like this https://github.com/sbis04/flutterfire-samples/blob/crud-firestore/lib/widgets/item_list.dart
@@ -45,16 +55,18 @@ class ProductController {
         .get();
   }
 
-  Future<dynamic> updateProduct(String Uid, String pId, Product product) async {
-    return await products
+  Future<dynamic> updateProduct(
+      String Uid, String pId, List<String> imageList) async {
+    var res;
+    await products
         .doc(Uid)
         .collection(FirebaseCollections.ProductsList)
         .doc(pId)
-        .update(product.toJson())
-        .whenComplete(() {
-      return true;
+        .update({'imagesList': imageList}).whenComplete(() {
+      res = true;
     }).onError((error, stackTrace) {
-      return false;
+      res = false;
     });
+    return res;
   }
 }

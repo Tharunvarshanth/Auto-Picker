@@ -8,20 +8,21 @@ class AdvertisementController {
   static CollectionReference advertisements =
       FirebaseFirestore.instance.collection(FirebaseCollections.Advertisement);
 
-  Future<bool> addAdvertisment(
+  Future<dynamic> addAdvertisment(
       String uId, SpareAdvertisement spareAdvertisement) async {
+    var res;
     await advertisements
         .doc(uId)
         .collection(FirebaseCollections.AdvertisementList)
-        .doc()
-        .set(spareAdvertisement.toJson())
+        .add(spareAdvertisement.toJson())
         .then((value) {
       print("addSpareAdvertisement:success");
-      return true;
+      res = value.id;
     }).catchError((onError) {
       print("addSpareAdvertisement: $onError");
-      return false;
+      res = null;
     });
+    return res;
   }
 
   Future<dynamic> getAdvertisments() async {
@@ -39,16 +40,33 @@ class AdvertisementController {
   }
 
   Future<dynamic> updateAdvertisement(
-      String Uid, String aId, SpareAdvertisement spareAdvertisement) async {
-    return await advertisements
+      String Uid, String aId, String field, dynamic value) async {
+    var res;
+    await advertisements
         .doc(Uid)
-        .collection(FirebaseCollections.ProductsList)
+        .collection(FirebaseCollections.AdvertisementList)
         .doc(aId)
-        .update(spareAdvertisement.toJson())
-        .whenComplete(() {
-      return true;
+        .update({field: value}).whenComplete(() {
+      res = true;
     }).onError((error, stackTrace) {
-      return false;
+      res = false;
     });
+    return res;
+  }
+
+  Future<dynamic> updateManyAdvertisement(
+      String Uid, String aId, dynamic value) async {
+    var res;
+    await advertisements
+        .doc(Uid)
+        .collection(FirebaseCollections.AdvertisementList)
+        .doc(aId)
+        .update(value)
+        .whenComplete(() {
+      res = true;
+    }).onError((error, stackTrace) {
+      res = false;
+    });
+    return res;
   }
 }

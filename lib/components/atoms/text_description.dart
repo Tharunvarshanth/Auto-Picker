@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TextDescriptionWithButton extends StatelessWidget {
+class TextDescription extends StatelessWidget {
   String title;
   String description;
   double titleTextSize;
@@ -12,18 +12,18 @@ class TextDescriptionWithButton extends StatelessWidget {
   IconData icon;
   Color borderColor;
   double padding;
-  TextDescriptionWithButton(
+  TextDescription(
       {Key key,
       this.description = 'No Description',
       this.descriptionColor = Colors.black45,
-      this.descriptionTextSize = 20,
+      this.descriptionTextSize = 16,
       this.iconColor = Colors.black,
-      this.iconSize = 48,
+      this.iconSize,
       this.title = 'No Title',
       this.titleColor = Colors.black,
-      this.titleTextSize = 24,
+      this.titleTextSize = 20,
       this.icon = Icons.arrow_right,
-      this.padding = 20,
+      this.padding = 10,
       this.borderColor = Colors.black})
       : super(key: key);
 
@@ -31,7 +31,7 @@ class TextDescriptionWithButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(padding),
-      decoration: BoxDecoration(border: Border.all(color: borderColor)),
+      //decoration: BoxDecoration(border: Border.all(color: borderColor)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -57,16 +57,6 @@ class TextDescriptionWithButton extends StatelessWidget {
               ],
             ),
           ),
-          Expanded(
-            child: IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  icon,
-                  size: iconSize,
-                  color: iconColor,
-                )),
-            flex: 1,
-          )
         ],
       ),
     );

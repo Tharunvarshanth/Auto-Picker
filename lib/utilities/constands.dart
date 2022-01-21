@@ -32,4 +32,6 @@ class FirebaseCollections {
   static const OrdersList = 'ordersList';
 }
 
+const SPAREPARTSCONDITIONLIST = ["Recondition", "Used", "Brand New"];
+
 const TESTNUMBER = "+94772732976";

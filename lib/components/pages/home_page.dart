@@ -1,5 +1,6 @@
 import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/generic_button.dart';
+import 'package:auto_picker/components/pages/advertisement_payment_page.dart';
 import 'package:auto_picker/models/order.dart';
 import 'package:auto_picker/routes.dart';
 import 'package:auto_picker/services/order_controller.dart';
@@ -55,10 +56,29 @@ class _HomePageState extends State<HomePage> {
           isLogged: isLogged,
           showBackButton: false,
         ),
-        body: Center(
-            child: GenericButton(
-          text: 'Logout',
-          onPressed: () => signOut(),
-        )));
+        body: Column(children: [
+          GenericButton(
+            text: 'Logout',
+            onPressed: () => signOut(),
+          ),
+          if (isLogged)
+            GenericButton(
+              text: 'Profile',
+              onPressed: () => navigate(context, RouteGenerator.profilePage),
+            ),
+          if (isLogged)
+            GenericButton(
+              text: 'Payment',
+              onPressed: () => {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AdvertisementPaymentPage(
+                        params: {'adId': '728vjzix16tEfYpBZNNQ'}),
+                  ),
+                )
+              },
+            ),
+        ]));
   }
 }

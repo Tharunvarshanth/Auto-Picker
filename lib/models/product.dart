@@ -1,30 +1,21 @@
 class Product {
   String uid;
   String price;
-  String description;
   String title;
-  String subtitle;
-  String city;
+  String description;
   String condition;
   List<String> imagesList;
 
-  Product(this.uid, this.price, this.description, this.title, this.subtitle,
-      this.city, this.condition, this.imagesList);
+  Product(this.uid, this.price, this.title, this.description, this.condition,
+      this.imagesList);
 
   void updateId(String id) {
     this.uid = id;
   }
 
   factory Product.fromJson(dynamic json) {
-    return Product(
-        json["uid"],
-        json["price"],
-        json["description"],
-        json["title"],
-        json["subtitle"],
-        json["city"],
-        json["condition"],
-        json["imagesList"]);
+    return Product(json["uid"], json["price"], json["title"],
+        json["description"], json["condition"], json["imagesList"]);
   }
 
   String getUId() {
@@ -35,10 +26,8 @@ class Product {
     return {
       'uid': uid,
       'price': price,
-      'description': description,
       'title': title,
-      'subtitle': subtitle,
-      'city': city,
+      'description': description,
       'condition': condition,
       'imagesList': imagesList
     };

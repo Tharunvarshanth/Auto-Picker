@@ -40,13 +40,13 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   Future<bool> isNumberAlreadyHaveAccount() async {
-    var number = TESTNUMBER; //phoneNumberController.textt ;
+    var number = TESTNUMBER; //phoneNumberController.text ;
     var res = await userController.isNumberAlreadyHaveAccount(number);
     print("res:isNumberAlreadyHaveAccount ${res}");
     if (res) {
       //if user has account already  error pop up go login page
       isvalidUser = false;
-      navigate(context, RouteGenerator.loginPage);
+      // navigate(context, RouteGenerator.loginPage);
     } else {
       // if user doesn't have account error pop up go login page
       isvalidUser = true;
