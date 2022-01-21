@@ -1,6 +1,7 @@
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/text_description.dart';
 import 'package:auto_picker/components/atoms/text_description_with_button.dart';
+import 'package:auto_picker/components/pages/add_new_advertisement.dart';
 import 'package:auto_picker/components/pages/add_new_product.dart';
 import 'package:auto_picker/models/seller.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,15 @@ class _SellerProfilePageState extends State<SellerProfilePage> {
           onPress: () => Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const AddNewProductPage()),
+          ),
+        ),
+        TextDescriptionWithButton(
+          title: 'Add Advertisements',
+          description: 'You can add advertisements to your product',
+          onPress: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const AddNewAdvertisementPage()),
           ),
         ),
         TextDescription(

@@ -61,6 +61,7 @@ dependencies:
   circular_profile_avatar: ^2.0.5
   flutter_svg: ^1.0.2
   multi_image_picker2: ^5.0.02
+  simple_moment: ^1.1.1
 
 dev_dependencies:
   flutter_test:

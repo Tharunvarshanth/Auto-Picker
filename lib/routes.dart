@@ -1,3 +1,4 @@
+import 'package:auto_picker/components/pages/add_new_advertisement.dart';
 import 'package:auto_picker/components/pages/google_signin_login_page.dart';
 import 'package:auto_picker/components/pages/home_page.dart';
 import 'package:auto_picker/components/pages/login_page.dart';
@@ -12,6 +13,7 @@ import 'package:auto_picker/components/pages/splash_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'components/pages/advertisement_payment_page.dart';
 import 'components/pages/test_page.dart';
 
 class RouteGenerator {
@@ -26,7 +28,9 @@ class RouteGenerator {
   static const String sellerSignup = '/sellerSignUp';
   static const String mapLatLonGetter = '/mapLatLonGetter';
   static const String googleLinkLogin = '/googleLinkLogin';
-  static const String profilePage = 'profilePage';
+  static const String profilePage = '/profilePage';
+  static const String addNewAdvertisement = '/addNewAdvertisementPage';
+  static const String advertisementPaymentPage = '/advertisementPaymentPage';
 
   RouteGenerator._() {}
 
@@ -57,6 +61,12 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const GoogleLinkingPage());
       case profilePage:
         return MaterialPageRoute(builder: (_) => const ProfilePage());
+      case addNewAdvertisement:
+        return MaterialPageRoute(
+            builder: (_) => const AddNewAdvertisementPage());
+      case advertisementPaymentPage:
+        return MaterialPageRoute(
+            builder: (_) => const AdvertisementPaymentPage());
       case testPage:
         return MaterialPageRoute(builder: (_) => const TestPage());
       default:

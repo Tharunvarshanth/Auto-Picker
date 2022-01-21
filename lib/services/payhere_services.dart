@@ -1,7 +1,7 @@
 import 'package:payhere_mobilesdk_flutter/payhere_mobilesdk_flutter.dart';
 
 class PayhereService {
-  static const merchant_secret = "8gmxWbg0zW28bUDIzVESj24UoZBWaGa7Z4fWUwngVAT1";
+  static const merchant_secret = "4vQwllmb0NO4p87A3Cflp94jqtXX8939W4p5XcHaDpZr";
   static const merchant_id = "1215483";
 
   Map paymentObject = {
@@ -37,17 +37,7 @@ class PayhereService {
     paymentObject["address"] = address;
     paymentObject["delivery_address"] = address;
     paymentObject["delivery_city"] = city;
-
-    PayHere.startPayment(paymentObject, (paymentId) {
-      print("Tokenization Payment Success. Payment Id: $paymentId");
-      return paymentId;
-    }, (error) {
-      print("Tokenization Payment Failed. Error: $error");
-      return error;
-    }, () {
-      print("Tokenization Payment Dismissed");
-      return "Dismissed";
-    });
+    return paymentObject;
   }
 
   recurrencePayment(
