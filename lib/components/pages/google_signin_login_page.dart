@@ -122,6 +122,7 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
                       shadowColor: AppColors.ash,
                       text: 'Link with Google Account',
                       onPressed: () => linkEmailGoogle(),
+                      iconLeft: 'assets/images/at-sign.svg',
                     ),
                   ],
                 ),

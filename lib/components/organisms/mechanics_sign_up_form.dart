@@ -170,8 +170,8 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
                 widget.params['specialist'] = specialistController.text;
                 widget.params['workingCity'] = city;
                 widget.params['address'] = addressController.text;
-                widget.params['workingHoursTo'] = _valueChangedTo;
-                widget.params['workingHoursFrom'] = _valueChangedFrom;
+                widget.params['workingTime_To'] = _valueChangedTo;
+                widget.params['workingTime_From'] = _valueChangedFrom;
 
                 Navigator.push(
                   context,

@@ -42,26 +42,27 @@ class _ImageTileState extends State<ImageTile> {
         padding: EdgeInsets.symmetric(vertical: 0, horizontal: widget.margin),
         child: Stack(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(widget.borderRadius),
-              child: Image.network(
-                widget.imgUrl,
-                fit: BoxFit.cover,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Center(
-                      child: CircularProgressIndicator(
-                    value: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes
-                        : null,
-                  ));
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return Placeholder();
-                },
+            if (widget.imgUrl != null)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(widget.borderRadius),
+                child: Image.network(
+                  widget.imgUrl ?? '',
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                        child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes
+                          : null,
+                    ));
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Placeholder();
+                  },
+                ),
               ),
-            ),
             Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,

@@ -31,14 +31,13 @@ class MechanicController {
     return res;
   }
 
-  Future<List<Mechanic>> getMechanics() async {
-    await mechanics.doc().get().then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        print('Document exists on the database');
-        return documentSnapshot;
-      }
-      return null;
-    });
+  Future<dynamic> getMechanics() async {
+    QuerySnapshot querySnapshot = await mechanics.get();
+    if (querySnapshot.size > 0) {
+      final data = querySnapshot.docs.map((doc) => doc.data()).toList();
+      return data;
+    }
+    return null;
   }
 
   Future<bool> updateMechanic(Mechanic mechanic) async {

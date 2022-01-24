@@ -5,7 +5,7 @@ import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/single_digit_field.dart';
 import 'package:auto_picker/components/pages/google_signin_login_page.dart';
-import 'package:auto_picker/components/pages/home_page.dart';
+import 'package:auto_picker/components/pages/home_page_test.dart';
 import 'package:auto_picker/models/account.dart';
 import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/models/seller.dart';
