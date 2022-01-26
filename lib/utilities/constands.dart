@@ -34,4 +34,4 @@ class FirebaseCollections {
 
 const SPAREPARTSCONDITIONLIST = ["Recondition", "Used", "Brand New"];
 
-const TESTNUMBER = "+94767228993";
+const TESTNUMBER = "+94772732976";
