@@ -1,18 +1,24 @@
+import 'package:auto_picker/themes/colors.dart';
+import 'package:auto_picker/utilities/utils.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/parser.dart';
+
+import '../../routes.dart';
 
 class Footer extends StatelessWidget {
   Color backgroundColor;
   Color iconColor;
   void Function(int index) onTap;
-  List<IconLabelPair> items;
   int currentIndex;
   double elevation;
-
+  bool isLogged;
   double iconSize;
   Color selectedItemColor;
   Color unselectedItemColor;
+
   Footer(
       {Key key,
       this.backgroundColor = Colors.white,
@@ -20,22 +26,41 @@ class Footer extends StatelessWidget {
       this.elevation = 0,
       this.iconColor = Colors.blue,
       this.iconSize = 20,
-      this.items,
+      this.isLogged = false,
       this.onTap,
-      this.selectedItemColor = Colors.lightGreen,
+      this.selectedItemColor = AppColors.black,
       this.unselectedItemColor = Colors.blue})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      items: items
-          .map((e) => BottomNavigationBarItem(
-                icon: e.icon,
-                label: e.label,
-              ))
-          .toList(),
-      onTap: onTap,
+      items: [
+        BottomNavigationBarItem(
+          icon: SvgPicture.asset('assets/images/home.svg'),
+          label: 'Home',
+          activeIcon: SvgPicture.asset('assets/images/home-active.svg'),
+        ),
+        if (isLogged)
+          BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/images/bell.svg'),
+              label: 'Notifications',
+              activeIcon: SvgPicture.asset('assets/images/bell-active.svg')),
+        if (isLogged)
+          BottomNavigationBarItem(
+            icon: SvgPicture.asset('assets/images/user.svg'),
+            activeIcon: SvgPicture.asset('assets/images/user-active.svg'),
+            label: 'Profile',
+          ),
+        BottomNavigationBarItem(
+          icon: SvgPicture.asset('assets/images/menu.svg'),
+          activeIcon: SvgPicture.asset('assets/images/menu-active.svg'),
+          label: 'Menu',
+        ),
+      ],
+      onTap: (value) => {
+        onTap == null ? onTapDefault(value, context) : onTap(value),
+      },
       currentIndex: currentIndex,
       backgroundColor: backgroundColor,
       elevation: elevation,
@@ -44,10 +69,31 @@ class Footer extends StatelessWidget {
       unselectedItemColor: unselectedItemColor,
     );
   }
-}
 
-class IconLabelPair {
-  Icon icon;
-  String label;
-  IconLabelPair({this.icon, this.label});
+  void onTapDefault(int index, BuildContext context) {
+    switch (index) {
+      case 0:
+        {
+          navigate(context, RouteGenerator.homePage);
+        }
+        break;
+      case 1:
+        {
+          isLogged
+              ? navigate(context, RouteGenerator.profilePage)
+              : navigate(context, RouteGenerator.loginPage);
+        }
+        break;
+      case 2:
+        {
+          navigate(context, RouteGenerator.profilePage);
+        }
+        break;
+      case 3:
+        {
+          navigate(context, RouteGenerator.loginPage);
+        }
+        break;
+    }
+  }
 }

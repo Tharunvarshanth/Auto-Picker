@@ -194,11 +194,20 @@ class _HomePageState extends State<HomePage> {
                         height: 20,
                       ),
                       if (advertisementList.length > 0)
-                        GenericText(
-                          text: 'Advertisements',
-                          isBold: true,
-                          textSize: 24,
-                        ),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GenericText(
+                                text: 'Advertisements',
+                                isBold: true,
+                                textSize: 24,
+                              ),
+                              GenericTextButton(
+                                color: AppColors.Blue,
+                                text: 'See All',
+                                onPressed: () {},
+                              ),
+                            ]),
                       const SizedBox(
                         height: 10,
                       ),
@@ -207,11 +216,20 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(
                         height: 20,
                       ),
-                      GenericText(
-                        text: 'Products',
-                        isBold: true,
-                        textSize: 24,
-                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GenericText(
+                              text: 'Products',
+                              isBold: true,
+                              textSize: 24,
+                            ),
+                            GenericTextButton(
+                              color: AppColors.Blue,
+                              text: 'See All',
+                              onPressed: () {},
+                            ),
+                          ]),
                       Container(
                         margin:
                             EdgeInsets.symmetric(vertical: 20, horizontal: 5),
@@ -242,12 +260,8 @@ class _HomePageState extends State<HomePage> {
                   )),
                 ),
                 bottomNavigationBar: Footer(
-                  items: [
-                    IconLabelPair(icon: Icon(Icons.home), label: 'Home'),
-                    IconLabelPair(icon: Icon(Icons.home), label: 'Home'),
-                    IconLabelPair(icon: Icon(Icons.home), label: 'Home'),
-                  ],
-                  onTap: (int index) {},
+                  isLogged: isLogged,
+                  currentIndex: 0,
                 ),
               ));
   }
