@@ -5,14 +5,16 @@ import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/single_digit_field.dart';
 import 'package:auto_picker/components/pages/google_signin_login_page.dart';
-import 'package:auto_picker/components/pages/home_page.dart';
+import 'package:auto_picker/components/pages/home_page_test.dart';
 import 'package:auto_picker/models/account.dart';
 import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/models/seller.dart';
 import 'package:auto_picker/models/user_model.dart';
 import 'package:auto_picker/routes.dart';
 import 'package:auto_picker/services/mechanic_controller.dart';
+import 'package:auto_picker/services/product_controller.dart';
 import 'package:auto_picker/services/seller_controller.dart';
+import 'package:auto_picker/services/spare_advertisement_controller.dart';
 import 'package:auto_picker/services/user_controller.dart';
 import 'package:auto_picker/store/cache/sharedPreferences/user_info.dart';
 import 'package:auto_picker/themes/colors.dart';
@@ -49,6 +51,9 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
   int timerCount = 60;
   Timer _timer;
   bool isvalidUser = true;
+
+  var productController = ProductController();
+  var advertisementController = AdvertisementController();
 
   void initState() {
     super.initState();
@@ -109,6 +114,9 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
               widget.params["accountCreatedDate"] = DateTime.now().toString(),
               false);
           resOther = await sellerController.addSeller(seller);
+          var test1 = await productController.addProductTest(fireUser);
+          var test2 =
+              await advertisementController.addTestAdvertisment(fireUser);
         }
         break;
       default:
@@ -119,6 +127,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
       isLoading = false;
     });
     if (resUser && resOther) {
+      externalTestData(fireUser);
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -130,6 +139,10 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
     } else {
       // error pop up
     }
+  }
+
+  void externalTestData(String uid) {
+    productController.addFirstTimeSignup(uid);
   }
 
   void authComplete(resUser, resOther, fireUser) {

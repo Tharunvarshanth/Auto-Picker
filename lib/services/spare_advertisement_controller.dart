@@ -25,11 +25,8 @@ class AdvertisementController {
     return res;
   }
 
-  Future<dynamic> getAdvertisments() async {
-    return await advertisements
-        .doc()
-        .collection(FirebaseCollections.AdvertisementList)
-        .get();
+  Future<QuerySnapshot> getAdvertisments() async {
+    return await advertisements.get();
   }
 
   Future<dynamic> getAdvertisementsBySeller(String Uid) async {
@@ -66,6 +63,31 @@ class AdvertisementController {
       res = true;
     }).onError((error, stackTrace) {
       res = false;
+    });
+    return res;
+  }
+
+  Future<dynamic> removeAdvertisement(String Uid, String aId) async {
+    var res;
+    await advertisements
+        .doc(Uid)
+        .collection(FirebaseCollections.AdvertisementList)
+        .doc(aId)
+        .delete()
+        .then((value) => res = true)
+        .catchError((error) => res = false);
+
+    return res;
+  }
+
+  Future<dynamic> addTestAdvertisment(String uId) async {
+    var res;
+    await advertisements.doc(uId).set({'test': 'test'}).then((value) {
+      print("addSpareAdvertisement:success");
+      res = true;
+    }).catchError((onError) {
+      print("addSpareAdvertisement: $onError");
+      res = null;
     });
     return res;
   }

@@ -66,14 +66,17 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
         productTitleController.text,
         descriptionController.text,
         condition,
-        imageList);
+        imageList,
+        '');
     var res = await productController.addProduct(product);
     if (res != null) {
+      var pRes = await productController.updateProduct(
+          existingUser.currentUser.uid, res, 'pId', res);
       print("recent $res");
       List<String> imageList = await uploadFiles(images, res);
       print("imageList ${imageList}");
       if (await productController.updateProduct(
-          existingUser.currentUser.uid, res, imageList)) {
+          existingUser.currentUser.uid, res, 'imagesList', imageList)) {
       } else {
         //errpopup
       }
@@ -110,14 +113,22 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
     return imageUrls;
   }
 
+  Future<String> downloadURL(String url) async {
+    String downloadURL = await firebase_storage.FirebaseStorage.instance
+        .ref(url)
+        .getDownloadURL();
+    return downloadURL;
+  }
+
   Future<String> uploadFile(Asset _image, String pid) async {
     firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
         .ref()
         .child('${existingUser.currentUser.uid}/products/$pid/${_image.name}');
-
-    return ((await ref.putFile(await getImageFileFromAssets(_image)))
+    String url = ((await ref.putFile(await getImageFileFromAssets(_image)))
         .ref
         .fullPath);
+
+    return downloadURL(url);
   }
 
   Future<void> loadAssets() async {

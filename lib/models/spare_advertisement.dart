@@ -9,7 +9,8 @@ class SpareAdvertisement {
   String description;
   String title;
   String subtitle;
-  List<String> imageList;
+  List<dynamic> imageList;
+  String aId;
 
   SpareAdvertisement(
       this.uid,
@@ -22,7 +23,8 @@ class SpareAdvertisement {
       this.description,
       this.title,
       this.subtitle,
-      this.imageList);
+      this.imageList,
+      this.aId);
 
   factory SpareAdvertisement.fromJson(dynamic json) {
     return SpareAdvertisement(
@@ -36,7 +38,8 @@ class SpareAdvertisement {
         json["description"],
         json["title"],
         json["subtitle"],
-        json["imageList"]);
+        json["imageList"],
+        json["aId"]);
   }
 
   Map<String, Object> toJson() {
@@ -51,7 +54,8 @@ class SpareAdvertisement {
       'description': description,
       'title': title,
       'subtitle': subtitle,
-      'imageList': imageList
+      'imageList': imageList,
+      'aId': aId
     };
   }
 }

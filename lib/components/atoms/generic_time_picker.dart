@@ -16,18 +16,18 @@ class GenericTimePicker extends StatelessWidget {
   String _valueToValidate4 = '';
   String _valueSaved4 = '';
 
-  GenericTimePicker(
-      {Key key,
-      this.controller,
-      this.labelText = '',
-      this.fieldIcon,
-      this.prefixIcon,
-      this.inputType = TextInputType.text,
-      this.borderColor = Colors.grey,
-      this.onChanged,
-      this.onSaved,
-      this.focusBorderColor = Colors.blue})
-      : super(key: key);
+  GenericTimePicker({
+    Key key,
+    this.controller,
+    this.labelText = '',
+    this.fieldIcon,
+    this.prefixIcon,
+    this.inputType = TextInputType.text,
+    this.borderColor = Colors.grey,
+    this.onChanged,
+    this.onSaved,
+    this.focusBorderColor = Colors.blue,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,6 @@ class GenericTimePicker extends StatelessWidget {
           type: DateTimePickerType.time,
           //timePickerEntryModeInput: true,
           controller: controller,
-          //initialValue: '', //_initialValue,
           icon: Icon(Icons.access_time),
           timeLabelText: "Time",
           use24HourFormat: true,

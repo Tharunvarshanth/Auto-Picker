@@ -74,13 +74,16 @@ class _ProductAdvertisementAddFormState
         descriptionController.text,
         productTitleController.text,
         productSubTitleController.text,
-        imageList);
+        imageList,
+        '');
 
     var res = await advertismentController.addAdvertisment(
         existingUser.currentUser.uid, advertisement);
     if (res != null) {
       print("recent $res");
       List<String> imageList = await uploadFiles(images, res);
+      await advertismentController.updateAdvertisement(
+          existingUser.currentUser.uid, res, 'aId', res);
       print("imageList ${imageList}");
       if (await advertismentController.updateAdvertisement(
           existingUser.currentUser.uid, res, 'imageList', imageList)) {
@@ -121,6 +124,13 @@ class _ProductAdvertisementAddFormState
     return file;
   }
 
+  Future<String> downloadURL(String url) async {
+    String downloadURL = await firebase_storage.FirebaseStorage.instance
+        .ref(url)
+        .getDownloadURL();
+    return downloadURL;
+  }
+
   Future<List<String>> uploadFiles(List<Asset> _images, String aid) async {
     var imageUrls =
         await Future.wait(_images.map((_image) => uploadFile(_image, aid)));
@@ -134,9 +144,10 @@ class _ProductAdvertisementAddFormState
         .child(
             '${existingUser.currentUser.uid}/advertisments/$aid/${_image.name}');
 
-    return ((await ref.putFile(await getImageFileFromAssets(_image)))
+    String url = ((await ref.putFile(await getImageFileFromAssets(_image)))
         .ref
         .fullPath);
+    return downloadURL(url);
   }
 
   Future<void> loadAssets() async {

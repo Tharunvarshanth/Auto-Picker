@@ -1,6 +1,5 @@
 import 'package:auto_picker/components/pages/add_new_advertisement.dart';
 import 'package:auto_picker/components/pages/google_signin_login_page.dart';
-import 'package:auto_picker/components/pages/home_page.dart';
 import 'package:auto_picker/components/pages/login_page.dart';
 import 'package:auto_picker/components/pages/map_page.dart';
 import 'package:auto_picker/components/pages/mechanics_signup_page.dart';
@@ -14,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'components/pages/advertisement_payment_page.dart';
+import 'components/pages/home_page.dart';
 import 'components/pages/test_page.dart';
 
 class RouteGenerator {

@@ -1,4 +1,3 @@
-import 'package:auto_picker/themes/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +23,6 @@ class _AppBarState extends State<CustomAppBar> {
       centerTitle: true,
       title: Text(widget.title),
       automaticallyImplyLeading: widget.showBackButton,
-      elevation: 2,
       actions: <Widget>[
         if (!widget.isLogged)
           Padding(
@@ -32,9 +30,7 @@ class _AppBarState extends State<CustomAppBar> {
             child: GestureDetector(
               onTap: () =>
                   Navigator.of(context)?.pushNamed(RouteGenerator.loginPage),
-              child: const Text(
-                'Login',
-              ),
+              child: Text('Login'),
             ),
           )
       ],
