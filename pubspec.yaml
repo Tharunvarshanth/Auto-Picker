@@ -62,6 +62,7 @@ dependencies:
   flutter_svg: ^1.0.2
   multi_image_picker2: ^5.0.02
   simple_moment: ^1.1.1
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

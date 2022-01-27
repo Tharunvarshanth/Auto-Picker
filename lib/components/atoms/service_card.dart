@@ -1,4 +1,6 @@
 import 'package:auto_picker/components/atoms/generic_button.dart';
+import 'package:auto_picker/components/atoms/generic_text.dart';
+import 'package:auto_picker/themes/colors.dart';
 import 'package:flutter/material.dart';
 
 class ServiceCard extends StatelessWidget {
@@ -48,26 +50,28 @@ class ServiceCard extends StatelessWidget {
                       Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
-                            miniTitle,
+                          GenericText(
+                            text: miniTitle,
                             textAlign: TextAlign.start,
-                            style: TextStyle(fontSize: titleSize),
+                            textSize: titleSize ?? 16,
                           ),
-                          Text(
-                            miniSubTitle,
+                          GenericText(
+                            text: miniSubTitle,
                             textAlign: TextAlign.start,
-                            style: TextStyle(fontSize: subTitleSize),
+                            textSize: subTitleSize ?? 14,
                           ),
                         ],
                         crossAxisAlignment: CrossAxisAlignment.start,
                       ),
                       GenericButton(
+                        isBold: true,
                         text: buttonTitle,
+                        textColor: AppColors.primaryVariant,
                         onPressed: buttonPressed,
-                        borderColor: Colors.blue,
-                        backgroundColor: Colors.cyan[50],
+                        borderColor: AppColors.primaryVariant,
+                        backgroundColor: AppColors.skyBlue,
                         paddingVertical: 5,
-                        shadowColor: Colors.transparent,
+                        elevation: 0,
                       )
                     ],
                   ),
@@ -83,7 +87,7 @@ class ServiceCard extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'Location',
+                            'Location -',
                             textAlign: TextAlign.start,
                             style: TextStyle(fontSize: titleSize),
                           ),
@@ -92,12 +96,8 @@ class ServiceCard extends StatelessWidget {
                       ),
                       TextButton(
                           onPressed: locationPressed,
-                          child: Text(
-                            location,
-                            style: TextStyle(
-                                fontSize: subTitleSize,
-                                decoration: TextDecoration.underline),
-                          ))
+                          child: GenericText(
+                              text: location, textSize: subTitleSize))
                     ],
                   ),
                   const Divider(
@@ -112,7 +112,7 @@ class ServiceCard extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'Working Hours',
+                            'Working Hours -',
                             textAlign: TextAlign.start,
                             style: TextStyle(fontSize: titleSize),
                           ),

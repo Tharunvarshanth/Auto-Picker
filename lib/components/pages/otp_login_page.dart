@@ -4,6 +4,8 @@ import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
+import 'package:auto_picker/components/atoms/popup_modal.dart';
+import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/atoms/single_digit_field.dart';
 import 'package:auto_picker/routes.dart';
 import 'package:auto_picker/services/user_controller.dart';
@@ -57,7 +59,7 @@ class _OtpLoginPage extends State<OtpLoginPage> {
     setState(() {
       isLoading = true;
     });
-    autoOtpSubmit();
+    // autoOtpSubmit();
   }
 
   //testng devices
@@ -109,6 +111,19 @@ class _OtpLoginPage extends State<OtpLoginPage> {
       _verifyPhone();
     } else {
       isvalidUser = true;
+      showDialog(
+          context: context,
+          builder: (context) => ItemDialogMessage(
+                icon: 'assets/images/x-circle.svg',
+                titleText: 'Login Failure',
+                bodyText:
+                    "We didn't find any records for this number so try signup with this number",
+                primaryButtonText: 'Sign Up',
+                onPressedPrimary: () =>
+                    navigate(context, RouteGenerator.signUpPage),
+                secondaryButtonText: 'Ok',
+                onPressedSecondary: () => Navigator.pop(context, 'Cancel'),
+              ));
     }
   }
 

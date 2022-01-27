@@ -1,53 +1,37 @@
+import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
+import 'package:auto_picker/themes/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class MoreMenu extends StatefulWidget {
-  const MoreMenu({Key key}) : super(key: key);
+class MenuMorePage extends StatefulWidget {
+  const MenuMorePage({Key key}) : super(key: key);
 
   @override
-  _MoreMenuState createState() => _MoreMenuState();
+  _MenuMoreState createState() => _MenuMoreState();
 }
 
-class _MoreMenuState extends State<MoreMenu> {
+class _MenuMoreState extends State<MenuMorePage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        elevation: 2,
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: Text('Menu More'),
-        actions: [
-          Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {},
-                child: Icon(
-                  Icons.more_horiz,
-                  size: 26.0,
-                ),
-              )),
-        ],
-        actionsIconTheme:
-            IconThemeData(size: 30.0, color: Colors.grey, opacity: 10.0),
+      appBar: CustomAppBar(
+        title: 'Menu More',
+        isLogged: true,
+        showBackButton: true,
       ),
       bottomNavigationBar: Footer(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
           children: [
-            getTile("Personal Info", () {}),
-            getTile("Find Mechanics", () {}),
+            getTile("Personal Controller", () {}),
+            getTile("Find Mechanics Nearby", () {}),
             getTile("Find Spare Parts", () {}),
             getTile("Service Records", () {}),
             getTile("Fuel Manager", () {}),
             getTile("Mileage Calculator", () {}),
-            getTile("Find Near by Garage", () {}),
             getTile("Vehicle Information", () {}),
             getTile("Notifications", () {}),
             getTile("My Orders", () {}),
@@ -63,23 +47,23 @@ class _MoreMenuState extends State<MoreMenu> {
 }
 
 Widget getTile(String text, void Function() onPressed,
-    {Color textColor = Colors.black, Color borderColor = Colors.grey}) {
+    {Color textColor = AppColors.black, Color borderColor = Colors.grey}) {
   return GestureDetector(
     onTap: onPressed,
     child: Container(
       decoration:
           BoxDecoration(border: Border(bottom: BorderSide(color: borderColor))),
-      margin: EdgeInsets.symmetric(vertical: 12),
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      margin: EdgeInsets.symmetric(vertical: 4),
+      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       child: Row(
         children: [
           Expanded(
               child: Text(
             text,
-            style: TextStyle(fontSize: 20, color: textColor),
+            style: TextStyle(fontSize: 18, color: textColor),
           )),
           IconButton(
-            icon: Icon(Icons.arrow_forward),
+            icon: SvgPicture.asset('assets/images/chevron-right.svg'),
             onPressed: onPressed,
             color: Colors.cyan,
           )

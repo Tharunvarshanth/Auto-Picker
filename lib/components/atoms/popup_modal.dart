@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'generic_button.dart';
 
 class ItemDialog extends StatelessWidget {
-  Icon icon;
+  String icon;
   String titleText;
   String bodyText;
   String primaryButtonText;
@@ -37,17 +38,13 @@ class ItemDialog extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Icon(
-                Icons.folder_outlined,
-                color: Colors.cyan,
-                size: 32,
+              Text(
+                titleText ?? 'No of Items',
+                style: TextStyle(fontSize: 20),
               ),
+              SvgPicture.asset(icon),
               const SizedBox(
                 height: 10,
-              ),
-              const Text(
-                'No of Items',
-                style: TextStyle(fontSize: 20),
               ),
               LayoutBuilder(
                 builder: (context, constraints) {

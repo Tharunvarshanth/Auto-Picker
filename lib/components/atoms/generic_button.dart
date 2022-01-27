@@ -47,8 +47,8 @@ class GenericButton extends StatelessWidget {
           primary: backgroundColor ?? AppColors.blue,
           onPrimary: textColor ?? AppColors.white,
           padding: EdgeInsets.symmetric(
-              vertical: (paddingVertical ?? 30),
-              horizontal: (paddingHorizontal ?? 30)),
+              vertical: (paddingVertical ?? 15),
+              horizontal: (paddingHorizontal ?? 20)),
           shape: borderColor != null
               ? RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(borderRadius ?? 30),

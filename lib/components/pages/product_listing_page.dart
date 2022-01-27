@@ -2,14 +2,14 @@ import 'package:auto_picker/components/atoms/product_tile.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:flutter/material.dart';
 
-class ProductLsting extends StatefulWidget {
-  const ProductLsting({Key key}) : super(key: key);
+class ProductListingPage extends StatefulWidget {
+  const ProductListingPage({Key key}) : super(key: key);
 
   @override
-  _ProductLstingState createState() => _ProductLstingState();
+  _ProductListingPageState createState() => _ProductListingPageState();
 }
 
-class _ProductLstingState extends State<ProductLsting> {
+class _ProductListingPageState extends State<ProductListingPage> {
   final ScrollController _controller = ScrollController();
   @override
   void initState() {
