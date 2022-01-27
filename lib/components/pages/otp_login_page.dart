@@ -59,7 +59,7 @@ class _OtpLoginPage extends State<OtpLoginPage> {
     setState(() {
       isLoading = true;
     });
-    // autoOtpSubmit();
+    autoOtpSubmit();
   }
 
   //testng devices
@@ -297,6 +297,7 @@ class _OtpLoginPage extends State<OtpLoginPage> {
                         text: ' Resend',
                         color: AppColors.Blue,
                         isBold: true,
+                        onPressed: () => _verifyPhone(),
                       )
                   ],
                 ),

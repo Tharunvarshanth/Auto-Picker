@@ -17,6 +17,7 @@ import 'components/pages/advertisement_payment_page.dart';
 import 'components/pages/home_page.dart';
 import 'components/pages/mechanics_listing_page.dart';
 import 'components/pages/product_listing_page.dart';
+import 'components/pages/product_page.dart';
 import 'components/pages/test_page.dart';
 
 class RouteGenerator {
@@ -37,6 +38,7 @@ class RouteGenerator {
   static const String menuMorePage = '/menuMorePage';
   static const String mechanicsListingPage = '/mechanicsListingPage';
   static const String productsListingPage = '/productsListingPage';
+  static const String productPage = '/productPage';
 
   RouteGenerator._() {}
 
@@ -79,6 +81,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const MechanicsListingPage());
       case productsListingPage:
         return MaterialPageRoute(builder: (_) => const ProductListingPage());
+      case productPage:
+        return MaterialPageRoute(builder: (_) => ProductPage());
       case testPage:
         return MaterialPageRoute(builder: (_) => const TestPage());
       default:

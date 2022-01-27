@@ -1,175 +1,213 @@
+import 'package:auto_picker/components/atoms/custom_app_bar%20copy.dart';
 import 'package:auto_picker/components/atoms/generic_button.dart';
+import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/image_corousal.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:auto_picker/models/carousel_data.dart';
+import 'package:auto_picker/models/product.dart';
+import 'package:auto_picker/models/seller.dart';
+import 'package:auto_picker/services/product_controller.dart';
+import 'package:auto_picker/services/seller_controller.dart';
+import 'package:auto_picker/themes/colors.dart';
+import 'package:auto_picker/utilities/constands.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProductPage extends StatefulWidget {
-  const ProductPage({Key key}) : super(key: key);
+  Product product;
+  ProductPage({Key key, this.product}) : super(key: key);
 
   @override
   _ProductPageState createState() => _ProductPageState();
 }
 
 class _ProductPageState extends State<ProductPage> {
+  var productController = ProductController();
+  var sellerController = SellerController();
+  bool _hasCallSupport = false;
+  Future<void> _launched;
+  Seller seller;
+  bool isLogged = false;
+  bool isLoading = true;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  List<CarouselItemData> imageList = [];
+
+  void initState() {
+    super.initState();
+// Check for phone call support.
+    canLaunch('tel:123').then((bool result) {
+      setState(() {
+        _hasCallSupport = result;
+      });
+    });
+    setData();
+  }
+
+  void setData() async {
+    var res = await sellerController.getSeller(widget.product.uid);
+    if (res != null) {
+      seller = Seller.fromJson(res);
+    }
+    widget.product.imagesList.forEach((element) {
+      var temp = CarouselItemData(element, '', '');
+      setState(() {
+        imageList.add(temp);
+      });
+    });
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    // Use `Uri` to ensure that `phoneNumber` is properly URL-encoded.
+    // Just using 'tel:$phoneNumber' would create invalid URLs in some cases,
+    // such as spaces in the input, which would cause `launch` to fail on some
+    // platforms.
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    await launch(launchUri.toString());
+  }
+
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        elevation: 2,
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: Text('Product'),
-        actions: [
-          Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {},
-                child: Icon(
-                  Icons.more_horiz,
-                  size: 26.0,
-                ),
-              )),
-        ],
-        actionsIconTheme:
-            IconThemeData(size: 30.0, color: Colors.grey, opacity: 10.0),
+      appBar: const CustomAppBar(
+        title: 'Product',
+        showBackButton: true,
       ),
       bottomNavigationBar: Footer(),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    'Kasun Traders',
-                    style: TextStyle(fontSize: 24),
-                  ),
-                ),
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(
+                backgroundColor: AppColors.white,
               ),
-              CustomCarousel(
-                items: [
-                  //**************** to be removed *****************/
-                  CarouselItemData(
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThsbKGhH8Cy1G3PffQSiOnF3IUlLEs1r6Dmo96ZyC5fL-soXNzq9_UeDHBV-ZV9Q-ynMs&usqp=CAU',
-                      'title1',
-                      'subTitle1'),
-                  CarouselItemData(
-                      'https://china-gadgets.com/app/uploads/2021/08/CaDA_C61027W_Humvee.jpg',
-                      'title2',
-                      'subTitle2')
-                  //**************** to be removed *******************/
-                ],
-              ),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Text(
-                        'Product Name',
-                        style: TextStyle(fontSize: 24),
-                      ),
-                      Text('Vehicle Type',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.grey,
+            )
+          : Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Center(
+                      child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: GenericText(
+                            text: seller.shopName ?? '',
+                            textSize: 24,
+                            isBold: true,
                           )),
-                    ],
-                    mainAxisSize: MainAxisSize.min,
-                  ),
+                    ),
+                    CustomCarousel(items: imageList),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            GenericText(
+                              text: widget.product.title,
+                              textSize: 24,
+                            ),
+                            GenericText(
+                                text: widget.product.condition, textSize: 18),
+                          ],
+                          mainAxisSize: MainAxisSize.min,
+                        ),
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GenericText(
+                            text:
+                                "Rs ${widget.product.price}" ?? PriceNegotiable,
+                            textAlign: TextAlign.left,
+                            textSize: 18),
+                        Divider(
+                          thickness: 2,
+                        ),
+                        GenericText(
+                          text: widget.product.description,
+                          textAlign: TextAlign.left,
+                          textSize: 18,
+                        ),
+                        Divider(
+                          thickness: 2,
+                        ),
+                        GenericText(
+                          text: seller.contactDetails,
+                          textAlign: TextAlign.left,
+                          textSize: 18,
+                        ),
+                        Divider(
+                          thickness: 2,
+                        ),
+                        GenericText(
+                          text: seller.address,
+                          textAlign: TextAlign.left,
+                          textSize: 18,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.05,
+                    ),
+                    Wrap(
+                      spacing: 20,
+                      children: [
+                        GenericButton(
+                          isBold: true,
+                          text: _hasCallSupport
+                              ? 'CALL'
+                              : 'Calling not supported',
+                          paddingHorizontal: 4,
+                          paddingVertical: 2,
+                          onPressed: _hasCallSupport
+                              ? () => setState(() {
+                                    _launched =
+                                        _makePhoneCall(seller.contactDetails);
+                                  })
+                              : null,
+                          shadowColor: Colors.transparent,
+                          backgroundColor: Colors.blue,
+                          borderRadius: 14,
+                        ),
+                        GenericButton(
+                          text: 'CHAT',
+                          isBold: true,
+                          paddingHorizontal: 4,
+                          backgroundColor: AppColors.white,
+                          paddingVertical: 2,
+                          onPressed: () {},
+                          elevation: 0,
+                          textColor: Colors.blue,
+                          shadowColor: Colors.transparent,
+                          borderRadius: 14,
+                        ),
+                        GenericButton(
+                          text: 'ORDER',
+                          isBold: true,
+                          paddingHorizontal: 4,
+                          paddingVertical: 2,
+                          onPressed: () {},
+                          backgroundColor: Colors.blue,
+                          shadowColor: Colors.transparent,
+                          borderRadius: 14,
+                        ),
+                      ],
+                      alignment: WrapAlignment.center,
+                    )
+                  ],
                 ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Product Price ',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  Divider(
-                    thickness: 2,
-                  ),
-                  Text(
-                    'Phone number ',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  Divider(
-                    thickness: 2,
-                  ),
-                  Text(
-                    'Product Address ',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  Divider(
-                    thickness: 2,
-                  ),
-                  Text(
-                    'Product Description',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.05,
-              ),
-              Wrap(
-                spacing: 20,
-                children: [
-                  GenericButton(
-                    text: 'CALL',
-                    paddingHorizontal: 4,
-                    paddingVertical: 2,
-                    onPressed: () {},
-                    shadowColor: Colors.transparent,
-                    borderRadius: 14,
-                  ),
-                  GenericButton(
-                    text: 'CHAT',
-                    paddingHorizontal: 4,
-                    paddingVertical: 2,
-                    onPressed: () {},
-                    backgroundColor: Colors.blue,
-                    textColor: Colors.white,
-                    shadowColor: Colors.transparent,
-                    borderRadius: 14,
-                  ),
-                  GenericButton(
-                    text: 'ORDER',
-                    paddingHorizontal: 4,
-                    paddingVertical: 2,
-                    onPressed: () {},
-                    shadowColor: Colors.transparent,
-                    borderRadius: 14,
-                  ),
-                  GenericButton(
-                    text: 'VISIT SHOP',
-                    paddingHorizontal: 4,
-                    paddingVertical: 2,
-                    onPressed: () {},
-                    backgroundColor: Colors.blue,
-                    textColor: Colors.white,
-                    shadowColor: Colors.transparent,
-                    borderRadius: 14,
-                  ),
-                ],
-                alignment: WrapAlignment.center,
-              )
-            ],
-          ),
-        ),
-      ),
+            ),
     ));
   }
 }

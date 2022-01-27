@@ -4,9 +4,11 @@ import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/image_corousal.dart';
 import 'package:auto_picker/components/atoms/image_corousal_advertisment.dart';
+import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/atoms/product_tile.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:auto_picker/components/organisms/mechanics_horizontal_scroll.dart';
+import 'package:auto_picker/components/pages/product_page.dart';
 import 'package:auto_picker/models/carousel_data.dart';
 import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/models/product.dart';
@@ -134,6 +136,29 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void navigateToProductPage(int index) {
+    if (isLogged) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductPage(
+              product: productList[index],
+            ),
+          ));
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) => ItemDialogMessage(
+                icon: 'assets/images/x-circle.svg',
+                titleText: 'Need to Signup',
+                bodyText:
+                    "Auto picker terms & conditions without an account user's cann't see product informations detaily",
+                primaryButtonText: 'Ok',
+                onPressedPrimary: () => Navigator.pop(context, 'Cancel'),
+              ));
+    }
+  }
+
   signOut() {
     //redirect
     userInfo.clearValue();
@@ -230,7 +255,10 @@ class _HomePageState extends State<HomePage> {
                             GenericTextButton(
                               color: AppColors.Blue,
                               text: 'See All',
-                              onPressed: () {},
+                              onPressed: () {
+                                navigate(context,
+                                    RouteGenerator.productsListingPage);
+                              },
                             ),
                           ]),
                       Container(
@@ -241,11 +269,14 @@ class _HomePageState extends State<HomePage> {
                           controller: controller,
                           itemCount: productList.length ?? 0,
                           itemBuilder: (context, index) {
-                            return ProductTile(
-                              imgUrl: productList[index].imagesList[0],
-                              title: productList[index].title,
-                              description: productList[index].description,
-                              price: productList[index].price,
+                            return GestureDetector(
+                              onTap: () => navigateToProductPage(index),
+                              child: ProductTile(
+                                imgUrl: productList[index].imagesList[0],
+                                title: productList[index].title,
+                                description: productList[index].description,
+                                price: "${productList[index].price} rs",
+                              ),
                             );
                           },
                         ),

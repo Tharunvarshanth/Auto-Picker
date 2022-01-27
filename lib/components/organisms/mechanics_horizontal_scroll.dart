@@ -3,7 +3,9 @@
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/atoms/image_tile.dart';
+import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/models/mechanic.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class MechanicsHorizontalItemScroll extends StatefulWidget {
@@ -25,10 +27,15 @@ class MechanicsHorizontalItemScroll extends StatefulWidget {
 
 class _MechanicsHorizontalItemScrollState
     extends State<MechanicsHorizontalItemScroll> {
+  bool isLogged = false;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   @override
   void initState() {
     super.initState();
-
+    setState(() {
+      isLogged = _auth.currentUser != null;
+    });
     widget.controller.addListener(() async {
       if (widget.controller.offset >=
               widget.controller.position.maxScrollExtent &&
@@ -42,6 +49,22 @@ class _MechanicsHorizontalItemScrollState
         });
       }
     });
+  }
+
+  void navigateToMechanicProfilePage(int index) {
+    if (isLogged) {
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) => ItemDialogMessage(
+                icon: 'assets/images/x-circle.svg',
+                titleText: 'Need to Signup',
+                bodyText:
+                    "Auto picker terms & conditions without an account user's cann't see informations",
+                primaryButtonText: 'Ok',
+                onPressedPrimary: () => Navigator.pop(context, 'Cancel'),
+              ));
+    }
   }
 
   @override
@@ -68,9 +91,12 @@ class _MechanicsHorizontalItemScrollState
                       scrollDirection: Axis.horizontal,
                       itemCount: widget.ImageTileList.length,
                       itemBuilder: (context, index) {
-                        return ImageTile(
-                          text: widget.ImageTileList[index].specialist,
-                          subText: widget.ImageTileList[index].workingCity,
+                        return GestureDetector(
+                          onTap: () => navigateToMechanicProfilePage(index),
+                          child: ImageTile(
+                            text: widget.ImageTileList[index].specialist,
+                            subText: widget.ImageTileList[index].workingCity,
+                          ),
                         );
                       })
                   : GenericText(
