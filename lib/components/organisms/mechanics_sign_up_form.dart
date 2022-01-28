@@ -25,7 +25,6 @@ class MechanicsSignUpForm extends StatefulWidget {
 }
 
 class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
-  final specialistController = TextEditingController();
   final addressController = TextEditingController();
   final phoneNumberController = TextEditingController();
   final timePickerToController = TextEditingController();
@@ -40,12 +39,15 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
   String _valueSavedFrom = '';
 
   String city;
+  String specialist;
 
   void initState() {
     super.initState();
     Intl.defaultLocale = 'en_LK';
     if (widget.params["location-lat"] != null) {
-      specialistController.text = widget.params['specialist'];
+      setState(() {
+        specialist = widget.params['specialist'];
+      });
       setState(() {
         city = widget.params['workingCity'];
       });
@@ -61,8 +63,14 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
     });
   }
 
+  void handleMechanicsSpecialist(skill) {
+    setState(() {
+      specialist = skill;
+    });
+  }
+
   void handleNext() {
-    widget.params['specialist'] = specialistController.text;
+    widget.params['specialist'] = specialist;
     widget.params['workingCity'] = city;
     widget.params['workingAddress'] = addressController.text;
     widget.params['workingTime_To'] = _valueChangedTo;
@@ -78,7 +86,6 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
 
   @override
   void dispose() {
-    specialistController.dispose();
     addressController.dispose();
     phoneNumberController.dispose();
     super.dispose();
@@ -98,11 +105,12 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            GenericTextField(
-              controller: specialistController,
+            GenericInputOptionSelect(
+              width: size.width,
               labelText: 'Specialist',
-              hintText: "Electrician",
-              borderColor: AppColors.ash,
+              value: city,
+              itemList: MechanicSpecialistSkills,
+              onValueChange: (text) => handleMechanicsSpecialist(text),
             ),
             SizedBox(height: size.height * 0.015),
             GenericInputOptionSelect(
@@ -167,7 +175,7 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
                   ? 'location picked'
                   : 'Pick your working Location',
               onPressed: () {
-                widget.params['specialist'] = specialistController.text;
+                widget.params['specialist'] = specialist;
                 widget.params['workingCity'] = city;
                 widget.params['address'] = addressController.text;
                 widget.params['workingTime_To'] = _valueChangedTo;

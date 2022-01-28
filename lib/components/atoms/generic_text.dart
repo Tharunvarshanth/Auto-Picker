@@ -6,6 +6,7 @@ class GenericText extends StatelessWidget {
   Color color;
   double textSize;
   bool isBold;
+  int maxLines;
   TextAlign textAlign;
   GenericText(
       {Key key,
@@ -13,6 +14,7 @@ class GenericText extends StatelessWidget {
       this.color,
       this.textSize,
       this.isBold = false,
+      this.maxLines,
       this.textAlign})
       : super(key: key);
 
@@ -21,6 +23,7 @@ class GenericText extends StatelessWidget {
     return Text(
       text,
       textAlign: textAlign ?? TextAlign.left,
+      maxLines: maxLines ?? 1,
       style: TextStyle(
           color: color ?? AppColors.black,
           fontSize: textSize ?? 16,

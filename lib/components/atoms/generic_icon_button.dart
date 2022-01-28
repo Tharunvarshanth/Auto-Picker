@@ -27,6 +27,7 @@ class GenericIconButton extends StatelessWidget {
   double borderRadius;
   EdgeInsets padding;
   String iconLeft;
+  int elevation;
   GenericIconButton(
       {Key key,
       this.backgroundColor,
@@ -37,6 +38,7 @@ class GenericIconButton extends StatelessWidget {
       this.borderRadius,
       this.padding,
       this.iconLeft,
+      this.elevation,
       this.text})
       : super(key: key);
 
@@ -48,7 +50,7 @@ class GenericIconButton extends StatelessWidget {
       label: iconLeft != null ? Text(text) : iconLeft,
       style: ElevatedButton.styleFrom(
           shadowColor: shadowColor ?? Colors.grey,
-          elevation: 15,
+          elevation: elevation ?? 15,
           primary: backgroundColor ?? AppColors.white,
           onPrimary: textColor ?? Colors.blue,
           padding: padding ??

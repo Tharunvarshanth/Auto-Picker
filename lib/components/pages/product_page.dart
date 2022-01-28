@@ -125,35 +125,73 @@ class _ProductPageState extends State<ProductPage> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        GenericText(
-                            text:
-                                "Rs ${widget.product.price}" ?? PriceNegotiable,
-                            textAlign: TextAlign.left,
-                            textSize: 18),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            GenericText(
+                                text: "Price  :",
+                                textAlign: TextAlign.left,
+                                textSize: 18),
+                            GenericText(
+                                text: "Rs ${widget.product.price}" ??
+                                    PriceNegotiable,
+                                textAlign: TextAlign.left,
+                                textSize: 18),
+                          ],
+                        ),
+                        const Divider(
+                          thickness: 2,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            GenericText(
+                              text: "Description  : ",
+                              textAlign: TextAlign.left,
+                              textSize: 18,
+                              maxLines: 2,
+                            ),
+                            GenericText(
+                              text: "${widget.product.description}",
+                              textAlign: TextAlign.left,
+                              textSize: 18,
+                            ),
+                          ],
+                        ),
                         Divider(
                           thickness: 2,
                         ),
-                        GenericText(
-                          text: widget.product.description,
-                          textAlign: TextAlign.left,
-                          textSize: 18,
-                        ),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              GenericText(
+                                text: "Contact Detail  : ",
+                                textAlign: TextAlign.left,
+                                textSize: 18,
+                              ),
+                              GenericText(
+                                text: "${seller.contactDetails}",
+                                textAlign: TextAlign.left,
+                                textSize: 18,
+                              )
+                            ]),
                         Divider(
                           thickness: 2,
                         ),
-                        GenericText(
-                          text: seller.contactDetails,
-                          textAlign: TextAlign.left,
-                          textSize: 18,
-                        ),
-                        Divider(
-                          thickness: 2,
-                        ),
-                        GenericText(
-                          text: seller.address,
-                          textAlign: TextAlign.left,
-                          textSize: 18,
-                        ),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              GenericText(
+                                text: "Address  : ",
+                                textAlign: TextAlign.left,
+                                textSize: 18,
+                              ),
+                              GenericText(
+                                text: "${seller.address}",
+                                textAlign: TextAlign.left,
+                                textSize: 18,
+                              ),
+                            ])
                       ],
                     ),
                     SizedBox(

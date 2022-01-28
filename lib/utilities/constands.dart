@@ -1,3 +1,5 @@
+import 'package:auto_picker/models/mechanic.dart';
+
 class Users {
   static const Admin = 'admin';
   static const NormalUser = 'user';
@@ -10,6 +12,24 @@ class UsersSignUp {
   static const Mechanic = 'mechanic';
   static const Seller = 'seller';
 }
+
+const MechanicSpecialistSkills = [
+  "Three wheel",
+  "Motorcycle",
+  "Electirican",
+  "Air Conditioning",
+  "Auto Exhaust",
+  "Engine",
+  "Gear Box",
+  "Radiator",
+  "All Type Vehicles",
+  "Brake and transmission",
+  "Tire mechanics",
+  "General automotive",
+  "Auto body",
+  "Service Station",
+  "Auto glass"
+];
 
 class FirebaseCollections {
   static const CarServiceRecords = 'carServiceRecords';

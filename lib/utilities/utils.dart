@@ -23,3 +23,9 @@ String utcTo12HourFormat(String bigTime) {
   print("------------$createdDate");
   return createdDate;
 }
+
+stringToTimeFormat(String bigTime) {
+  DateTime tempDate = DateFormat("hh:mm").parse(bigTime);
+
+  return tempDate;
+}
