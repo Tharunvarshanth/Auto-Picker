@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ChatMessage extends StatelessWidget {
+class ChatMessage extends StatefulWidget {
   String messageBody;
   String messageHint;
   DateTime dateTime;
@@ -12,9 +12,11 @@ class ChatMessage extends StatelessWidget {
   double messagePaddingVertical;
   double messageTextSize;
   double dateTimeTextSize;
+  String picUrl;
   ChatMessage(
       {Key key,
       this.backgroundColor = Colors.blue,
+      this.picUrl = '',
       this.dateTime,
       this.dateTimeColor = Colors.black,
       this.dateTimeTextSize = 12,
@@ -29,6 +31,11 @@ class ChatMessage extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<ChatMessage> createState() => _ChatMessageState();
+}
+
+class _ChatMessageState extends State<ChatMessage> {
+  @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -38,29 +45,49 @@ class ChatMessage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            '$messageHint',
-            style: TextStyle(color: hintTextColor),
+            '${widget.messageHint}',
+            style: TextStyle(color: widget.hintTextColor),
             textAlign: TextAlign.start,
           ),
+          widget.picUrl != ''
+              ? Image.network(
+                  widget.picUrl,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.network(
+                        'https://1080motion.com/wp-content/uploads/2018/06/NoImageFound.jpg.png');
+                  },
+                  fit: BoxFit.contain,
+                )
+              : SizedBox(),
           Container(
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
             padding: EdgeInsets.symmetric(
-                vertical: messagePaddingVertical,
-                horizontal: messagePaddingHorizontal),
+                vertical: widget.messagePaddingVertical,
+                horizontal: widget.messagePaddingHorizontal),
             decoration: BoxDecoration(
-                color: backgroundColor,
+                color: widget.backgroundColor,
                 borderRadius: BorderRadius.circular(20)),
-            child: Text('$messageBody',
+            child: Text('${widget.messageBody}',
                 textAlign: TextAlign.start,
                 style: TextStyle(
-                    color: messageTextColor, fontSize: messageTextSize)),
+                    color: widget.messageTextColor,
+                    fontSize: widget.messageTextSize)),
           ),
           Container(
             child: Text(
-              (dateTime ?? DateTime.now()).toString(),
+              (widget.dateTime ?? DateTime.now()).toString(),
               textAlign: TextAlign.end,
-              style:
-                  TextStyle(fontSize: dateTimeTextSize, color: dateTimeColor),
+              style: TextStyle(
+                  fontSize: widget.dateTimeTextSize,
+                  color: widget.dateTimeColor),
             ),
           )
         ],
