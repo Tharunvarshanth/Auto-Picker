@@ -1,8 +1,13 @@
 import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
+import 'package:auto_picker/store/cache/sharedPreferences/user_info.dart';
 import 'package:auto_picker/themes/colors.dart';
+import 'package:auto_picker/utilities/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../routes.dart';
 
 class MenuMorePage extends StatefulWidget {
   const MenuMorePage({Key key}) : super(key: key);
@@ -12,33 +17,65 @@ class MenuMorePage extends StatefulWidget {
 }
 
 class _MenuMoreState extends State<MenuMorePage> {
+  final FirebaseAuth existingUser = FirebaseAuth.instance;
+  bool isLogged = false;
+  var userInfo = UserInfoCache();
+  void initState() {
+    super.initState();
+    print("Auth ${existingUser.currentUser}");
+    setState(() {
+      isLogged = existingUser.currentUser != null ? true : false;
+    });
+  }
+
+  signOut() {
+    //redirect
+    userInfo.clearValue();
+    existingUser
+        .signOut()
+        .then((value) => navigate(context, RouteGenerator.homePage));
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
       appBar: CustomAppBar(
         title: 'Menu More',
-        isLogged: true,
+        isLogged: isLogged,
         showBackButton: true,
       ),
-      bottomNavigationBar: Footer(),
+      bottomNavigationBar: Footer(
+        isLogged: isLogged,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
           children: [
-            getTile("Personal Controller", () {}),
-            getTile("Find Mechanics Nearby", () {}),
-            getTile("Find Spare Parts", () {}),
-            getTile("Service Records", () {}),
-            getTile("Fuel Manager", () {}),
+            if (isLogged) ...[
+              getTile("Personal Controller",
+                  () => {navigate(context, RouteGenerator.profilePage)}),
+              getTile("Find Mechanics Nearby", () {}),
+              getTile("Service Records", () {}),
+              getTile("Fuel Manager", () {}),
+              getTile("Notifications", () {}),
+              getTile("My Orders", () {}),
+            ],
             getTile("Mileage Calculator", () {}),
             getTile("Vehicle Information", () {}),
-            getTile("Notifications", () {}),
-            getTile("My Orders", () {}),
             getTile("Contact Us", () {}),
             getTile("About Us", () {}, borderColor: Colors.transparent),
-            getTile("Login", () {},
-                textColor: Colors.cyan, borderColor: Colors.transparent),
+            isLogged
+                ? getTile("Logout", () => {signOut()},
+                    textColor: AppColors.blue, borderColor: Colors.transparent)
+                : getTile(
+                    "Login",
+                    () => {
+                          Navigator.of(context)
+                              ?.pushNamed(RouteGenerator.loginPage)
+                        },
+                    textColor: AppColors.blue,
+                    borderColor: Colors.transparent)
           ],
         ),
       ),

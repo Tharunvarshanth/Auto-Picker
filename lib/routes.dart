@@ -1,3 +1,4 @@
+import 'package:auto_picker/components/organisms/mechanic_profile.dart';
 import 'package:auto_picker/components/pages/add_new_advertisement.dart';
 import 'package:auto_picker/components/pages/google_signin_login_page.dart';
 import 'package:auto_picker/components/pages/login_page.dart';
@@ -15,9 +16,11 @@ import 'package:flutter/material.dart';
 
 import 'components/pages/advertisement_payment_page.dart';
 import 'components/pages/home_page.dart';
+import 'components/pages/mechanic_profile_page.dart';
 import 'components/pages/mechanics_listing_page.dart';
 import 'components/pages/product_listing_page.dart';
 import 'components/pages/product_page.dart';
+import 'components/pages/profile_user_edit_page.dart';
 import 'components/pages/test_page.dart';
 
 class RouteGenerator {
@@ -39,6 +42,8 @@ class RouteGenerator {
   static const String mechanicsListingPage = '/mechanicsListingPage';
   static const String productsListingPage = '/productsListingPage';
   static const String productPage = '/productPage';
+  static const String mechanicProfilePage = '/mechanicProfilePage';
+  static const String userProfileEditPage = '/userProfileEditPage';
 
   RouteGenerator._() {}
 
@@ -83,6 +88,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ProductListingPage());
       case productPage:
         return MaterialPageRoute(builder: (_) => ProductPage());
+      case mechanicProfilePage:
+        return MaterialPageRoute(builder: (_) => MechanicProfilePage());
+      case userProfileEditPage:
+        return MaterialPageRoute(builder: (_) => ProfileUserEditPage());
       case testPage:
         return MaterialPageRoute(builder: (_) => const TestPage());
       default:

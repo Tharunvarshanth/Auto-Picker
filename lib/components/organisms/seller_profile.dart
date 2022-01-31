@@ -6,15 +6,15 @@ import 'package:auto_picker/components/pages/add_new_product.dart';
 import 'package:auto_picker/models/seller.dart';
 import 'package:flutter/material.dart';
 
-class SellerProfilePage extends StatefulWidget {
+class SellerProfile extends StatefulWidget {
   final Seller seller;
-  const SellerProfilePage(this.seller);
+  const SellerProfile(this.seller);
 
   @override
-  _SellerProfilePageState createState() => _SellerProfilePageState();
+  _SellerProfileState createState() => _SellerProfileState();
 }
 
-class _SellerProfilePageState extends State<SellerProfilePage> {
+class _SellerProfileState extends State<SellerProfile> {
   bool isLoading = true;
   String userRole;
 

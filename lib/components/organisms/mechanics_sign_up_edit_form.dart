@@ -5,11 +5,17 @@ import 'package:auto_picker/components/atoms/generic_input_option_select.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/atoms/generic_time_picker.dart';
+import 'package:auto_picker/components/atoms/popup_modal_message.dart';
+import 'package:auto_picker/components/pages/map_edit_page.dart';
 import 'package:auto_picker/components/pages/map_page.dart';
 import 'package:auto_picker/components/pages/mechanics_signup_page.dart';
 import 'package:auto_picker/components/pages/otp_signup_page.dart';
 import 'package:auto_picker/components/pages/seller_signup_page.dart';
+import 'package:auto_picker/models/mechanic.dart';
+import 'package:auto_picker/models/user_model.dart';
 import 'package:auto_picker/routes.dart';
+import 'package:auto_picker/services/mechanic_controller.dart';
+import 'package:auto_picker/services/user_controller.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/constands.dart';
 import 'package:auto_picker/utilities/utils.dart';
@@ -17,19 +23,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class MechanicsSignUpForm extends StatefulWidget {
-  final Map<String, dynamic> params;
-  const MechanicsSignUpForm({Map<String, dynamic> this.params});
+class MechanicsSignUpEditForm extends StatefulWidget {
+  UserModel userModel;
+  Mechanic mechanic;
+  MechanicsSignUpEditForm({this.userModel, this.mechanic});
   @override
-  _MechanicsSignUpFormState createState() => _MechanicsSignUpFormState();
+  _MechanicsSignUpEditFormState createState() =>
+      _MechanicsSignUpEditFormState();
 }
 
-class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
+class _MechanicsSignUpEditFormState extends State<MechanicsSignUpEditForm> {
   final addressController = TextEditingController();
   final phoneNumberController = TextEditingController();
   final timePickerToController = TextEditingController();
   final timePickerFromController = TextEditingController();
-
+  var userController = UserController();
+  var mechanicController = MechanicController();
   String _valueChangedStart = '';
   String _valueToValidateStart = '';
   String _valueSavedStart = '';
@@ -37,24 +46,25 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
   String _valueChangedFinish = '';
   String _valueToValidateFinish = '';
   String _valueSavedFinish = '';
-
+  bool isMapclicked = false;
   String city;
   String specialist;
 
   void initState() {
     super.initState();
     Intl.defaultLocale = 'en_LK';
-    if (widget.params["location-lat"] != null) {
-      setState(() {
-        specialist = widget.params['specialist'];
-      });
-      setState(() {
-        city = widget.params['workingCity'];
-      });
-      addressController.text = widget.params['address'];
-      timePickerToController.text = widget.params['workingTime_To'];
-      timePickerFromController.text = widget.params['workingTime_From'];
-    }
+
+    addressController.text = widget.mechanic.workingAddress;
+    timePickerToController.text = (widget.mechanic.workingTime_To);
+    timePickerFromController.text = (widget.mechanic.workingTime_From);
+    setState(() {
+      _valueChangedStart = widget.mechanic.workingTime_To;
+      _valueToValidateStart = widget.mechanic.workingTime_To;
+      _valueChangedFinish = widget.mechanic.workingTime_From;
+      _valueToValidateFinish = widget.mechanic.workingTime_From;
+      city = widget.mechanic.workingCity;
+      specialist = widget.mechanic.specialist;
+    });
   }
 
   void handleCity(cityName) {
@@ -70,18 +80,43 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
   }
 
   void handleNext() {
-    widget.params['specialist'] = specialist;
-    widget.params['workingCity'] = city;
-    widget.params['workingAddress'] = addressController.text;
-    widget.params['workingTime_To'] = _valueChangedStart;
-    widget.params['workingTime_From'] = _valueChangedFinish;
+    print("TO handleNext ${_valueChangedStart}");
+    widget.mechanic.specialist = specialist;
+    widget.mechanic.workingCity = city;
+    widget.mechanic.workingAddress = addressController.text;
+    widget.mechanic.workingTime_To = _valueChangedStart;
+    widget.mechanic.workingTime_From = _valueChangedFinish;
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => OtpSignUpPage(params: widget.params),
-      ),
-    );
+    Future.wait([
+      userController.updateUser(widget.userModel),
+      mechanicController.updateMechanic(widget.mechanic)
+    ]).then((List<bool> res) {
+      print(res[0]);
+      if (res[0] && res[1]) {
+        //popup
+        showDialog(
+            context: context,
+            builder: (context) => ItemDialogMessage(
+                  icon: 'assets/images/plus-circle.svg',
+                  titleText: 'Done ok',
+                  bodyText: "",
+                  primaryButtonText: 'Ok',
+                  onPressedPrimary: () =>
+                      navigate(context, RouteGenerator.homePage),
+                ));
+      } else {
+        showDialog(
+            context: context,
+            builder: (context) => ItemDialogMessage(
+                  icon: 'assets/images/x-circle.svg',
+                  titleText: 'Failure',
+                  bodyText: "",
+                  primaryButtonText: 'Ok',
+                  onPressedPrimary: () =>
+                      navigate(context, RouteGenerator.homePage),
+                ));
+      }
+    });
   }
 
   @override
@@ -99,7 +134,7 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
       Users.Admin,
       Users.Mechanic,
       Users.NormalUser,
-      Users.Seller
+      Users.Seller,
     ];
     return Form(
         key: _formKey,
@@ -108,7 +143,7 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
             GenericInputOptionSelect(
               width: size.width,
               labelText: 'Specialist',
-              value: city,
+              value: specialist,
               itemList: MechanicSpecialistSkills,
               onValueChange: (text) => handleMechanicsSpecialist(text),
             ),
@@ -171,21 +206,24 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
             SizedBox(height: size.height * 0.015),
             Container(
                 child: GenericTextButton(
-              text: widget.params["location-lat"] != null
-                  ? 'location picked'
-                  : 'Pick your working Location',
+              text: isMapclicked
+                  ? 'Location updated'
+                  : 'Update your working Location',
               onPressed: () {
-                widget.params['specialist'] = specialist;
-                widget.params['workingCity'] = city;
-                widget.params['address'] = addressController.text;
-                widget.params['workingTime_To'] = _valueChangedStart;
-                widget.params['workingTime_From'] = _valueChangedFinish;
-
+                widget.mechanic.specialist = specialist;
+                widget.mechanic.workingCity = city;
+                widget.mechanic.workingAddress = addressController.text;
+                widget.mechanic.workingTime_To = _valueChangedStart;
+                widget.mechanic.workingTime_From = _valueChangedFinish;
+                setState(() {
+                  isMapclicked = true;
+                });
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MapLatLonPage(params: widget.params),
-                  ),
+                      builder: (context) => MapLatLonEditPage(
+                          userModel: widget.userModel,
+                          mechanic: widget.mechanic)),
                 );
               },
             )),

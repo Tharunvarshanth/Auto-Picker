@@ -65,13 +65,15 @@ class UserController {
   }
 
   Future<bool> updateUser(UserModel user) async {
+    var res = false;
     await users.doc(user.getId()).update(user.toJson()).then((value) {
       print("updateSeller:success");
-      return true;
+      res = true;
     }).catchError((onError) {
       print("updateSeller:error: $onError");
-      return true;
+      res = true;
     });
+    return res;
   }
 
   Future<bool> updateUserField(String uid, String field, String value) async {

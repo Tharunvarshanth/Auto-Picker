@@ -41,16 +41,18 @@ class MechanicController {
   }
 
   Future<bool> updateMechanic(Mechanic mechanic) async {
+    var res = false;
     await mechanics
         .doc(mechanic.getId())
         .update(mechanic.toJson())
         .then((value) {
       print("updateMechanic:success");
-      return true;
+      res = true;
     }).catchError((onError) {
       print("updateMechanic:error: $onError");
-      return true;
+      res = false;
     });
+    return res;
   }
 
   Future<bool> updateMechanicsField(

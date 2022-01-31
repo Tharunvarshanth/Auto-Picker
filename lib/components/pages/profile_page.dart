@@ -3,12 +3,15 @@ import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/text_description.dart';
 import 'package:auto_picker/components/atoms/text_description_with_button.dart';
+import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:auto_picker/components/organisms/mechanic_profile.dart';
 import 'package:auto_picker/components/organisms/seller_profile.dart';
+import 'package:auto_picker/components/pages/profile_user_edit_page.dart';
 import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/models/product.dart';
 import 'package:auto_picker/models/seller.dart';
 import 'package:auto_picker/models/user_model.dart';
+import 'package:auto_picker/routes.dart';
 import 'package:auto_picker/services/mechanic_controller.dart';
 import 'package:auto_picker/services/product_controller.dart';
 import 'package:auto_picker/services/seller_controller.dart';
@@ -16,6 +19,7 @@ import 'package:auto_picker/services/user_controller.dart';
 import 'package:auto_picker/store/cache/sharedPreferences/user_info.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/constands.dart';
+import 'package:auto_picker/utilities/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -83,6 +87,10 @@ class _ProfilePageState extends State<ProfilePage> {
           title: 'Profile Controller',
           showBackButton: true,
         ),
+        bottomNavigationBar: Footer(
+          isLogged: true,
+          currentIndex: 2,
+        ),
         body: SingleChildScrollView(
           child: isLoading
               ? SizedBox(
@@ -132,7 +140,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                                 GenericTextButton(
                                   text: 'Edit Profile',
-                                  onPressed: () {},
+                                  onPressed: () => {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProfileUserEditPage(
+                                                  userModel: userModel,
+                                                  mechanic: mechanicModel,
+                                                  seller: sellerModel),
+                                        ))
+                                  },
                                 )
                               ],
                             ),
@@ -156,9 +174,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         description: 'Address',
                       ),
                       if (userRole == Users.Seller)
-                        SellerProfilePage(this.sellerModel)
+                        SellerProfile(this.sellerModel)
                       else if (userRole == Users.Mechanic)
-                        MechanicProfilePage(this.mechanicModel)
+                        MechanicProfile(this.mechanicModel)
                     ],
                   ),
                 ),

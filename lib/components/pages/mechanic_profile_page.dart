@@ -1,25 +1,53 @@
+import 'package:auto_picker/components/atoms/custom_app_bar%20copy.dart';
 import 'package:auto_picker/components/atoms/generic_button.dart';
+import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:auto_picker/models/feedback_data.dart';
+import 'package:auto_picker/models/mechanic.dart';
+import 'package:auto_picker/models/user_model.dart';
+import 'package:auto_picker/services/user_controller.dart';
+import 'package:auto_picker/themes/colors.dart';
+import 'package:auto_picker/utilities/utils.dart';
+import 'package:circular_profile_avatar/circular_profile_avatar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class MechanicProfile extends StatefulWidget {
-  const MechanicProfile({Key key}) : super(key: key);
+class MechanicProfilePage extends StatefulWidget {
+  Mechanic mechanic;
+  MechanicProfilePage({Key key, this.mechanic}) : super(key: key);
 
   @override
-  _MechanicProfileState createState() => _MechanicProfileState();
+  _MechanicProfilePageState createState() => _MechanicProfilePageState();
 }
 
-class _MechanicProfileState extends State<MechanicProfile> {
+class _MechanicProfilePageState extends State<MechanicProfilePage> {
   String address = '';
   String workingHours = '';
   String phoneNumber = '';
   ScrollController _controller = ScrollController();
+  var userController = UserController();
   List<FeedBackData> feedBackList = [];
-
+  String profileUrl;
+  UserModel userModel;
+  FirebaseAuth existingUser;
+  bool _hasCallSupport = false;
+  bool isLoading = true;
+  Future<void> _launched;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    existingUser = FirebaseAuth.instance;
+    profileUrl = existingUser.currentUser.photoURL;
+    setData();
+
+    // Check for phone call support.
+    canLaunch('tel:123').then((bool result) {
+      setState(() {
+        _hasCallSupport = result;
+      });
+    });
     _controller.addListener(() async {
       if (_controller.offset >= _controller.position.maxScrollExtent &&
           !_controller.position.outOfRange) {
@@ -34,6 +62,26 @@ class _MechanicProfileState extends State<MechanicProfile> {
     });
   }
 
+  void setData() async {
+    var _user = await userController.getUser((existingUser.currentUser.uid));
+    userModel = UserModel.fromJson(_user);
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    // Use `Uri` to ensure that `phoneNumber` is properly URL-encoded.
+    // Just using 'tel:$phoneNumber' would create invalid URLs in some cases,
+    // such as spaces in the input, which would cause `launch` to fail on some
+    // platforms.
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    await launch(launchUri.toString());
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -45,166 +93,182 @@ class _MechanicProfileState extends State<MechanicProfile> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            getHeader(),
-            InfoTile(Icons.location_pin,
-                title: "Working Address", subTitle: address),
-            Divider(
-              color: Colors.grey,
-              thickness: 1,
-              endIndent: MediaQuery.of(context).size.width * 1 / 8,
-              indent: MediaQuery.of(context).size.width * 1 / 8,
-            ),
-            InfoTile(Icons.lock_clock,
-                title: "Working Hours", subTitle: workingHours),
-            Divider(
-              color: Colors.grey,
-              thickness: 1,
-              endIndent: MediaQuery.of(context).size.width * 1 / 8,
-              indent: MediaQuery.of(context).size.width * 1 / 8,
-            ),
-            InfoTile(Icons.phone_android_outlined,
-                title: 'Phone Number', subTitle: phoneNumber),
-            Divider(
-              color: Colors.grey,
-              thickness: 1,
-              endIndent: MediaQuery.of(context).size.width * 1 / 8,
-              indent: MediaQuery.of(context).size.width * 1 / 8,
-            ),
-            Text(
-              'Description',
-              textAlign: TextAlign.start,
-              style: TextStyle(fontSize: 20),
-            ),
-            Text(
-              'Phone authentication allows users to sign in to Firebase using their phone as the authenticator. An SMS message is sent to the user (using the provided phone number) containing a unique code. Once the code has been authorized, the user is able to sign into Firebase.',
-              textAlign: TextAlign.justify,
-              style: TextStyle(fontSize: 16),
-              maxLines: 10,
-              overflow: TextOverflow.ellipsis,
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Text(
-              'Feedbacks',
-              textAlign: TextAlign.start,
-              style: TextStyle(fontSize: 20),
-            ),
-            FutureBuilder(
-                future: Future.delayed(Duration(seconds: 5)),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting)
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  return Container(
-                    child: feedBackList.length != 0
-                        ? ListView.builder(
-                            controller: _controller,
-                            itemCount: feedBackList.length,
-                            itemBuilder: (context, index) {
-                              return feedBackTile(feedBackList[index]);
-                            },
-                          )
-                        : Image.network(
-                            'https://cdn.dribbble.com/users/683081/screenshots/2728654/exfuse_app_main_nocontent.png'),
-                    height: MediaQuery.of(context).size.height * 2 / 3,
-                  );
-                })
-          ],
-        ),
+      appBar: const CustomAppBar(
+        title: 'Mechanic',
+        isLogged: true,
+        showBackButton: true,
       ),
-    ));
-  }
-}
-
-Widget getHeader() {
-  return Row(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Icon(
-        Icons.arrow_back,
-        color: Colors.cyan,
+      bottomNavigationBar: Footer(
+        isLogged: true,
       ),
-      SizedBox(
-        width: 8,
-      ),
-      Expanded(
-          child: Row(
-        children: [
-          CircleAvatar(
-            radius: 48,
-          ),
-          SizedBox(
-            width: 16,
-          ),
-          Expanded(
+      body: isLoading
+          ? CircularProgressIndicator()
+          : SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 8),
               child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Gunnar',
-                textAlign: TextAlign.start,
-                style: TextStyle(fontSize: 24),
-              ),
-              Text(
-                'All kind of services',
-                textAlign: TextAlign.start,
-                style: TextStyle(fontSize: 20),
-              ),
-              Wrap(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  GenericButton(
-                    text: 'CALL',
-                    textColor: Colors.white,
-                    backgroundColor: Colors.blue,
-                    paddingHorizontal: 2,
-                    paddingVertical: 2,
-                    shadowColor: Colors.transparent,
-                    onPressed: () {},
+                  SizedBox(
+                    height: 30,
+                  ),
+                  getHeader(),
+                  InfoTile(SvgPicture.asset("assets/images/map-pin.svg"),
+                      title: "City", subTitle: widget.mechanic.workingCity),
+                  InfoTile(SvgPicture.asset("assets/images/map-pin.svg"),
+                      title: "Working Address",
+                      subTitle: widget.mechanic.workingAddress),
+                  Divider(
+                    color: Colors.grey,
+                    thickness: 1,
+                    endIndent: MediaQuery.of(context).size.width * 1 / 8,
+                    indent: MediaQuery.of(context).size.width * 1 / 8,
+                  ),
+                  InfoTile(SvgPicture.asset("assets/images/clock.svg"),
+                      title: "Working Hours",
+                      subTitle:
+                          "${utcTo12HourFormat(widget.mechanic.workingTime_From)} - ${utcTo12HourFormat(widget.mechanic.workingTime_To)}"),
+                  Divider(
+                    color: Colors.grey,
+                    thickness: 1,
+                    endIndent: MediaQuery.of(context).size.width * 1 / 8,
+                    indent: MediaQuery.of(context).size.width * 1 / 8,
+                  ),
+                  InfoTile(SvgPicture.asset("assets/images/phone.svg"),
+                      title: 'Phone Number', subTitle: userModel.phoneNumber),
+                  Divider(
+                    color: Colors.grey,
+                    thickness: 1,
+                    endIndent: MediaQuery.of(context).size.width * 1 / 8,
+                    indent: MediaQuery.of(context).size.width * 1 / 8,
                   ),
                   SizedBox(
-                    width: 8,
+                    height: 8,
                   ),
-                  GenericButton(
-                    text: 'CHAT',
-                    onPressed: () {},
-                    paddingHorizontal: 2,
-                    paddingVertical: 2,
-                    shadowColor: Colors.transparent,
+                  Text(
+                    'Feedbacks',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(fontSize: 20),
                   ),
+                  FutureBuilder(
+                      future: Future.delayed(Duration(seconds: 5)),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting)
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        return Container(
+                          child: feedBackList.length != 0
+                              ? ListView.builder(
+                                  controller: _controller,
+                                  itemCount: feedBackList.length,
+                                  itemBuilder: (context, index) {
+                                    return feedBackTile(feedBackList[index]);
+                                  },
+                                )
+                              : Image.network(
+                                  'https://cdn.dribbble.com/users/683081/screenshots/2728654/exfuse_app_main_nocontent.png',
+                                  height: 400,
+                                ),
+                          height: 300,
+                          width: MediaQuery.of(context).size.width,
+                        );
+                      })
                 ],
-              )
-            ],
-          ))
-        ],
-      ))
-    ],
-  );
-}
+              ),
+            ),
+    ));
+  }
 
-Widget InfoTile(IconData icon,
-    {String title = "Title", String subTitle = 'Sub title'}) {
-  return ListTile(
-    leading: Icon(
-      icon,
-      color: Colors.cyan,
-    ),
-    title: Text(
-      title,
-      style: TextStyle(fontSize: 20),
-    ),
-    subtitle: Text(
-      subTitle,
-      style: TextStyle(fontSize: 16),
-    ),
-  );
+  Widget getHeader() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Expanded(
+            child: Row(
+          children: [
+            CircularProfileAvatar(
+              profileUrl ?? '',
+              initialsText: Text(
+                userModel.fullName,
+                style: TextStyle(fontSize: 24, color: Colors.white),
+              ),
+              radius: 40,
+              imageFit: BoxFit.fitHeight,
+              placeHolder: (context, url) => Container(
+                width: 40,
+                height: 40,
+                child: CircularProgressIndicator(),
+              ),
+              backgroundColor: AppColors.green,
+            ),
+            SizedBox(
+              width: 16,
+            ),
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  userModel.fullName,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(fontSize: 24),
+                ),
+                Text(
+                  widget.mechanic.specialist,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(fontSize: 20),
+                ),
+                Wrap(
+                  children: [
+                    GenericButton(
+                      text: _hasCallSupport ? 'CALL' : 'Calling not supported',
+                      textColor: AppColors.white,
+                      backgroundColor: Colors.blue,
+                      paddingHorizontal: 2,
+                      paddingVertical: 2,
+                      onPressed: _hasCallSupport
+                          ? () => setState(() {
+                                _launched =
+                                    _makePhoneCall(userModel.phoneNumber);
+                              })
+                          : null,
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    GenericButton(
+                      text: 'CHAT',
+                      onPressed: () {},
+                      paddingHorizontal: 2,
+                      textColor: AppColors.blue,
+                      backgroundColor: AppColors.white,
+                      paddingVertical: 2,
+                    ),
+                  ],
+                )
+              ],
+            ))
+          ],
+        ))
+      ],
+    );
+  }
+
+  Widget InfoTile(Widget icon,
+      {String title = "Title", String subTitle = 'Sub title'}) {
+    return ListTile(
+      leading: icon,
+      title: Text(
+        title,
+        style: TextStyle(fontSize: 20),
+      ),
+      subtitle: Text(
+        subTitle,
+        style: TextStyle(fontSize: 16),
+      ),
+    );
+  }
 }
 
 Widget feedBackTile(FeedBackData feedBackData) {

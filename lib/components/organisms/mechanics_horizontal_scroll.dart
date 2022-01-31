@@ -4,6 +4,7 @@ import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/atoms/image_tile.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
+import 'package:auto_picker/components/pages/mechanic_profile_page.dart';
 import 'package:auto_picker/models/mechanic.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +54,13 @@ class _MechanicsHorizontalItemScrollState
 
   void navigateToMechanicProfilePage(int index) {
     if (isLogged) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MechanicProfilePage(
+              mechanic: widget.ImageTileList[index],
+            ),
+          ));
     } else {
       showDialog(
           context: context,

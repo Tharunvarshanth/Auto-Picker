@@ -20,13 +20,15 @@ class SellerController {
   }
 
   Future<bool> updateSeller(Seller seller) async {
+    var res = false;
     await sellers.doc(seller.getId()).update(seller.toJson()).then((value) {
       print("updateSeller:success");
-      return true;
+      res = true;
     }).catchError((onError) {
       print("updateSeller:error: $onError");
-      return true;
+      res = true;
     });
+    return res;
   }
 
   Future<bool> updateSellersField(
