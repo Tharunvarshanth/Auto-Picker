@@ -152,17 +152,11 @@ class _HomePageState extends State<HomePage> {
                 icon: 'assets/images/x-circle.svg',
                 titleText: 'Need to Signup',
                 bodyText:
-                    "Auto picker terms & conditions without an account user's cann't see product informations detaily",
+                    "Auto picker terms & conditions without an account user's cann't see detail view",
                 primaryButtonText: 'Ok',
                 onPressedPrimary: () => Navigator.pop(context, 'Cancel'),
               ));
     }
-  }
-
-  signOut() {
-    //redirect
-    userInfo.clearValue();
-    _auth.signOut().then((value) => navigate(context, RouteGenerator.homePage));
   }
 
   testFunction() {
@@ -283,15 +277,6 @@ class _HomePageState extends State<HomePage> {
                             );
                           },
                         ),
-                      ),
-                      GenericTextButton(
-                        text: 'logout',
-                        onPressed: signOut,
-                      ),
-                      GenericButton(
-                        text: 'Profile',
-                        onPressed: () =>
-                            navigate(context, RouteGenerator.profilePage),
                       ),
                     ],
                   )),

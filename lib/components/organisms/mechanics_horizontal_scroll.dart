@@ -68,7 +68,7 @@ class _MechanicsHorizontalItemScrollState
                 icon: 'assets/images/x-circle.svg',
                 titleText: 'Need to Signup',
                 bodyText:
-                    "Auto picker terms & conditions without an account user's cann't see informations",
+                    "Auto picker terms & conditions without an account user's cann't see detail view",
                 primaryButtonText: 'Ok',
                 onPressedPrimary: () => Navigator.pop(context, 'Cancel'),
               ));

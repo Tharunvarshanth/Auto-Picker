@@ -86,7 +86,7 @@ class _ProductListingPageState extends State<ProductListingPage> {
                 icon: 'assets/images/x-circle.svg',
                 titleText: 'Need to Signup',
                 bodyText:
-                    "Auto picker terms & conditions without an account user's cann't see product informations detaily",
+                    "Auto picker terms & conditions without an account user's cann't see detail view",
                 primaryButtonText: 'Ok',
                 onPressedPrimary: () => Navigator.pop(context, 'Cancel'),
               ));

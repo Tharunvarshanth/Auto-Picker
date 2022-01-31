@@ -106,8 +106,6 @@ class _OtpLoginPage extends State<OtpLoginPage> {
     print("res:isNumberAlreadyHaveAccount ${res}");
     if (res) {
       isOtpScreen = true;
-      timerCount = 60;
-      startTimer();
       _verifyPhone();
     } else {
       isvalidUser = true;
@@ -128,6 +126,8 @@ class _OtpLoginPage extends State<OtpLoginPage> {
   }
 
   void _verifyPhone() async {
+    timerCount = 60;
+    startTimer();
     var testingNumber = TESTNUMBER;
     await auth.verifyPhoneNumber(
       phoneNumber: testingNumber,
@@ -149,6 +149,16 @@ class _OtpLoginPage extends State<OtpLoginPage> {
       verificationFailed: (FirebaseAuthException e) {
         if (e.code == 'invalid-phone-number') {
           print('The provided phone number is not valid.');
+          showDialog(
+              context: context,
+              builder: (context) => ItemDialogMessage(
+                    icon: 'assets/images/x-circle.svg',
+                    titleText: 'Login Failure',
+                    bodyText: "The provided phone number is not valid.",
+                    primaryButtonText: 'OK',
+                    onPressedPrimary: () =>
+                        navigate(context, RouteGenerator.loginPage),
+                  ));
         }
         setState(() {
           isLoading = false;
@@ -192,6 +202,7 @@ class _OtpLoginPage extends State<OtpLoginPage> {
 
   void dispose() {
     super.dispose();
+    _timer.cancel();
   }
 
   @override
