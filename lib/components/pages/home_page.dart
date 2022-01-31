@@ -233,7 +233,10 @@ class _HomePageState extends State<HomePage> {
                               GenericTextButton(
                                 color: AppColors.Blue,
                                 text: 'See All',
-                                onPressed: () {},
+                                onPressed: () {
+                                  navigate(context,
+                                      RouteGenerator.advertisementListingPage);
+                                },
                               ),
                             ]),
                       const SizedBox(

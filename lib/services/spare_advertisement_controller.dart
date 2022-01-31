@@ -91,4 +91,36 @@ class AdvertisementController {
     });
     return res;
   }
+
+  Future<dynamic> deleteProduct(SpareAdvertisement advertisement) async {
+    var res = false;
+    await advertisements
+        .doc(advertisement.uid)
+        .collection(FirebaseCollections.AdvertisementList)
+        .doc(advertisement.aId)
+        .delete()
+        .then((value) {
+      res = true;
+    }).catchError((onError) {
+      print("addProduct: $onError");
+      res = false;
+    });
+    return res;
+  }
+
+  Future<dynamic> updateAdvertisementAllField(
+      SpareAdvertisement advertisement) async {
+    var res = false;
+    await advertisements
+        .doc(advertisement.uid)
+        .collection(FirebaseCollections.AdvertisementList)
+        .doc(advertisement.aId)
+        .update(advertisement.toJson())
+        .whenComplete(() {
+      res = true;
+    }).onError((error, stackTrace) {
+      res = false;
+    });
+    return res;
+  }
 }

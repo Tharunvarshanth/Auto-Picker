@@ -1,6 +1,9 @@
+import 'package:auto_picker/components/atoms/popup_modal_message.dart';
+import 'package:auto_picker/components/pages/advertisement_page.dart';
 import 'package:auto_picker/models/carousel_data.dart';
 import 'package:auto_picker/models/spare_advertisement.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -36,6 +39,36 @@ class _CustomCarouselAdvertisementState
     extends State<CustomCarouselAdvertisement> {
   CarouselController controller = CarouselController();
   int counter = 0;
+  bool isLogged = false;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  void initState() {
+    setState(() {
+      isLogged = _auth.currentUser != null ? true : false;
+    });
+  }
+
+  void navigateToAdvertisementPage(SpareAdvertisement spareAdvertisement) {
+    if (isLogged) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AdvertisementPage(
+              advertisement: spareAdvertisement,
+            ),
+          ));
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) => ItemDialogMessage(
+                icon: 'assets/images/x-circle.svg',
+                titleText: 'Need to Signup',
+                bodyText:
+                    "Auto picker terms & conditions without an account user's cann't see product informations detaily",
+                primaryButtonText: 'Ok',
+                onPressedPrimary: () => Navigator.pop(context, 'Cancel'),
+              ));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,17 +79,19 @@ class _CustomCarouselAdvertisementState
             CarouselSlider(
               carouselController: controller,
               items: widget.items
-                  .map((e) => Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8.0),
-                          image: DecorationImage(
-                            image: NetworkImage(
-                              e.imageList[0],
-                            ),
-                            fit: BoxFit.cover,
+                  .map(
+                    (e) => Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            e.imageList[0],
                           ),
+                          fit: BoxFit.cover,
                         ),
-                      ))
+                      ),
+                    ),
+                  )
                   .toList(),
               options: CarouselOptions(
                   height: MediaQuery.of(context).size.height *
@@ -77,32 +112,34 @@ class _CustomCarouselAdvertisementState
                   },
                   pageSnapping: true),
             ),
-            Container(
-              color: Colors.transparent,
-              child: Column(
-                children: [
-                  Text(
-                    widget.items[counter] != null
-                        ? widget.items[counter].title
-                        : '',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        color: widget.titleColor,
-                        fontSize: widget.titleTextSize),
+            GestureDetector(
+                onTap: () => navigateToAdvertisementPage(widget.items[counter]),
+                child: Container(
+                  color: Colors.transparent,
+                  child: Column(
+                    children: [
+                      Text(
+                        widget.items[counter] != null
+                            ? widget.items[counter].title
+                            : '',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            color: widget.titleColor,
+                            fontSize: widget.titleTextSize),
+                      ),
+                      Text(
+                        widget.items[counter] != null
+                            ? widget.items[counter].subtitle
+                            : '',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            color: widget.subTitleColor,
+                            fontSize: widget.subtitleTextSize),
+                      ),
+                    ],
+                    mainAxisSize: MainAxisSize.min,
                   ),
-                  Text(
-                    widget.items[counter] != null
-                        ? widget.items[counter].subtitle
-                        : '',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        color: widget.subTitleColor,
-                        fontSize: widget.subtitleTextSize),
-                  ),
-                ],
-                mainAxisSize: MainAxisSize.min,
-              ),
-            ),
+                )),
             LayoutBuilder(
               builder: (context, constraints2) {
                 return Container(

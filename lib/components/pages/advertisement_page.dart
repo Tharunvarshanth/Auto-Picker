@@ -4,12 +4,15 @@ import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/image_corousal.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
+import 'package:auto_picker/components/pages/edit_existing_advertisement.dart';
 import 'package:auto_picker/components/pages/edit_existing_product_page.dart';
 import 'package:auto_picker/models/carousel_data.dart';
 import 'package:auto_picker/models/product.dart';
 import 'package:auto_picker/models/seller.dart';
+import 'package:auto_picker/models/spare_advertisement.dart';
 import 'package:auto_picker/services/product_controller.dart';
 import 'package:auto_picker/services/seller_controller.dart';
+import 'package:auto_picker/services/spare_advertisement_controller.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/constands.dart';
 import 'package:auto_picker/utilities/utils.dart';
@@ -19,17 +22,18 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../routes.dart';
 
-class ProductPage extends StatefulWidget {
-  Product product;
+class AdvertisementPage extends StatefulWidget {
+  SpareAdvertisement advertisement;
   bool isOwner = false;
-  ProductPage({Key key, this.product, this.isOwner = false}) : super(key: key);
+  AdvertisementPage({Key key, this.advertisement, this.isOwner = false})
+      : super(key: key);
 
   @override
-  _ProductPageState createState() => _ProductPageState();
+  _AdvertisementPageState createState() => _AdvertisementPageState();
 }
 
-class _ProductPageState extends State<ProductPage> {
-  var productController = ProductController();
+class _AdvertisementPageState extends State<AdvertisementPage> {
+  var advertisementController = AdvertisementController();
   var sellerController = SellerController();
   bool _hasCallSupport = false;
   Future<void> _launched;
@@ -51,11 +55,11 @@ class _ProductPageState extends State<ProductPage> {
   }
 
   void setData() async {
-    var res = await sellerController.getSeller(widget.product.uid);
+    var res = await sellerController.getSeller(widget.advertisement.uid);
     if (res != null) {
       seller = Seller.fromJson(res);
     }
-    widget.product.imagesList.forEach((element) {
+    widget.advertisement.imageList.forEach((element) {
       var temp = CarouselItemData(element, '', '');
       setState(() {
         imageList.add(temp);
@@ -79,7 +83,7 @@ class _ProductPageState extends State<ProductPage> {
   }
 
   void deleteProduct() async {
-    if (await productController.deleteProduct(widget.product)) {
+    if (await advertisementController.deleteProduct(widget.advertisement)) {
       showDialog(
           context: context,
           builder: (context) => ItemDialogMessage(
@@ -113,7 +117,7 @@ class _ProductPageState extends State<ProductPage> {
     return SafeArea(
         child: Scaffold(
       appBar: const CustomAppBar(
-        title: 'Product',
+        title: 'Advertisement',
         showBackButton: true,
       ),
       bottomNavigationBar: Footer(),
@@ -144,11 +148,12 @@ class _ProductPageState extends State<ProductPage> {
                         child: Column(
                           children: [
                             GenericText(
-                              text: widget.product.title,
+                              text: widget.advertisement.title,
                               textSize: 24,
                             ),
                             GenericText(
-                                text: widget.product.condition, textSize: 18),
+                                text: widget.advertisement.subtitle,
+                                textSize: 18),
                           ],
                           mainAxisSize: MainAxisSize.min,
                         ),
@@ -165,7 +170,7 @@ class _ProductPageState extends State<ProductPage> {
                                 textAlign: TextAlign.left,
                                 textSize: 18),
                             GenericText(
-                                text: "Rs ${widget.product.price}" ??
+                                text: "Rs ${widget.advertisement.price}" ??
                                     PriceNegotiable,
                                 textAlign: TextAlign.left,
                                 textSize: 18),
@@ -184,7 +189,7 @@ class _ProductPageState extends State<ProductPage> {
                               maxLines: 2,
                             ),
                             GenericText(
-                              text: "${widget.product.description}",
+                              text: "${widget.advertisement.description}",
                               textAlign: TextAlign.left,
                               textSize: 18,
                             ),
@@ -262,16 +267,6 @@ class _ProductPageState extends State<ProductPage> {
                                 shadowColor: Colors.transparent,
                                 borderRadius: 14,
                               ),
-                              GenericButton(
-                                text: 'ORDER',
-                                isBold: true,
-                                paddingHorizontal: 4,
-                                paddingVertical: 2,
-                                onPressed: () {},
-                                backgroundColor: Colors.blue,
-                                shadowColor: Colors.transparent,
-                                borderRadius: 14,
-                              ),
                             ],
                             alignment: WrapAlignment.center,
                           )
@@ -288,8 +283,9 @@ class _ProductPageState extends State<ProductPage> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            EditExistingProductPage(
-                                          product: widget.product,
+                                            EditExistingAdvertisementPage(
+                                          spareAdvertisement:
+                                              widget.advertisement,
                                         ),
                                       ));
                                 },
@@ -303,7 +299,7 @@ class _ProductPageState extends State<ProductPage> {
                                 paddingHorizontal: 4,
                                 backgroundColor: AppColors.white,
                                 paddingVertical: 2,
-                                onPressed: () => deleteProduct(),
+                                onPressed: () {},
                                 elevation: 0,
                                 textColor: Colors.blue,
                                 shadowColor: Colors.transparent,
