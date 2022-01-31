@@ -2,6 +2,7 @@ import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
+import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/models/product.dart';
 import 'package:auto_picker/models/user_model.dart';
 import 'package:auto_picker/routes.dart';
@@ -52,7 +53,16 @@ class _AdvertisementPaymentPageState extends State<AdvertisementPaymentPage> {
     Widget okButton = TextButton(
       child: Text("OK"),
       onPressed: () {
-        navigate(context, RouteGenerator.homePage);
+        showDialog(
+            context: context,
+            builder: (context) => ItemDialogMessage(
+                  icon: 'assets/images/plus-circle.svg',
+                  titleText: 'Success',
+                  bodyText: "Advertisement successfully added",
+                  primaryButtonText: 'Ok',
+                  onPressedPrimary: () =>
+                      navigate(context, RouteGenerator.homePage),
+                ));
       },
     );
 

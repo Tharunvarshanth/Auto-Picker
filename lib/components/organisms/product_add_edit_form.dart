@@ -83,11 +83,41 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
       print("imageList ${imageList}");
       if (await productController.updateProduct(
           existingUser.currentUser.uid, res, 'imagesList', imageList)) {
+        showDialog(
+            context: context,
+            builder: (context) => ItemDialogMessage(
+                  icon: 'assets/images/plus-circle.svg',
+                  titleText: 'Success',
+                  bodyText: "Prdouct successfully added",
+                  primaryButtonText: 'Ok',
+                  onPressedPrimary: () =>
+                      navigate(context, RouteGenerator.homePage),
+                ));
       } else {
         //errpopup
+        showDialog(
+            context: context,
+            builder: (context) => ItemDialogMessage(
+                  icon: 'assets/images/x-circle.svg',
+                  titleText: 'Failure',
+                  bodyText: "Prdouct  image upload getting failed try again",
+                  primaryButtonText: 'Ok',
+                  onPressedPrimary: () =>
+                      navigate(context, RouteGenerator.homePage),
+                ));
       }
     } else {
       //error popup
+      showDialog(
+          context: context,
+          builder: (context) => ItemDialogMessage(
+                icon: 'assets/images/x-circle.svg',
+                titleText: 'Failure',
+                bodyText: "Prdouct  adding failed try again",
+                primaryButtonText: 'Ok',
+                onPressedPrimary: () =>
+                    navigate(context, RouteGenerator.homePage),
+              ));
     }
   }
 
