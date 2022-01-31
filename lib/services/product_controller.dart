@@ -105,6 +105,37 @@ class ProductController {
     return res;
   }
 
+  Future<dynamic> updateProductAllField(Product product) async {
+    var res = false;
+    await products
+        .doc(product.uid)
+        .collection(FirebaseCollections.ProductsList)
+        .doc(product.pId)
+        .update(product.toJson())
+        .whenComplete(() {
+      res = true;
+    }).onError((error, stackTrace) {
+      res = false;
+    });
+    return res;
+  }
+
+  Future<dynamic> deleteProduct(Product product) async {
+    var res = false;
+    await products
+        .doc(product.getUId())
+        .collection(FirebaseCollections.ProductsList)
+        .doc(product.pId)
+        .delete()
+        .then((value) {
+      res = true;
+    }).catchError((onError) {
+      print("addProduct: $onError");
+      res = false;
+    });
+    return res;
+  }
+
   Future<dynamic> addProductTest(String user) async {
     var res;
     await products.doc(user).set({"test": "test"}).then((value) {

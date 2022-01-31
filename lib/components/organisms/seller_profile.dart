@@ -3,6 +3,7 @@ import 'package:auto_picker/components/atoms/text_description.dart';
 import 'package:auto_picker/components/atoms/text_description_with_button.dart';
 import 'package:auto_picker/components/pages/add_new_advertisement.dart';
 import 'package:auto_picker/components/pages/add_new_product.dart';
+import 'package:auto_picker/components/pages/my_own_product_listing_page.dart';
 import 'package:auto_picker/models/seller.dart';
 import 'package:flutter/material.dart';
 
@@ -39,6 +40,15 @@ class _SellerProfileState extends State<SellerProfile> {
           onPress: () => Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const AddNewProductPage()),
+          ),
+        ),
+        TextDescriptionWithButton(
+          title: 'My Products',
+          description: 'You can view and edit your own products',
+          onPress: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const MyOwnProductListingPage()),
           ),
         ),
         TextDescriptionWithButton(

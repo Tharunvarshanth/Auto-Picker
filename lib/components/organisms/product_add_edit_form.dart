@@ -7,6 +7,7 @@ import 'package:auto_picker/components/atoms/generic_input_option_select.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/atoms/generic_time_picker.dart';
+import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/pages/map_page.dart';
 import 'package:auto_picker/components/pages/mechanics_signup_page.dart';
 import 'package:auto_picker/components/pages/otp_signup_page.dart';
@@ -26,8 +27,9 @@ import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ProductAddEditForm extends StatefulWidget {
-  final Map<String, dynamic> params;
-  const ProductAddEditForm({Map<String, dynamic> this.params});
+  final Product product;
+  const ProductAddEditForm({this.product});
+
   @override
   _ProductAddEditFormState createState() => _ProductAddEditFormState();
 }
@@ -46,6 +48,15 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
 
   void initState() {
     super.initState();
+    if (widget.product != null) {
+      productTitleController.text = widget.product.title;
+      descriptionController.text = widget.product.description;
+      priceController.text = widget.product.price;
+      conditionToController.text = widget.product.condition;
+      setState(() {
+        condition = widget.product.condition;
+      });
+    }
   }
 
   void handleConditionChange(_condition) {
@@ -55,11 +66,6 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
   }
 
   void handleAdd() async {
-    /*  widget.params['price'] = priceController.text;
-    widget.params['title'] = productTitleController.text;
-    widget.params['description'] = descriptionController.text;
-    widget.params['condition'] = condition;
-    widget.params['imageList'] = imageList;*/
     var product = Product(
         existingUser.currentUser.uid,
         priceController.text,
@@ -82,6 +88,42 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
       }
     } else {
       //error popup
+    }
+  }
+
+  void handleUpdate() async {
+    var product = Product(
+        existingUser.currentUser.uid,
+        priceController.text,
+        productTitleController.text,
+        descriptionController.text,
+        condition,
+        widget.product.imagesList,
+        widget.product.pId);
+    var res = await productController.updateProductAllField(product);
+    if (res) {
+      //popup
+      showDialog(
+          context: context,
+          builder: (context) => ItemDialogMessage(
+                icon: 'assets/images/plus-circle.svg',
+                titleText: 'Done ok',
+                bodyText: "",
+                primaryButtonText: 'Ok',
+                onPressedPrimary: () =>
+                    navigate(context, RouteGenerator.homePage),
+              ));
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) => ItemDialogMessage(
+                icon: 'assets/images/x-circle.svg',
+                titleText: 'Failure',
+                bodyText: "",
+                primaryButtonText: 'Ok',
+                onPressedPrimary: () =>
+                    navigate(context, RouteGenerator.homePage),
+              ));
     }
   }
 
@@ -215,31 +257,45 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
               onValueChange: (text) => handleConditionChange(text),
             ),
             SizedBox(height: size.height * 0.025),
-            GenericIconButton(
-              backgroundColor: AppColors.white,
-              textColor: AppColors.black,
-              shadowColor: AppColors.ash,
-              text: 'Upload Images',
-              borderRadius: 30,
-              onPressed: loadAssets,
-              iconLeft: 'assets/images/camera.svg',
-            ),
+            if (widget.product == null)
+              GenericIconButton(
+                backgroundColor: AppColors.white,
+                textColor: AppColors.black,
+                shadowColor: AppColors.ash,
+                text: 'Upload Images',
+                borderRadius: 30,
+                onPressed: loadAssets,
+                iconLeft: 'assets/images/camera.svg',
+              ),
             SizedBox(height: size.height * 0.015),
             SizedBox(
                 height: images.length == 0 ? 0 : 100, child: buildGridView()),
             SizedBox(height: size.height * 0.015),
-            GenericButton(
-              textColor: AppColors.white,
-              backgroundColor: AppColors.Blue,
-              paddingVertical: 20,
-              paddingHorizontal: 80,
-              text: 'Add',
-              onPressed: () {
-                //validations ok
-                handleAdd();
-              },
-              isBold: true,
-            ),
+            widget.product == null
+                ? GenericButton(
+                    textColor: AppColors.white,
+                    backgroundColor: AppColors.Blue,
+                    paddingVertical: 20,
+                    paddingHorizontal: 80,
+                    text: 'Add',
+                    onPressed: () {
+                      //validations ok
+                      handleAdd();
+                    },
+                    isBold: true,
+                  )
+                : GenericButton(
+                    textColor: AppColors.white,
+                    backgroundColor: AppColors.Blue,
+                    paddingVertical: 20,
+                    paddingHorizontal: 80,
+                    text: 'Update',
+                    onPressed: () {
+                      //validations ok
+                      handleUpdate();
+                    },
+                    isBold: true,
+                  ),
           ],
         ));
   }
