@@ -49,6 +49,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    setState(() {
+      isLogged = _auth.currentUser != null ? true : false;
+    });
     controller.addListener(() {});
     setData();
   }

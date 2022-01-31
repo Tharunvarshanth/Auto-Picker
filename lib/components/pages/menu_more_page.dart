@@ -20,6 +20,7 @@ class _MenuMoreState extends State<MenuMorePage> {
   final FirebaseAuth existingUser = FirebaseAuth.instance;
   bool isLogged = false;
   var userInfo = UserInfoCache();
+
   void initState() {
     super.initState();
     print("Auth ${existingUser.currentUser}");
