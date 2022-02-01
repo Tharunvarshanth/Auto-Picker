@@ -7,6 +7,7 @@ import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/atoms/single_digit_field.dart';
 import 'package:auto_picker/components/pages/google_signin_login_page.dart';
 import 'package:auto_picker/components/pages/home_page_test.dart';
+import 'package:auto_picker/components/pages/user_payment_page.dart';
 import 'package:auto_picker/models/account.dart';
 import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/models/seller.dart';
@@ -112,7 +113,8 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
               widget.params["accountCreatedDate"] = DateTime.now().toString(),
               false,
               widget.params["location-lat"],
-              widget.params["location-lon"]);
+              widget.params["location-lon"],
+              false);
           resOther = await mechanicController.addMechanic(mechanic);
         }
         break;
@@ -125,6 +127,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
               widget.params["shopcity"],
               widget.params["shopPhoneNumber"],
               widget.params["accountCreatedDate"] = DateTime.now().toString(),
+              false,
               false);
           resOther = await sellerController.addSeller(seller);
           externalTestData(fireUser);
@@ -138,6 +141,49 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
       isLoading = false;
     });
     if (resUser && resOther) {
+      switch (widget.params["role"]) {
+        case Users.Mechanic:
+          {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    UserSignUpPaymentPage(id: fireUser, isSeller: false),
+              ),
+            );
+          }
+          break;
+        case Users.Seller:
+          {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    UserSignUpPaymentPage(id: fireUser, isSeller: true),
+              ),
+            );
+          }
+          break;
+        default:
+          {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const GoogleLinkingPage(
+                  isLinkingPage: true,
+                ),
+              ),
+            );
+          }
+          break;
+      }
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              UserSignUpPaymentPage(id: fireUser, isSeller: false),
+        ),
+      ); /*
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -145,7 +191,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
             isLinkingPage: true,
           ),
         ),
-      );
+      );*/
     } else {
       // error pop up
       showDialog(

@@ -6,9 +6,10 @@ class Product {
   String condition;
   List<dynamic> imagesList;
   String pId;
+  bool isPayed;
 
   Product(this.uid, this.price, this.title, this.description, this.condition,
-      this.imagesList, this.pId);
+      this.imagesList, this.pId, this.isPayed);
 
   void updateId(String id) {
     this.uid = id;
@@ -22,7 +23,8 @@ class Product {
         json["description"],
         json["condition"],
         json["imagesList"] as List<dynamic>,
-        json["pId"]);
+        json["pId"],
+        json["isPayed"]);
   }
 
   String getUId() {
@@ -37,7 +39,8 @@ class Product {
       'description': description,
       'condition': condition,
       'imagesList': imagesList,
-      'pId': pId
+      'pId': pId,
+      'isPayed': isPayed
     };
   }
 }

@@ -32,7 +32,7 @@ class SellerController {
   }
 
   Future<bool> updateSellersField(
-      String uid, String field, String value) async {
+      String uid, String field, dynamic value) async {
     await sellers.doc(uid).update({field: value}).then((value) {
       print("updateSellers:success");
       return true;

@@ -54,7 +54,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void getUserInfo() async {
     var _user = await userController.getUser((existingUser.currentUser.uid));
-    userRole = await userInfo.getRole();
+
+    setState(() {
+      userRole = _user["role"];
+    });
     switch (userRole) {
       case Users.Mechanic:
         {

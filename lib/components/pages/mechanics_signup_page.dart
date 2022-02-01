@@ -51,15 +51,16 @@ class _MechanicsSignUpPageState extends State<MechanicsSignUpPage> {
               textSize: 36,
               isBold: true,
             ),
-            SizedBox(
+            const SizedBox(
               height: 1,
             ),
             GenericText(
+              maxLines: 3,
               text:
                   'As a Mechanics we need an additional information for you please fill below form complete the registration',
               textSize: 16,
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             MechanicsSignUpForm(params: widget.params)

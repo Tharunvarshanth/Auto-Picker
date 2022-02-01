@@ -11,6 +11,7 @@ import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/pages/map_page.dart';
 import 'package:auto_picker/components/pages/mechanics_signup_page.dart';
 import 'package:auto_picker/components/pages/otp_signup_page.dart';
+import 'package:auto_picker/components/pages/product_payment_page.dart';
 import 'package:auto_picker/components/pages/seller_signup_page.dart';
 import 'package:auto_picker/models/product.dart';
 import 'package:auto_picker/routes.dart';
@@ -73,7 +74,8 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
         descriptionController.text,
         condition,
         imageList,
-        '');
+        '',
+        false);
     var res = await productController.addProduct(product);
     if (res != null) {
       var pRes = await productController.updateProduct(
@@ -86,13 +88,18 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
         showDialog(
             context: context,
             builder: (context) => ItemDialogMessage(
-                  icon: 'assets/images/plus-circle.svg',
-                  titleText: 'Success',
-                  bodyText: "Prdouct successfully added",
-                  primaryButtonText: 'Ok',
-                  onPressedPrimary: () =>
-                      navigate(context, RouteGenerator.homePage),
-                ));
+                icon: 'assets/images/plus-circle.svg',
+                titleText: 'Success',
+                bodyText:
+                    "Prdouct successfully added Please Pay amount then your product go will go live",
+                primaryButtonText: 'Ok',
+                onPressedPrimary: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProductPaymentPage(
+                        productId: res,
+                      ),
+                    ))));
       } else {
         //errpopup
         showDialog(
@@ -129,7 +136,8 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
         descriptionController.text,
         condition,
         widget.product.imagesList,
-        widget.product.pId);
+        widget.product.pId,
+        widget.product.isPayed);
     var res = await productController.updateProductAllField(product);
     if (res) {
       //popup

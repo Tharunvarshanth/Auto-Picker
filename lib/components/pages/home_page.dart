@@ -62,6 +62,9 @@ class _HomePageState extends State<HomePage> {
       getMechanicsList(),
       getAdvertismentList(),
     ]);
+    setState(() {
+      isLoading = false;
+    });
   }
 
   getMechanicsList() async {
@@ -99,9 +102,6 @@ class _HomePageState extends State<HomePage> {
           }
         } else {}
       }
-    });
-    setState(() {
-      isLoading = false;
     });
   }
 

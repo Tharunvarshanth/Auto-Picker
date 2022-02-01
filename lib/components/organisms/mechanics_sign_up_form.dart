@@ -47,8 +47,8 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
     if (widget.params["location-lat"] != null) {
       setState(() {
         specialist = widget.params['specialist'];
-      });
-      setState(() {
+        _valueChangedStart = widget.params['workingTime_To'];
+        _valueChangedFinish = widget.params['workingTime_From'];
         city = widget.params['workingCity'];
       });
       addressController.text = widget.params['address'];
@@ -108,7 +108,7 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
             GenericInputOptionSelect(
               width: size.width,
               labelText: 'Specialist',
-              value: city,
+              value: specialist,
               itemList: MechanicSpecialistSkills,
               onValueChange: (text) => handleMechanicsSpecialist(text),
             ),
