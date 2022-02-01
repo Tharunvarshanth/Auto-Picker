@@ -71,10 +71,12 @@ class _HomePageState extends State<HomePage> {
     List<dynamic> res = await mechanicsController.getMechanics();
     if (res != null) {
       res.forEach((element) {
-        print("Mechanics: $element");
-        setState(() {
-          mechanicList.add(Mechanic.fromJson(element));
-        });
+        var tM = Mechanic.fromJson(element);
+        if (tM.isPayed) {
+          setState(() {
+            mechanicList.add(tM);
+          });
+        }
       });
     }
   }
@@ -131,9 +133,12 @@ class _HomePageState extends State<HomePage> {
       if (res2 != null) {
         print(res2);
         res2.docs.forEach((element) {
-          setState(() {
-            productList.add(Product.fromJson(element.data()));
-          });
+          var tP = Product.fromJson(element.data());
+          if (tP.isPayed) {
+            setState(() {
+              productList.add(tP);
+            });
+          }
         });
       }
     });

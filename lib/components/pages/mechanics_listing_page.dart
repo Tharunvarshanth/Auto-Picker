@@ -63,7 +63,7 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
       res.forEach((element) {
         print("Mechanics: $element");
         Mechanic _mechanic = Mechanic.fromJson(element);
-        if (!_mechanic.isBlocked) {
+        if (!_mechanic.isBlocked && _mechanic.isPayed) {
           setState(() {
             mechanicList.add(_mechanic);
             mechanicListFiltered.add(_mechanic);

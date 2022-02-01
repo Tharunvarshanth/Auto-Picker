@@ -58,10 +58,12 @@ class _ProductListingPageState extends State<ProductListingPage> {
       if (res2 != null) {
         print(res2);
         res2.docs.forEach((element) {
-          print("ProductListingPage ${element}");
-          setState(() {
-            productList.add(Product.fromJson(element.data()));
-          });
+          var tP = Product.fromJson(element.data());
+          if (tP.isPayed) {
+            setState(() {
+              productList.add(tP);
+            });
+          }
         });
       }
     });
