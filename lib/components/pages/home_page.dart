@@ -23,6 +23,7 @@ import 'package:auto_picker/utilities/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import '../../routes.dart';
 
@@ -54,6 +55,19 @@ class _HomePageState extends State<HomePage> {
     });
     controller.addListener(() {});
     setData();
+    // setOneSignalToken();
+  }
+
+  void setOneSignalToken() async {
+    var externalUserId = _auth.currentUser
+        .uid; // You will supply the external user id to the OneSignal SDK
+
+// Setting External User Id with Callback Available in SDK Version 3.9.3+
+    OneSignal.shared.setExternalUserId(externalUserId).then((results) {
+      print("setExternalUserId ${results.toString()}");
+    }).catchError((error) {
+      print("setExternalUserId:e ${error.toString()}");
+    });
   }
 
   void setData() async {

@@ -66,6 +66,10 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
     });
   }
 
+  adEndDate() {
+    return (DateTime.now().add(const Duration(days: 30)));
+  }
+
   void handleAdd() async {
     var product = Product(
         existingUser.currentUser.uid,
@@ -75,7 +79,8 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
         condition,
         imageList,
         '',
-        false);
+        false,
+        adEndDate().toString());
     var res = await productController.addProduct(product);
     if (res != null) {
       var pRes = await productController.updateProduct(
@@ -137,7 +142,8 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
         condition,
         widget.product.imagesList,
         widget.product.pId,
-        widget.product.isPayed);
+        widget.product.isPayed,
+        widget.product.deletingDate);
     var res = await productController.updateProductAllField(product);
     if (res) {
       //popup

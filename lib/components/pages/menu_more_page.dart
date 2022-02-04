@@ -6,6 +6,7 @@ import 'package:auto_picker/utilities/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import '../../routes.dart';
 
@@ -30,6 +31,8 @@ class _MenuMoreState extends State<MenuMorePage> {
   }
 
   signOut() {
+    //usually called after the user logs out of your app
+    OneSignal.shared.removeExternalUserId();
     //redirect
     userInfo.clearValue();
     existingUser

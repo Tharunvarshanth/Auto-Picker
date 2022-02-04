@@ -4,7 +4,7 @@ import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
-import 'package:auto_picker/components/atoms/popup_modal.dart';
+import 'package:auto_picker/components/atoms/popup_modal_order.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/atoms/single_digit_field.dart';
 import 'package:auto_picker/routes.dart';

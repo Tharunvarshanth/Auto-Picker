@@ -3,12 +3,16 @@ import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/image_corousal.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
+import 'package:auto_picker/components/atoms/popup_modal_order.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:auto_picker/components/pages/edit_existing_product_page.dart';
 import 'package:auto_picker/models/carousel_data.dart';
+import 'package:auto_picker/models/order.dart';
 import 'package:auto_picker/models/product.dart';
 import 'package:auto_picker/models/seller.dart';
+import 'package:auto_picker/services/order_controller.dart';
 import 'package:auto_picker/services/product_controller.dart';
+import 'package:auto_picker/services/push_messaging_service.dart';
 import 'package:auto_picker/services/seller_controller.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/constands.dart';
@@ -31,6 +35,7 @@ class ProductPage extends StatefulWidget {
 class _ProductPageState extends State<ProductPage> {
   var productController = ProductController();
   var sellerController = SellerController();
+  var orderController = OrderController();
   bool _hasCallSupport = false;
   Future<void> _launched;
   Seller seller;
@@ -38,6 +43,8 @@ class _ProductPageState extends State<ProductPage> {
   bool isLoading = true;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   List<CarouselItemData> imageList = [];
+  var noOfItemsController = TextEditingController();
+  var pushMessagingService = PushMessagingSerivce();
 
   void initState() {
     super.initState();
@@ -67,10 +74,6 @@ class _ProductPageState extends State<ProductPage> {
   }
 
   Future<void> _makePhoneCall(String phoneNumber) async {
-    // Use `Uri` to ensure that `phoneNumber` is properly URL-encoded.
-    // Just using 'tel:$phoneNumber' would create invalid URLs in some cases,
-    // such as spaces in the input, which would cause `launch` to fail on some
-    // platforms.
     final Uri launchUri = Uri(
       scheme: 'tel',
       path: phoneNumber,
@@ -100,6 +103,79 @@ class _ProductPageState extends State<ProductPage> {
                 primaryButtonText: 'Ok',
                 onPressedPrimary: () =>
                     navigate(context, RouteGenerator.profilePage),
+              ));
+    }
+  }
+
+  void makeOrder() {
+    showDialog(
+        context: context,
+        builder: (context) => PopUpModalOrder(
+              icon: 'assets/images/order-now.png',
+              titleText: 'No of Items',
+              bodyText:
+                  "You can order your products we will send a notification seller's mobile",
+              primaryButtonText: "Done",
+              onPressedPrimary: () {
+                if (noOfItemsController.text != null)
+                  print("no of Items ${noOfItemsController.text}");
+                processOrder(noOfItemsController.text);
+              },
+              secondaryButtonText: "Cancel",
+              controller: noOfItemsController,
+              onPressedSecondary: () {
+                Navigator.pop(context, 'Cancel');
+              },
+            ));
+  }
+
+  void processOrder(String numberItems) async {
+    var order = Order(
+        '',
+        _auth.currentUser.uid,
+        widget.product.pId,
+        widget.product.uid,
+        false,
+        int.parse(numberItems),
+        '',
+        false,
+        DateTime.now().toString());
+    var res = await orderController.addOrder(order);
+    if (res != null) {
+      var res1 = false;
+
+      res1 = await orderController.updateOrderField(order, 'orderId', res);
+      if (res1) {
+        List<String> list = [order.customerId]; //[order.sellerId];
+        print(
+            "Onesignal push ${pushMessagingService.sendNotification(list, 'You have Got a  Order from Please Check My Orders', 'Product Order Received')}");
+        Navigator.pop(context, 'Cancel');
+        showDialog(
+            context: context,
+            builder: (context) => ItemDialogMessage(
+                  icon: 'assets/images/plus-circle.svg',
+                  titleText: 'Success',
+                  bodyText: "Order successfully placed",
+                  primaryButtonText: "Ok",
+                  onPressedPrimary: () {
+                    Navigator.pop(context, 'Cancel');
+                  },
+                  secondaryButtonText: 'Go Home',
+                  onPressedSecondary: () =>
+                      navigate(context, RouteGenerator.homePage),
+                ));
+      }
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) => ItemDialogMessage(
+                icon: 'assets/images/x-circle.svg',
+                titleText: 'Failure',
+                bodyText: "Please Try again",
+                primaryButtonText: "Ok",
+                onPressedPrimary: () {
+                  Navigator.pop(context, 'Cancel');
+                },
               ));
     }
   }
@@ -226,12 +302,9 @@ class _ProductPageState extends State<ProductPage> {
                             ])
                       ],
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.05,
-                    ),
                     !widget.isOwner
                         ? Wrap(
-                            spacing: 20,
+                            spacing: 25,
                             children: [
                               GenericButton(
                                 isBold: true,
@@ -267,7 +340,7 @@ class _ProductPageState extends State<ProductPage> {
                                 isBold: true,
                                 paddingHorizontal: 4,
                                 paddingVertical: 2,
-                                onPressed: () {},
+                                onPressed: () => makeOrder(),
                                 backgroundColor: Colors.blue,
                                 shadowColor: Colors.transparent,
                                 borderRadius: 14,
