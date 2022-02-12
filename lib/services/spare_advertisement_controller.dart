@@ -25,11 +25,8 @@ class AdvertisementController {
     return res;
   }
 
-  Future<dynamic> getAdvertisments() async {
-    return await advertisements
-        .doc()
-        .collection(FirebaseCollections.AdvertisementList)
-        .get();
+  Future<QuerySnapshot> getAdvertisments() async {
+    return await advertisements.get();
   }
 
   Future<dynamic> getAdvertisementsBySeller(String Uid) async {
@@ -62,6 +59,63 @@ class AdvertisementController {
         .collection(FirebaseCollections.AdvertisementList)
         .doc(aId)
         .update(value)
+        .whenComplete(() {
+      res = true;
+    }).onError((error, stackTrace) {
+      res = false;
+    });
+    return res;
+  }
+
+  Future<dynamic> removeAdvertisement(String Uid, String aId) async {
+    var res;
+    await advertisements
+        .doc(Uid)
+        .collection(FirebaseCollections.AdvertisementList)
+        .doc(aId)
+        .delete()
+        .then((value) => res = true)
+        .catchError((error) => res = false);
+
+    return res;
+  }
+
+  Future<dynamic> addTestAdvertisment(String uId) async {
+    var res;
+    await advertisements.doc(uId).set({'test': 'test'}).then((value) {
+      print("addSpareAdvertisement:success");
+      res = true;
+    }).catchError((onError) {
+      print("addSpareAdvertisement: $onError");
+      res = null;
+    });
+    return res;
+  }
+
+  Future<dynamic> deleteProduct(SpareAdvertisement advertisement) async {
+    var res = false;
+    await advertisements
+        .doc(advertisement.uid)
+        .collection(FirebaseCollections.AdvertisementList)
+        .doc(advertisement.aId)
+        .delete()
+        .then((value) {
+      res = true;
+    }).catchError((onError) {
+      print("addProduct: $onError");
+      res = false;
+    });
+    return res;
+  }
+
+  Future<dynamic> updateAdvertisementAllField(
+      SpareAdvertisement advertisement) async {
+    var res = false;
+    await advertisements
+        .doc(advertisement.uid)
+        .collection(FirebaseCollections.AdvertisementList)
+        .doc(advertisement.aId)
+        .update(advertisement.toJson())
         .whenComplete(() {
       res = true;
     }).onError((error, stackTrace) {

@@ -11,6 +11,7 @@ class Mechanic {
   bool isBlocked;
   String location_lat;
   String location_lon;
+  bool isPayed;
 
   Mechanic(
       this.workingAddress,
@@ -22,7 +23,8 @@ class Mechanic {
       this.accountCreatedDate,
       this.isBlocked,
       this.location_lat,
-      this.location_lon);
+      this.location_lon,
+      this.isPayed);
 
   void updateId(String id) {
     this.id = id;
@@ -34,17 +36,17 @@ class Mechanic {
 
   factory Mechanic.fromJson(dynamic json) {
     return Mechanic(
-      json["workingAddress"],
-      json["id"],
-      json["workingCity"],
-      json["workingTime_To"],
-      json["workingTime_From"],
-      json["specialist"],
-      json["accountCreatedDate"],
-      json["isBlocked"],
-      json["location_lat"],
-      json["location_lon"],
-    );
+        json["workingAddress"],
+        json["id"],
+        json["workingCity"],
+        json["workingTime_To"],
+        json["workingTime_From"],
+        json["specialist"],
+        json["accountCreatedDate"],
+        json["isBlocked"],
+        json["location_lat"],
+        json["location_lon"],
+        json["isPayed"]);
   }
 
   Map<String, Object> toJson() {
@@ -59,6 +61,7 @@ class Mechanic {
       'isBlocked': isBlocked,
       'location_lat': location_lat,
       'location_lon': location_lon,
+      "isPayed": isPayed
     };
   }
 }

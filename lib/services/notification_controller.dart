@@ -5,12 +5,13 @@ import 'package:auto_picker/store/cache/sharedPreferences/user_info.dart';
 import 'package:auto_picker/utilities/constands.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class MechanicController {
+class NotificationController {
   static CollectionReference notificationCollection =
       FirebaseFirestore.instance.collection(FirebaseCollections.Notifications);
   var userInfo = new UserInfoCache();
 
-  Future<bool> addNotification(Notification notification, String uid) async {
+  Future<bool> addNotification(
+      NotificationModel notification, String uid) async {
     await notificationCollection
         .doc(uid)
         .collection(FirebaseCollections.NotificationsList)
@@ -23,6 +24,18 @@ class MechanicController {
       print("addNotification: $onError");
       return false;
     });
+  }
+
+  Future<dynamic> addNotificationTest(String uid) async {
+    var res;
+    await notificationCollection.doc(uid).set({"test": "test"}).then((value) {
+      print("add product ");
+      res = true;
+    }).catchError((onError) {
+      print("addProduct: $onError");
+      res = null;
+    });
+    return res;
   }
 
   Future<List<Seller>> getNotifications(String uid) async {

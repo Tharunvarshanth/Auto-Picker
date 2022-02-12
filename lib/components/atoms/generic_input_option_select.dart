@@ -17,6 +17,8 @@ class GenericInputOptionSelect extends StatelessWidget {
   double width;
   String value;
   List<String> itemList;
+  bool enable = true;
+  void Function() onTap = () => {};
   void Function(String text) onValueChange;
   GenericInputOptionSelect(
       {Key key,
@@ -33,6 +35,8 @@ class GenericInputOptionSelect extends StatelessWidget {
       this.onValueChange,
       this.itemList,
       this.width,
+      this.enable,
+      this.onTap,
       this.value})
       : super(key: key);
 
@@ -56,6 +60,7 @@ class GenericInputOptionSelect extends StatelessWidget {
           child: SizedBox(
             width: width,
             child: DropdownButton<String>(
+              onTap: () => onTap,
               isExpanded: true,
               borderRadius: BorderRadius.circular(30),
               value: value,
@@ -68,6 +73,7 @@ class GenericInputOptionSelect extends StatelessWidget {
               },
               items: itemList.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
+                  enabled: enable ?? true,
                   value: value,
                   child: Text(value),
                 );

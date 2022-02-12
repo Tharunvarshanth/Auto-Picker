@@ -25,28 +25,30 @@ class MechanicsSignUpForm extends StatefulWidget {
 }
 
 class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
-  final specialistController = TextEditingController();
   final addressController = TextEditingController();
   final phoneNumberController = TextEditingController();
   final timePickerToController = TextEditingController();
   final timePickerFromController = TextEditingController();
 
-  String _valueChangedTo = '';
-  String _valueToValidateTo = '';
-  String _valueSavedTo = '';
+  String _valueChangedStart = '';
+  String _valueToValidateStart = '';
+  String _valueSavedStart = '';
 
-  String _valueChangedFrom = '';
-  String _valueToValidateFrom = '';
-  String _valueSavedFrom = '';
+  String _valueChangedFinish = '';
+  String _valueToValidateFinish = '';
+  String _valueSavedFinish = '';
 
   String city;
+  String specialist;
 
   void initState() {
     super.initState();
     Intl.defaultLocale = 'en_LK';
     if (widget.params["location-lat"] != null) {
-      specialistController.text = widget.params['specialist'];
       setState(() {
+        specialist = widget.params['specialist'];
+        _valueChangedStart = widget.params['workingTime_To'];
+        _valueChangedFinish = widget.params['workingTime_From'];
         city = widget.params['workingCity'];
       });
       addressController.text = widget.params['address'];
@@ -61,12 +63,18 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
     });
   }
 
+  void handleMechanicsSpecialist(skill) {
+    setState(() {
+      specialist = skill;
+    });
+  }
+
   void handleNext() {
-    widget.params['specialist'] = specialistController.text;
+    widget.params['specialist'] = specialist;
     widget.params['workingCity'] = city;
     widget.params['workingAddress'] = addressController.text;
-    widget.params['workingTime_To'] = _valueChangedTo;
-    widget.params['workingTime_From'] = _valueChangedFrom;
+    widget.params['workingTime_To'] = _valueChangedStart;
+    widget.params['workingTime_From'] = _valueChangedFinish;
 
     Navigator.push(
       context,
@@ -78,7 +86,6 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
 
   @override
   void dispose() {
-    specialistController.dispose();
     addressController.dispose();
     phoneNumberController.dispose();
     super.dispose();
@@ -98,11 +105,12 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            GenericTextField(
-              controller: specialistController,
+            GenericInputOptionSelect(
+              width: size.width,
               labelText: 'Specialist',
-              hintText: "Electrician",
-              borderColor: AppColors.ash,
+              value: specialist,
+              itemList: MechanicSpecialistSkills,
+              onValueChange: (text) => handleMechanicsSpecialist(text),
             ),
             SizedBox(height: size.height * 0.015),
             GenericInputOptionSelect(
@@ -127,16 +135,16 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
                   width: 150,
                   child: GenericTimePicker(
                       controller: timePickerToController,
-                      labelText: 'To',
+                      labelText: 'Start',
                       onChanged: (value) => {
                             print("time ${value}"),
                             setState(() {
-                              _valueChangedTo = value;
+                              _valueChangedStart = value;
                             })
                           },
                       onSaved: (value) => {
                             setState(() {
-                              _valueSavedTo = value;
+                              _valueSavedStart = value;
                             })
                           }),
                 ),
@@ -144,17 +152,17 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
                   width: 150,
                   child: GenericTimePicker(
                       controller: timePickerFromController,
-                      labelText: 'From',
+                      labelText: 'Finish',
                       onChanged: (value) => {
                             print("time ${value}"),
                             setState(() {
-                              _valueChangedFrom = value;
+                              _valueChangedFinish = value;
                             })
                           },
                       onSaved: (value) => {
                             print("time onsave ${value}}"),
                             setState(() {
-                              _valueSavedTo = value;
+                              _valueSavedFinish = value;
                             })
                           }),
                 ),
@@ -167,11 +175,11 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
                   ? 'location picked'
                   : 'Pick your working Location',
               onPressed: () {
-                widget.params['specialist'] = specialistController.text;
+                widget.params['specialist'] = specialist;
                 widget.params['workingCity'] = city;
                 widget.params['address'] = addressController.text;
-                widget.params['workingHoursTo'] = _valueChangedTo;
-                widget.params['workingHoursFrom'] = _valueChangedFrom;
+                widget.params['workingTime_To'] = _valueChangedStart;
+                widget.params['workingTime_From'] = _valueChangedFinish;
 
                 Navigator.push(
                   context,

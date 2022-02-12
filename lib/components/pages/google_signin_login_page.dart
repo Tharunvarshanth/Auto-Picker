@@ -101,6 +101,7 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
             ? Align(
                 alignment: Alignment.center,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GenericText(
                       text: 'Email Linking',
@@ -122,6 +123,7 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
                       shadowColor: AppColors.ash,
                       text: 'Link with Google Account',
                       onPressed: () => linkEmailGoogle(),
+                      iconLeft: 'assets/images/at-sign.svg',
                     ),
                   ],
                 ),

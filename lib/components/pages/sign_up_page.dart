@@ -20,7 +20,7 @@ class _SignUpPageState extends State<SignUpPage> {
             child: Stack(children: [
       IconButton(
         padding: EdgeInsets.all(12),
-        iconSize: 40,
+        iconSize: 36,
         alignment: Alignment.topLeft,
         icon: const Icon(Icons.arrow_back),
         color: AppColors.black,

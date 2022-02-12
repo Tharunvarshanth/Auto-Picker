@@ -3,15 +3,15 @@ import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/models/seller.dart';
 import 'package:flutter/material.dart';
 
-class MechanicProfilePage extends StatefulWidget {
+class MechanicProfile extends StatefulWidget {
   final Mechanic mechanic;
-  const MechanicProfilePage(this.mechanic);
+  const MechanicProfile(this.mechanic);
 
   @override
-  _MechanicProfilePageState createState() => _MechanicProfilePageState();
+  _MechanicProfileState createState() => _MechanicProfileState();
 }
 
-class _MechanicProfilePageState extends State<MechanicProfilePage> {
+class _MechanicProfileState extends State<MechanicProfile> {
   bool isLoading = true;
   String userRole;
 

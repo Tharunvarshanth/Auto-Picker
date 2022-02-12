@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_select.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
+import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/pages/mechanics_signup_page.dart';
 import 'package:auto_picker/components/pages/otp_signup_page.dart';
 import 'package:auto_picker/components/pages/seller_signup_page.dart';
@@ -42,53 +43,66 @@ class _SignUpFormState extends State<SignUpForm> {
   Future<bool> isNumberAlreadyHaveAccount() async {
     var number = TESTNUMBER; //phoneNumberController.text ;
     var res = await userController.isNumberAlreadyHaveAccount(number);
-    print("res:isNumberAlreadyHaveAccount ${res}");
     if (res) {
       //if user has account already  error pop up go login page
+      showDialog(
+          context: context,
+          builder: (context) => ItemDialogMessage(
+                icon: 'assets/images/x-circle.svg',
+                titleText: 'Login Failure',
+                bodyText: "This user already have an account",
+                primaryButtonText: 'Login',
+                onPressedPrimary: () =>
+                    navigate(context, RouteGenerator.loginPage),
+                secondaryButtonText: 'Ok',
+                onPressedSecondary: () => Navigator.pop(context, 'Cancel'),
+              ));
       isvalidUser = false;
       // navigate(context, RouteGenerator.loginPage);
     } else {
       // if user doesn't have account error pop up go login page
       isvalidUser = true;
+      handleNext();
     }
   }
 
   void handleNext() {
-    isNumberAlreadyHaveAccount();
-    var param = {
-      'name': nameController.text,
-      'address': addressController.text,
-      'phoneNumber': TESTNUMBER, //phoneNumberController.text,
-      'city': city,
-      'role': role
-    };
-    switch (role) {
-      case Users.Mechanic:
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MechanicsSignUpPage(params: param),
-          ),
-        );
-        break;
-      case Users.Seller:
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SellerSignUpPage(params: param),
-          ),
-        );
-        break;
-      case Users.NormalUser:
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => OtpSignUpPage(params: param),
-          ),
-        );
-        break;
-      default:
-        break;
+    if (isvalidUser) {
+      var param = {
+        'name': nameController.text,
+        'address': addressController.text,
+        'phoneNumber': TESTNUMBER, //phoneNumberController.text,
+        'city': city,
+        'role': role
+      };
+      switch (role) {
+        case Users.Mechanic:
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MechanicsSignUpPage(params: param),
+            ),
+          );
+          break;
+        case Users.Seller:
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SellerSignUpPage(params: param),
+            ),
+          );
+          break;
+        case Users.NormalUser:
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OtpSignUpPage(params: param),
+            ),
+          );
+          break;
+        default:
+          break;
+      }
     }
   }
 
@@ -161,7 +175,7 @@ class _SignUpFormState extends State<SignUpForm> {
               text: 'Next',
               onPressed: () {
                 //validations ok
-                handleNext();
+                isNumberAlreadyHaveAccount();
               },
               isBold: true,
             )

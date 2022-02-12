@@ -4,6 +4,8 @@ import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
+import 'package:auto_picker/components/atoms/popup_modal_order.dart';
+import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/atoms/single_digit_field.dart';
 import 'package:auto_picker/routes.dart';
 import 'package:auto_picker/services/user_controller.dart';
@@ -15,6 +17,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class OtpLoginPage extends StatefulWidget {
   const OtpLoginPage();
@@ -60,7 +63,6 @@ class _OtpLoginPage extends State<OtpLoginPage> {
     autoOtpSubmit();
   }
 
-  //testng devices
   void redirect(UserCredential user) async {
     var _user = await userController.getUser((user.user.uid));
     print(_user['role']);
@@ -104,15 +106,28 @@ class _OtpLoginPage extends State<OtpLoginPage> {
     print("res:isNumberAlreadyHaveAccount ${res}");
     if (res) {
       isOtpScreen = true;
-      timerCount = 60;
-      startTimer();
       _verifyPhone();
     } else {
       isvalidUser = true;
+      showDialog(
+          context: context,
+          builder: (context) => ItemDialogMessage(
+                icon: 'assets/images/x-circle.svg',
+                titleText: 'Login Failure',
+                bodyText:
+                    "We didn't find any records for this number so try signup with this number",
+                primaryButtonText: 'Sign Up',
+                onPressedPrimary: () =>
+                    navigate(context, RouteGenerator.signUpPage),
+                secondaryButtonText: 'Ok',
+                onPressedSecondary: () => Navigator.pop(context, 'Cancel'),
+              ));
     }
   }
 
   void _verifyPhone() async {
+    timerCount = 60;
+    startTimer();
     var testingNumber = TESTNUMBER;
     await auth.verifyPhoneNumber(
       phoneNumber: testingNumber,
@@ -125,6 +140,17 @@ class _OtpLoginPage extends State<OtpLoginPage> {
         auth.signInWithCredential(credential).then((value) async {
           if (value.user != null) {
             var user = await userController.getUser((value.user.uid));
+            void setOneSignalToken() async {
+// Setting External User Id with Callback Available in SDK Version 3.9.3+
+              OneSignal.shared
+                  .setExternalUserId(value.user.uid)
+                  .then((results) {
+                print("setExternalUserId ${results.toString()}");
+              }).catchError((error) {
+                print("setExternalUserId:e ${error.toString()}");
+              });
+            }
+
             await userInfo.saveUser(
                 true, value.user.uid, value.user.phoneNumber, '', user["role"]);
             navigate(context, RouteGenerator.homePage);
@@ -134,6 +160,16 @@ class _OtpLoginPage extends State<OtpLoginPage> {
       verificationFailed: (FirebaseAuthException e) {
         if (e.code == 'invalid-phone-number') {
           print('The provided phone number is not valid.');
+          showDialog(
+              context: context,
+              builder: (context) => ItemDialogMessage(
+                    icon: 'assets/images/x-circle.svg',
+                    titleText: 'Login Failure',
+                    bodyText: "The provided phone number is not valid.",
+                    primaryButtonText: 'OK',
+                    onPressedPrimary: () =>
+                        navigate(context, RouteGenerator.loginPage),
+                  ));
         }
         setState(() {
           isLoading = false;
@@ -177,6 +213,7 @@ class _OtpLoginPage extends State<OtpLoginPage> {
 
   void dispose() {
     super.dispose();
+    _timer.cancel();
   }
 
   @override
@@ -282,6 +319,7 @@ class _OtpLoginPage extends State<OtpLoginPage> {
                         text: ' Resend',
                         color: AppColors.Blue,
                         isBold: true,
+                        onPressed: () => _verifyPhone(),
                       )
                   ],
                 ),

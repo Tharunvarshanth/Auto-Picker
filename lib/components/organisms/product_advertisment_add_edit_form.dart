@@ -7,6 +7,7 @@ import 'package:auto_picker/components/atoms/generic_input_option_select.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/atoms/generic_time_picker.dart';
+import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/pages/advertisement_payment_page.dart';
 import 'package:auto_picker/components/pages/map_page.dart';
 import 'package:auto_picker/components/pages/mechanics_signup_page.dart';
@@ -29,7 +30,8 @@ import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ProductAdvertisementAddForm extends StatefulWidget {
-  const ProductAdvertisementAddForm();
+  final SpareAdvertisement advertisement;
+  const ProductAdvertisementAddForm({this.advertisement});
   @override
   _ProductAdvertisementAddFormState createState() =>
       _ProductAdvertisementAddFormState();
@@ -50,11 +52,48 @@ class _ProductAdvertisementAddFormState
 
   void initState() {
     super.initState();
-    adEndDate();
+    if (widget.advertisement != null) {
+      priceController.text = widget.advertisement.price;
+      descriptionController.text = widget.advertisement.description;
+      productTitleController.text = widget.advertisement.title;
+      productSubTitleController.text = widget.advertisement.subtitle;
+    }
   }
 
   adEndDate() {
     return (DateTime.now().add(const Duration(days: 15)));
+  }
+
+  void handleUpdate() async {
+    widget.advertisement.price = priceController.text;
+    widget.advertisement.description = descriptionController.text;
+    widget.advertisement.title = productTitleController.text;
+    productSubTitleController.text = productSubTitleController.text;
+
+    if (await advertismentController
+        .updateAdvertisementAllField(widget.advertisement)) {
+      showDialog(
+          context: context,
+          builder: (context) => ItemDialogMessage(
+                icon: 'assets/images/plus-circle.svg',
+                titleText: 'Done ok',
+                bodyText: "",
+                primaryButtonText: 'Ok',
+                onPressedPrimary: () =>
+                    navigate(context, RouteGenerator.homePage),
+              ));
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) => ItemDialogMessage(
+                icon: 'assets/images/x-circle.svg',
+                titleText: 'Failure',
+                bodyText: "",
+                primaryButtonText: 'Ok',
+                onPressedPrimary: () =>
+                    navigate(context, RouteGenerator.homePage),
+              ));
+    }
   }
 
   void handleAdd() async {
@@ -74,13 +113,16 @@ class _ProductAdvertisementAddFormState
         descriptionController.text,
         productTitleController.text,
         productSubTitleController.text,
-        imageList);
+        imageList,
+        '');
 
     var res = await advertismentController.addAdvertisment(
         existingUser.currentUser.uid, advertisement);
     if (res != null) {
       print("recent $res");
       List<String> imageList = await uploadFiles(images, res);
+      await advertismentController.updateAdvertisement(
+          existingUser.currentUser.uid, res, 'aId', res);
       print("imageList ${imageList}");
       if (await advertismentController.updateAdvertisement(
           existingUser.currentUser.uid, res, 'imageList', imageList)) {
@@ -121,6 +163,13 @@ class _ProductAdvertisementAddFormState
     return file;
   }
 
+  Future<String> downloadURL(String url) async {
+    String downloadURL = await firebase_storage.FirebaseStorage.instance
+        .ref(url)
+        .getDownloadURL();
+    return downloadURL;
+  }
+
   Future<List<String>> uploadFiles(List<Asset> _images, String aid) async {
     var imageUrls =
         await Future.wait(_images.map((_image) => uploadFile(_image, aid)));
@@ -134,9 +183,10 @@ class _ProductAdvertisementAddFormState
         .child(
             '${existingUser.currentUser.uid}/advertisments/$aid/${_image.name}');
 
-    return ((await ref.putFile(await getImageFileFromAssets(_image)))
+    String url = ((await ref.putFile(await getImageFileFromAssets(_image)))
         .ref
         .fullPath);
+    return downloadURL(url);
   }
 
   Future<void> loadAssets() async {
@@ -164,9 +214,6 @@ class _ProductAdvertisementAddFormState
       error = e.toString();
     }
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
     if (!mounted) return;
     setState(() {
       images = resultList;
@@ -222,31 +269,45 @@ class _ProductAdvertisementAddFormState
               borderColor: AppColors.ash,
             ),
             SizedBox(height: size.height * 0.025),
-            GenericIconButton(
-              backgroundColor: AppColors.white,
-              textColor: AppColors.black,
-              shadowColor: AppColors.ash,
-              text: 'Upload Images',
-              borderRadius: 30,
-              onPressed: loadAssets,
-              iconLeft: 'assets/images/camera.svg',
-            ),
+            if (widget.advertisement == null)
+              GenericIconButton(
+                backgroundColor: AppColors.white,
+                textColor: AppColors.black,
+                shadowColor: AppColors.ash,
+                text: 'Upload Images',
+                borderRadius: 30,
+                onPressed: loadAssets,
+                iconLeft: 'assets/images/camera.svg',
+              ),
             SizedBox(height: size.height * 0.015),
             SizedBox(
                 height: images.length == 0 ? 0 : 100, child: buildGridView()),
             SizedBox(height: size.height * 0.015),
-            GenericButton(
-              textColor: AppColors.white,
-              backgroundColor: AppColors.Blue,
-              paddingVertical: 20,
-              paddingHorizontal: 80,
-              text: 'Add',
-              onPressed: () {
-                //validations ok
-                handleAdd();
-              },
-              isBold: true,
-            ),
+            (widget.advertisement == null)
+                ? GenericButton(
+                    textColor: AppColors.white,
+                    backgroundColor: AppColors.Blue,
+                    paddingVertical: 20,
+                    paddingHorizontal: 80,
+                    text: 'Add',
+                    onPressed: () {
+                      //validations ok
+                      handleAdd();
+                    },
+                    isBold: true,
+                  )
+                : GenericButton(
+                    textColor: AppColors.white,
+                    backgroundColor: AppColors.Blue,
+                    paddingVertical: 20,
+                    paddingHorizontal: 80,
+                    text: 'Update',
+                    onPressed: () {
+                      //validations ok
+                      handleUpdate();
+                    },
+                    isBold: true,
+                  ),
           ],
         ));
   }

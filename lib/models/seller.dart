@@ -6,16 +6,9 @@ class Seller {
   String contactDetails;
   String accountCreatedDate;
   bool isBlocked;
-
-  Seller(
-    this.shopName,
-    this.id,
-    this.address,
-    this.city,
-    this.contactDetails,
-    this.accountCreatedDate,
-    this.isBlocked,
-  );
+  bool isPayed;
+  Seller(this.shopName, this.id, this.address, this.city, this.contactDetails,
+      this.accountCreatedDate, this.isBlocked, this.isPayed);
 
   void updateId(String id) {
     this.id = id;
@@ -23,14 +16,14 @@ class Seller {
 
   factory Seller.fromJson(dynamic json) {
     return Seller(
-      json["shopName"],
-      json["id"],
-      json["address"],
-      json["city"],
-      json["contactDetails"],
-      json["accountCreatedDate"],
-      json["isBlocked"],
-    );
+        json["shopName"],
+        json["id"],
+        json["address"],
+        json["city"],
+        json["contactDetails"],
+        json["accountCreatedDate"],
+        json["isBlocked"],
+        json["isPayed"]);
   }
 
   String getId() {
@@ -46,6 +39,7 @@ class Seller {
       'contactDetails': contactDetails,
       'accountCreatedDate': accountCreatedDate,
       'isBlocked': isBlocked,
+      'isPayed': isPayed
     };
   }
 }

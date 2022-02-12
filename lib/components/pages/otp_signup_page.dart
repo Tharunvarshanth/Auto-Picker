@@ -3,16 +3,22 @@ import 'dart:async';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
+import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/atoms/single_digit_field.dart';
 import 'package:auto_picker/components/pages/google_signin_login_page.dart';
-import 'package:auto_picker/components/pages/home_page.dart';
+import 'package:auto_picker/components/pages/home_page_test.dart';
+import 'package:auto_picker/components/pages/user_payment_page.dart';
 import 'package:auto_picker/models/account.dart';
 import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/models/seller.dart';
 import 'package:auto_picker/models/user_model.dart';
 import 'package:auto_picker/routes.dart';
 import 'package:auto_picker/services/mechanic_controller.dart';
+import 'package:auto_picker/services/notification_controller.dart';
+import 'package:auto_picker/services/order_controller.dart';
+import 'package:auto_picker/services/product_controller.dart';
 import 'package:auto_picker/services/seller_controller.dart';
+import 'package:auto_picker/services/spare_advertisement_controller.dart';
 import 'package:auto_picker/services/user_controller.dart';
 import 'package:auto_picker/store/cache/sharedPreferences/user_info.dart';
 import 'package:auto_picker/themes/colors.dart';
@@ -20,6 +26,7 @@ import 'package:auto_picker/utilities/constands.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class OtpSignUpPage extends StatefulWidget {
   final Map<String, String> params;
@@ -42,6 +49,8 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
   var userController = UserController();
   var mechanicController = MechanicController();
   var sellerController = SellerController();
+  var orderController = OrderController();
+  var notificationController = NotificationController();
   var userInfo = UserInfoCache();
   var addUserRes;
   bool isLoading = false;
@@ -49,6 +58,9 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
   int timerCount = 60;
   Timer _timer;
   bool isvalidUser = true;
+
+  var productController = ProductController();
+  var advertisementController = AdvertisementController();
 
   void initState() {
     super.initState();
@@ -60,10 +72,22 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
     var number = TESTNUMBER; //_numberController.text ;
     var res = await userController.isNumberAlreadyHaveAccount(number);
     print("res:isNumberAlreadyHaveAccount ${res}");
-    if (res) {
-      startTimer();
+    if (!res) {
       _verifyPhone();
     } else {
+      showDialog(
+          context: context,
+          builder: (context) => ItemDialogMessage(
+                icon: 'assets/images/x-circle.svg',
+                titleText: 'Login Failure',
+                bodyText:
+                    "This number already have an account try to signup with new number",
+                primaryButtonText: 'Sign Up',
+                onPressedPrimary: () =>
+                    navigate(context, RouteGenerator.signUpPage),
+                secondaryButtonText: 'Ok',
+                onPressedSecondary: () => Navigator.pop(context, 'Cancel'),
+              ));
       isvalidUser = true;
     }
   }
@@ -80,6 +104,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
         widget.params["address"],
         false);
     var resUser = await userController.addUser(user);
+    externalAllTestData(fireUser);
     var resOther = true;
     switch (widget.params["role"]) {
       case Users.Mechanic:
@@ -94,7 +119,8 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
               widget.params["accountCreatedDate"] = DateTime.now().toString(),
               false,
               widget.params["location-lat"],
-              widget.params["location-lon"]);
+              widget.params["location-lon"],
+              false);
           resOther = await mechanicController.addMechanic(mechanic);
         }
         break;
@@ -107,8 +133,10 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
               widget.params["shopcity"],
               widget.params["shopPhoneNumber"],
               widget.params["accountCreatedDate"] = DateTime.now().toString(),
+              false,
               false);
           resOther = await sellerController.addSeller(seller);
+          externalSellerTestData(fireUser);
         }
         break;
       default:
@@ -119,6 +147,55 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
       isLoading = false;
     });
     if (resUser && resOther) {
+      OneSignal.shared.setExternalUserId(fireUser).then((results) {
+        print("setExternalUserId ${results.toString()}");
+      }).catchError((error) {
+        print("setExternalUserId:e ${error.toString()}");
+      });
+
+      switch (widget.params["role"]) {
+        case Users.Mechanic:
+          {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    UserSignUpPaymentPage(id: fireUser, isSeller: false),
+              ),
+            );
+          }
+          break;
+        case Users.Seller:
+          {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    UserSignUpPaymentPage(id: fireUser, isSeller: true),
+              ),
+            );
+          }
+          break;
+        default:
+          {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const GoogleLinkingPage(
+                  isLinkingPage: true,
+                ),
+              ),
+            );
+          }
+          break;
+      }
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              UserSignUpPaymentPage(id: fireUser, isSeller: false),
+        ),
+      ); /*
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -126,10 +203,34 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
             isLinkingPage: true,
           ),
         ),
-      );
+      );*/
     } else {
       // error pop up
+      showDialog(
+          context: context,
+          builder: (context) => ItemDialogMessage(
+                icon: 'assets/images/x-circle.svg',
+                titleText: 'Signup Failure',
+                bodyText: "Your Signup was unsuccessful please try again",
+                primaryButtonText: 'Sign Up',
+                onPressedPrimary: () =>
+                    navigate(context, RouteGenerator.signUpPage),
+                secondaryButtonText: 'Ok',
+                onPressedSecondary: () => Navigator.pop(context, 'Cancel'),
+              ));
     }
+  }
+
+  void externalSellerTestData(String uid) async {
+    Future.wait([
+      productController.addProductTest(uid),
+      advertisementController.addTestAdvertisment(uid),
+      orderController.addTestOrder(uid)
+    ]);
+  }
+
+  void externalAllTestData(String uid) async {
+    Future.wait([notificationController.addNotificationTest(uid)]);
   }
 
   void authComplete(resUser, resOther, fireUser) {
@@ -197,6 +298,10 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
   }
 
   void _verifyPhone() async {
+    setState(() {
+      timerCount = 60;
+    });
+    startTimer();
     var testingNumber = TESTNUMBER;
     await auth.verifyPhoneNumber(
       phoneNumber: testingNumber,
@@ -217,6 +322,16 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
       verificationFailed: (FirebaseAuthException e) {
         if (e.code == 'invalid-phone-number') {
           print('The provided phone number is not valid.');
+          showDialog(
+              context: context,
+              builder: (context) => ItemDialogMessage(
+                    icon: 'assets/images/x-circle.svg',
+                    titleText: 'Login Failure',
+                    bodyText: "The provided phone number is not valid.",
+                    primaryButtonText: 'OK',
+                    onPressedPrimary: () =>
+                        navigate(context, RouteGenerator.loginPage),
+                  ));
         }
         setState(() {
           isLoading = false;
@@ -263,6 +378,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
   @override
   void dispose() {
     super.dispose();
+    _timer.cancel();
   }
 
   Widget build(BuildContext context) {
@@ -350,6 +466,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
                 text: ' Resend',
                 color: AppColors.Blue,
                 isBold: true,
+                onPressed: () => _verifyPhone(),
               )
           ],
         ),

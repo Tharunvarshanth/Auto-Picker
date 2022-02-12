@@ -31,31 +31,32 @@ class MechanicController {
     return res;
   }
 
-  Future<List<Mechanic>> getMechanics() async {
-    await mechanics.doc().get().then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        print('Document exists on the database');
-        return documentSnapshot;
-      }
-      return null;
-    });
+  Future<dynamic> getMechanics() async {
+    QuerySnapshot querySnapshot = await mechanics.get();
+    if (querySnapshot.size > 0) {
+      final data = querySnapshot.docs.map((doc) => doc.data()).toList();
+      return data;
+    }
+    return null;
   }
 
   Future<bool> updateMechanic(Mechanic mechanic) async {
+    var res = false;
     await mechanics
         .doc(mechanic.getId())
         .update(mechanic.toJson())
         .then((value) {
       print("updateMechanic:success");
-      return true;
+      res = true;
     }).catchError((onError) {
       print("updateMechanic:error: $onError");
-      return true;
+      res = false;
     });
+    return res;
   }
 
   Future<bool> updateMechanicsField(
-      String uid, String field, String value) async {
+      String uid, String field, dynamic value) async {
     await mechanics.doc(uid).update({field: value}).then((value) {
       print("updateMechanic:success");
       return true;

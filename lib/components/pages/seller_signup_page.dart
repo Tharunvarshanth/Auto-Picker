@@ -43,9 +43,10 @@ class _SellerSignUpPageState extends State<SellerSignUpPage> {
               isBold: true,
             ),
             GenericText(
+              maxLines: 3,
               text:
                   'As a Seller we need an additional information for you please fill below form complete the registration',
-              textSize: 24,
+              textSize: 18,
             ),
             const SizedBox(
               height: 30,

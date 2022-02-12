@@ -1,3 +1,5 @@
+import 'package:auto_picker/models/mechanic.dart';
+
 class Users {
   static const Admin = 'admin';
   static const NormalUser = 'user';
@@ -10,6 +12,24 @@ class UsersSignUp {
   static const Mechanic = 'mechanic';
   static const Seller = 'seller';
 }
+
+const MechanicSpecialistSkills = [
+  "Three wheel",
+  "Motorcycle",
+  "Electirican",
+  "Air Conditioning",
+  "Auto Exhaust",
+  "Engine",
+  "Gear Box",
+  "Radiator",
+  "All Type Vehicles",
+  "Brake and transmission",
+  "Tire mechanics",
+  "General automotive",
+  "Auto body",
+  "Service Station",
+  "Auto glass"
+];
 
 class FirebaseCollections {
   static const CarServiceRecords = 'carServiceRecords';
@@ -35,3 +55,9 @@ class FirebaseCollections {
 const SPAREPARTSCONDITIONLIST = ["Recondition", "Used", "Brand New"];
 
 const TESTNUMBER = "+94772732976";
+const PriceNegotiable = "Negotiable";
+
+const ONESIGNALAPPID = "9118dd3d-282d-42e6-b3a2-78b5bee6c5a0";
+const ORDERTITLTE = "Product Order Received";
+const ORDERBODY = "You have Got a  Order from Please Check My Orders";
+const NOTIFICATIONTYPES = ["Order"];
