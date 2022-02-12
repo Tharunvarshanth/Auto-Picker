@@ -34,9 +34,9 @@ class Order {
         json['customerId'],
         json["productId"],
         json['sellerId'],
+        json['isCompleted'],
         json['noOfItems'],
         json['descriptionCancelled'],
-        json['isCompleted'],
         json['cancelled'],
         json['orderCreatedDate']);
   }

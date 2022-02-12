@@ -80,13 +80,15 @@ class Footer extends StatelessWidget {
       case 1:
         {
           isLogged
-              ? navigate(context, RouteGenerator.profilePage)
+              ? navigate(context, RouteGenerator.notificationsPage)
               : navigate(context, RouteGenerator.menuMorePage);
         }
         break;
       case 2:
         {
-          navigate(context, RouteGenerator.profilePage);
+          isLogged
+              ? navigate(context, RouteGenerator.profilePage)
+              : navigate(context, RouteGenerator.menuMorePage);
         }
         break;
       case 3:

@@ -1,5 +1,6 @@
 import 'package:auto_picker/components/organisms/notification_tile.dart';
 import 'package:auto_picker/models/notification_data.dart';
+import 'package:auto_picker/services/notification_controller.dart';
 import 'package:flutter/material.dart';
 
 class NotificationsPage extends StatefulWidget {
@@ -12,6 +13,7 @@ class NotificationsPage extends StatefulWidget {
 class _NotificationsPageState extends State<NotificationsPage> {
   ScrollController _controller = ScrollController();
   List<NotificationData> notificationsList = [];
+  var notificationController = NotificationController();
   @override
   void initState() {
     // TODO: implement initState
@@ -19,8 +21,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
     _controller.addListener(() {
       //add scroll listener to load data from database
     });
+    getNotifications();
   }
 
+  void getNotifications() {}
   @override
   void dispose() {
     // TODO: implement dispose

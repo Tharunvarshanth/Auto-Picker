@@ -43,7 +43,7 @@ class ProductController {
         .doc(uid)
         .collection(FirebaseCollections.ProductsList)
         .doc(pId)
-        .snapshots();
+        .get();
   }
 
   //Need to do like this https://github.com/sbis04/flutterfire-samples/blob/crud-firestore/lib/widgets/item_list.dart

@@ -6,6 +6,7 @@ import 'package:auto_picker/components/pages/login_page.dart';
 import 'package:auto_picker/components/pages/map_page.dart';
 import 'package:auto_picker/components/pages/mechanics_signup_page.dart';
 import 'package:auto_picker/components/pages/menu_more_page.dart';
+import 'package:auto_picker/components/pages/notification_page.dart';
 import 'package:auto_picker/components/pages/otp_login_page.dart';
 import 'package:auto_picker/components/pages/otp_signup_page.dart';
 import 'package:auto_picker/components/pages/profile_page.dart';
@@ -19,6 +20,7 @@ import 'components/pages/advertisement_payment_page.dart';
 import 'components/pages/home_page.dart';
 import 'components/pages/mechanic_profile_page.dart';
 import 'components/pages/mechanics_listing_page.dart';
+import 'components/pages/orders_seller_page.dart';
 import 'components/pages/product_listing_page.dart';
 import 'components/pages/product_page.dart';
 import 'components/pages/profile_user_edit_page.dart';
@@ -46,6 +48,8 @@ class RouteGenerator {
   static const String mechanicProfilePage = '/mechanicProfilePage';
   static const String userProfileEditPage = '/userProfileEditPage';
   static const String advertisementListingPage = '/advertisementListingPage';
+  static const String orderSellerPage = "/orderPage";
+  static const String notificationsPage = '/notificationPage';
 
   RouteGenerator._() {}
 
@@ -96,6 +100,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => ProfileUserEditPage());
       case advertisementListingPage:
         return MaterialPageRoute(builder: (_) => AdvertisementListingPage());
+      case orderSellerPage:
+        return MaterialPageRoute(builder: (_) => const OrdersSellerListPage());
+      case notificationsPage:
+        return MaterialPageRoute(builder: (_) => const NotificationsPage());
       case testPage:
         return MaterialPageRoute(builder: (_) => const TestPage());
       default:

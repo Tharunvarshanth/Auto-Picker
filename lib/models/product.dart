@@ -28,6 +28,18 @@ class Product {
         json["isPayed"],
         json["deletingDate"]);
   }
+  factory Product.fromEmptyJson() {
+    return Product(
+        'Product Removed',
+        'Product Removed',
+        'Product Removed',
+        'Product Removed',
+        'Product Removed',
+        null,
+        'Product Removed',
+        false,
+        'Product Removed');
+  }
 
   String getUId() {
     return this.uid;
