@@ -42,7 +42,7 @@ class _ImageTileState extends State<ImageTile> {
         padding: EdgeInsets.symmetric(vertical: 0, horizontal: widget.margin),
         child: Stack(
           children: [
-            if (widget.imgUrl != null)
+            /*if (widget.imgUrl != null)
               ClipRRect(
                 borderRadius: BorderRadius.circular(widget.borderRadius),
                 child: Image.network(
@@ -62,7 +62,7 @@ class _ImageTileState extends State<ImageTile> {
                     return Placeholder();
                   },
                 ),
-              ),
+              ),*/
             Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,

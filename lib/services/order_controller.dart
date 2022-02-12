@@ -8,32 +8,64 @@ class OrderController {
   static CollectionReference orders =
       FirebaseFirestore.instance.collection(FirebaseCollections.Orders);
 
-  Future<bool> addOrder(Order order, String uid) async {
+  Future<dynamic> addOrder(
+    Order order,
+  ) async {
+    var res = null;
     await orders
-        .doc(uid)
+        .doc(order.sellerId)
         .collection(FirebaseCollections.OrdersList)
-        .doc()
-        .set(order.toJson())
+        .add(order.toJson())
         .then((value) {
-      print("addOrder:success");
-      return true;
+      print("addOrder:success ${value.id}");
+      res = value.id;
     }).catchError((onError) {
       print("addOrder: $onError");
-      return false;
+      res = null;
     });
+    return res;
   }
 
-  Future<dynamic> updateOrder(String oId, String uId, Order order) async {
-    return await orders
-        .doc(uId)
+  Future<dynamic> updateOrderAllField(Order order) async {
+    var res = false;
+    await orders
+        .doc(order.sellerId)
         .collection(FirebaseCollections.OrdersList)
-        .doc(oId)
+        .doc(order.orderId)
         .update(order.toJson())
         .whenComplete(() {
-      return true;
+      res = true;
     }).onError((error, stackTrace) {
-      return false;
+      res = false;
     });
+    return res;
+  }
+
+  Future<dynamic> addTestOrder(String uId) async {
+    var res;
+    await orders.doc(uId).set({'test': 'test'}).then((value) {
+      print("addSpareAdvertisement:success");
+      res = true;
+    }).catchError((onError) {
+      print("addSpareAdvertisement: $onError");
+      res = null;
+    });
+    return res;
+  }
+
+  Future<bool> updateOrderField(
+      Order order, String field, dynamic value) async {
+    var res = false;
+    await orders
+        .doc(order.sellerId)
+        .collection(FirebaseCollections.OrdersList)
+        .doc(value)
+        .update({field: value}).whenComplete(() {
+      res = true;
+    }).onError((error, stackTrace) {
+      res = false;
+    });
+    return res;
   }
 
   Future<dynamic> getOrdersBySeller(String Uid) async {

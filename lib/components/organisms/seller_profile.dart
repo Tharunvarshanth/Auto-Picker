@@ -3,18 +3,20 @@ import 'package:auto_picker/components/atoms/text_description.dart';
 import 'package:auto_picker/components/atoms/text_description_with_button.dart';
 import 'package:auto_picker/components/pages/add_new_advertisement.dart';
 import 'package:auto_picker/components/pages/add_new_product.dart';
+import 'package:auto_picker/components/pages/my_own_advertisement_listing_page.dart';
+import 'package:auto_picker/components/pages/my_own_product_listing_page.dart';
 import 'package:auto_picker/models/seller.dart';
 import 'package:flutter/material.dart';
 
-class SellerProfilePage extends StatefulWidget {
+class SellerProfile extends StatefulWidget {
   final Seller seller;
-  const SellerProfilePage(this.seller);
+  const SellerProfile(this.seller);
 
   @override
-  _SellerProfilePageState createState() => _SellerProfilePageState();
+  _SellerProfileState createState() => _SellerProfileState();
 }
 
-class _SellerProfilePageState extends State<SellerProfilePage> {
+class _SellerProfileState extends State<SellerProfile> {
   bool isLoading = true;
   String userRole;
 
@@ -39,6 +41,24 @@ class _SellerProfilePageState extends State<SellerProfilePage> {
           onPress: () => Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const AddNewProductPage()),
+          ),
+        ),
+        TextDescriptionWithButton(
+          title: 'My Products',
+          description: 'You can view and edit your own products',
+          onPress: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const MyOwnProductListingPage()),
+          ),
+        ),
+        TextDescriptionWithButton(
+          title: 'My ADS',
+          description: 'You can view and edit your Advertisements',
+          onPress: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const MyOwnAdvertismentListingPage()),
           ),
         ),
         TextDescriptionWithButton(

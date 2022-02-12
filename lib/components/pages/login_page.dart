@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
                         width: MediaQuery.of(context).size.width * 0.8,
                         child: GenericButton(
                           backgroundColor: AppColors.white,
-                          textColor: AppColors.Blue,
+                          textColor: AppColors.blue,
                           text: 'LOGIN WITH MOBILE NUMBER',
                           paddingVertical: 20,
                           onPressed: () {
@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                         width: MediaQuery.of(context).size.width * 0.8,
                         child: GenericButton(
                           backgroundColor: AppColors.white,
-                          textColor: AppColors.Blue,
+                          textColor: AppColors.blue,
                           text: 'LOGIN WITH EMAIL',
                           paddingVertical: 20,
                           paddingHorizontal: 50,
@@ -91,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   GenericTextButton(
                     text: 'Sign Up',
-                    color: AppColors.Blue,
+                    color: AppColors.blue,
                     onPressed: () {
                       navigate(context, RouteGenerator.signUpPage);
                     },

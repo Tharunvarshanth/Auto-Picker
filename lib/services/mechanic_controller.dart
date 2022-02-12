@@ -41,20 +41,22 @@ class MechanicController {
   }
 
   Future<bool> updateMechanic(Mechanic mechanic) async {
+    var res = false;
     await mechanics
         .doc(mechanic.getId())
         .update(mechanic.toJson())
         .then((value) {
       print("updateMechanic:success");
-      return true;
+      res = true;
     }).catchError((onError) {
       print("updateMechanic:error: $onError");
-      return true;
+      res = false;
     });
+    return res;
   }
 
   Future<bool> updateMechanicsField(
-      String uid, String field, String value) async {
+      String uid, String field, dynamic value) async {
     await mechanics.doc(uid).update({field: value}).then((value) {
       print("updateMechanic:success");
       return true;

@@ -6,6 +6,7 @@ import 'package:auto_picker/components/atoms/generic_time_picker.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/atoms/service_card.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
+import 'package:auto_picker/components/pages/mechanic_profile_page.dart';
 import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/services/mechanic_controller.dart';
 import 'package:auto_picker/utilities/constands.dart';
@@ -62,7 +63,7 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
       res.forEach((element) {
         print("Mechanics: $element");
         Mechanic _mechanic = Mechanic.fromJson(element);
-        if (!_mechanic.isBlocked) {
+        if (!_mechanic.isBlocked && _mechanic.isPayed) {
           setState(() {
             mechanicList.add(_mechanic);
             mechanicListFiltered.add(_mechanic);
@@ -77,6 +78,13 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
 
   void navigateToMechanicProfilePage(int index) {
     if (isLogged) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MechanicProfilePage(
+              mechanic: mechanicListFiltered[index],
+            ),
+          ));
     } else {
       showDialog(
           context: context,
@@ -253,7 +261,7 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
                                                   child: GenericTimePicker(
                                                       controller:
                                                           timePickerToController,
-                                                      labelText: 'To',
+                                                      labelText: 'Start',
                                                       onChanged: (value) => {
                                                             print(
                                                                 "time ${value}"),
@@ -277,7 +285,7 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
                                                   child: GenericTimePicker(
                                                       controller:
                                                           timePickerFromController,
-                                                      labelText: 'From',
+                                                      labelText: 'Finish',
                                                       onChanged: (value) => {
                                                             print(
                                                                 "time ${value}"),

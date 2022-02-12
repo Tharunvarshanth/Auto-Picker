@@ -101,6 +101,7 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
             ? Align(
                 alignment: Alignment.center,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GenericText(
                       text: 'Email Linking',

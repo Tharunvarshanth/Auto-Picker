@@ -1,20 +1,20 @@
+import 'package:auto_picker/components/atoms/generic_text.dart';
+import 'package:auto_picker/themes/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'generic_button.dart';
 
-class ItemDialog extends StatelessWidget {
+class PopUpModalOrder extends StatelessWidget {
   String icon;
   String titleText;
   String bodyText;
   String primaryButtonText;
   String secondaryButtonText;
-  bool Function(TextEditingController controller, BuildContext context)
-      onPressedPrimary;
-  bool Function(TextEditingController controller, BuildContext context)
-      onPressedSecondary;
+  bool Function() onPressedPrimary;
+  bool Function() onPressedSecondary;
   TextEditingController controller = TextEditingController();
-  ItemDialog(
+  PopUpModalOrder(
       {Key key,
       this.icon,
       this.titleText,
@@ -22,7 +22,8 @@ class ItemDialog extends StatelessWidget {
       this.primaryButtonText,
       this.secondaryButtonText,
       this.onPressedPrimary,
-      this.onPressedSecondary})
+      this.onPressedSecondary,
+      this.controller})
       : super(key: key);
 
   @override
@@ -38,11 +39,16 @@ class ItemDialog extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                titleText ?? 'No of Items',
-                style: TextStyle(fontSize: 20),
+              GenericText(
+                text: titleText,
+                textSize: 24,
+                isBold: true,
               ),
-              SvgPicture.asset(icon),
+              Image(
+                image: AssetImage(icon),
+                width: 150,
+                height: 75,
+              ),
               const SizedBox(
                 height: 10,
               ),
@@ -52,6 +58,7 @@ class ItemDialog extends StatelessWidget {
                     width: constraints.maxWidth * 0.33,
                     child: TextField(
                       controller: controller,
+                      autofocus: true,
                       keyboardType: TextInputType.number,
                       maxLength: 5,
                       textAlign: TextAlign.center,
@@ -67,8 +74,8 @@ class ItemDialog extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              const Text(
-                'Dialog has a default elevation of 24. Elevation is the z coordinate of the dialog, and that can be changed by setting the elevation property of the dialog. If you set the elevation to 0, you can see there’s no shadow, and it shows both the dialogs and the views below that are on the same surface.',
+              Text(
+                bodyText ?? 'Dialog',
                 style: TextStyle(
                   fontSize: 15,
                   color: Colors.black87,
@@ -81,10 +88,8 @@ class ItemDialog extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: GenericButton(
-                  text: 'DONE',
-                  onPressed: () {
-                    onPressedPrimary(controller, context);
-                  },
+                  text: primaryButtonText ?? 'Done',
+                  onPressed: onPressedPrimary,
                   borderRadius: 30,
                   shadowColor: Colors.white,
                   elevation: 0,
@@ -98,13 +103,12 @@ class ItemDialog extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: GenericButton(
-                  text: 'CANCEL',
-                  onPressed: () {
-                    onPressedPrimary(controller, context);
-                  },
+                  text: secondaryButtonText ?? 'CANCEL',
+                  onPressed: onPressedSecondary,
                   borderColor: Colors.white,
-                  textColor: Colors.blue,
+                  textColor: AppColors.Blue,
                   shadowColor: Colors.white,
+                  backgroundColor: AppColors.white,
                   elevation: 0,
                 ),
               )

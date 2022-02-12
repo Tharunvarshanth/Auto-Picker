@@ -23,6 +23,7 @@ import 'package:auto_picker/utilities/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import '../../routes.dart';
 
@@ -49,8 +50,24 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    setState(() {
+      isLogged = _auth.currentUser != null ? true : false;
+    });
     controller.addListener(() {});
     setData();
+    // setOneSignalToken();
+  }
+
+  void setOneSignalToken() async {
+    var externalUserId = _auth.currentUser
+        .uid; // You will supply the external user id to the OneSignal SDK
+
+// Setting External User Id with Callback Available in SDK Version 3.9.3+
+    OneSignal.shared.setExternalUserId(externalUserId).then((results) {
+      print("setExternalUserId ${results.toString()}");
+    }).catchError((error) {
+      print("setExternalUserId:e ${error.toString()}");
+    });
   }
 
   void setData() async {
@@ -59,16 +76,21 @@ class _HomePageState extends State<HomePage> {
       getMechanicsList(),
       getAdvertismentList(),
     ]);
+    setState(() {
+      isLoading = false;
+    });
   }
 
   getMechanicsList() async {
     List<dynamic> res = await mechanicsController.getMechanics();
     if (res != null) {
       res.forEach((element) {
-        print("Mechanics: $element");
-        setState(() {
-          mechanicList.add(Mechanic.fromJson(element));
-        });
+        var tM = Mechanic.fromJson(element);
+        if (tM.isPayed) {
+          setState(() {
+            mechanicList.add(tM);
+          });
+        }
       });
     }
   }
@@ -96,9 +118,6 @@ class _HomePageState extends State<HomePage> {
           }
         } else {}
       }
-    });
-    setState(() {
-      isLoading = false;
     });
   }
 
@@ -128,9 +147,12 @@ class _HomePageState extends State<HomePage> {
       if (res2 != null) {
         print(res2);
         res2.docs.forEach((element) {
-          setState(() {
-            productList.add(Product.fromJson(element.data()));
-          });
+          var tP = Product.fromJson(element.data());
+          if (tP.isPayed) {
+            setState(() {
+              productList.add(tP);
+            });
+          }
         });
       }
     });
@@ -152,17 +174,11 @@ class _HomePageState extends State<HomePage> {
                 icon: 'assets/images/x-circle.svg',
                 titleText: 'Need to Signup',
                 bodyText:
-                    "Auto picker terms & conditions without an account user's cann't see product informations detaily",
+                    "Auto picker terms & conditions without an account user's cann't see detail view",
                 primaryButtonText: 'Ok',
                 onPressedPrimary: () => Navigator.pop(context, 'Cancel'),
               ));
     }
-  }
-
-  signOut() {
-    //redirect
-    userInfo.clearValue();
-    _auth.signOut().then((value) => navigate(context, RouteGenerator.homePage));
   }
 
   testFunction() {
@@ -233,7 +249,10 @@ class _HomePageState extends State<HomePage> {
                               GenericTextButton(
                                 color: AppColors.Blue,
                                 text: 'See All',
-                                onPressed: () {},
+                                onPressed: () {
+                                  navigate(context,
+                                      RouteGenerator.advertisementListingPage);
+                                },
                               ),
                             ]),
                       const SizedBox(
@@ -280,15 +299,6 @@ class _HomePageState extends State<HomePage> {
                             );
                           },
                         ),
-                      ),
-                      GenericTextButton(
-                        text: 'logout',
-                        onPressed: signOut,
-                      ),
-                      GenericButton(
-                        text: 'Profile',
-                        onPressed: () =>
-                            navigate(context, RouteGenerator.profilePage),
                       ),
                     ],
                   )),

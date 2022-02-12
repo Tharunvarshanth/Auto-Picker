@@ -58,10 +58,12 @@ class _ProductListingPageState extends State<ProductListingPage> {
       if (res2 != null) {
         print(res2);
         res2.docs.forEach((element) {
-          print("ProductListingPage ${element}");
-          setState(() {
-            productList.add(Product.fromJson(element.data()));
-          });
+          var tP = Product.fromJson(element.data());
+          if (tP.isPayed) {
+            setState(() {
+              productList.add(tP);
+            });
+          }
         });
       }
     });
@@ -86,7 +88,7 @@ class _ProductListingPageState extends State<ProductListingPage> {
                 icon: 'assets/images/x-circle.svg',
                 titleText: 'Need to Signup',
                 bodyText:
-                    "Auto picker terms & conditions without an account user's cann't see product informations detaily",
+                    "Auto picker terms & conditions without an account user's cann't see detail view",
                 primaryButtonText: 'Ok',
                 onPressedPrimary: () => Navigator.pop(context, 'Cancel'),
               ));
