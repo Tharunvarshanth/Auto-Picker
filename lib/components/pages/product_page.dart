@@ -7,9 +7,11 @@ import 'package:auto_picker/components/atoms/popup_modal_order.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:auto_picker/components/pages/edit_existing_product_page.dart';
 import 'package:auto_picker/models/carousel_data.dart';
+import 'package:auto_picker/models/notification.dart';
 import 'package:auto_picker/models/order.dart';
 import 'package:auto_picker/models/product.dart';
 import 'package:auto_picker/models/seller.dart';
+import 'package:auto_picker/services/notification_controller.dart';
 import 'package:auto_picker/services/order_controller.dart';
 import 'package:auto_picker/services/product_controller.dart';
 import 'package:auto_picker/services/push_messaging_service.dart';
@@ -45,6 +47,7 @@ class _ProductPageState extends State<ProductPage> {
   List<CarouselItemData> imageList = [];
   var noOfItemsController = TextEditingController();
   var pushMessagingService = PushMessagingSerivce();
+  var notificationController = NotificationController();
 
   void initState() {
     super.initState();
@@ -146,9 +149,13 @@ class _ProductPageState extends State<ProductPage> {
 
       res1 = await orderController.updateOrderField(order, 'orderId', res);
       if (res1) {
-        List<String> list = [order.customerId]; //[order.sellerId];
-        print(
-            "Onesignal push ${pushMessagingService.sendNotification(list, 'You have Got a  Order from Please Check My Orders', 'Product Order Received')}");
+        List<String> list = [order.sellerId]; //[order.sellerId];
+        var no = NotificationModel(ORDERTITLTE, ORDERBODY,
+            DateTime.now().toString(), NOTIFICATIONTYPES[0]);
+        pushMessagingService.sendOrderNotification(
+            list, ORDERBODY, ORDERTITLTE);
+
+        notificationController.addNotification(no, order.sellerId);
         Navigator.pop(context, 'Cancel');
         showDialog(
             context: context,

@@ -49,7 +49,7 @@ class PushMessagingSerivce {
     });
   }
 
-  Future<Response> sendNotification(
+  Future<Response> sendOrderNotification(
       List<String> tokenIdList, String contents, String heading) async {
     await post(
       Uri.parse('https://onesignal.com/api/v1/notifications'),

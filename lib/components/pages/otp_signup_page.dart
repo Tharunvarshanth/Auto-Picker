@@ -14,6 +14,8 @@ import 'package:auto_picker/models/seller.dart';
 import 'package:auto_picker/models/user_model.dart';
 import 'package:auto_picker/routes.dart';
 import 'package:auto_picker/services/mechanic_controller.dart';
+import 'package:auto_picker/services/notification_controller.dart';
+import 'package:auto_picker/services/order_controller.dart';
 import 'package:auto_picker/services/product_controller.dart';
 import 'package:auto_picker/services/seller_controller.dart';
 import 'package:auto_picker/services/spare_advertisement_controller.dart';
@@ -24,6 +26,7 @@ import 'package:auto_picker/utilities/constands.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class OtpSignUpPage extends StatefulWidget {
   final Map<String, String> params;
@@ -46,6 +49,8 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
   var userController = UserController();
   var mechanicController = MechanicController();
   var sellerController = SellerController();
+  var orderController = OrderController();
+  var notificationController = NotificationController();
   var userInfo = UserInfoCache();
   var addUserRes;
   bool isLoading = false;
@@ -99,6 +104,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
         widget.params["address"],
         false);
     var resUser = await userController.addUser(user);
+    externalAllTestData(fireUser);
     var resOther = true;
     switch (widget.params["role"]) {
       case Users.Mechanic:
@@ -130,7 +136,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
               false,
               false);
           resOther = await sellerController.addSeller(seller);
-          externalTestData(fireUser);
+          externalSellerTestData(fireUser);
         }
         break;
       default:
@@ -141,6 +147,12 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
       isLoading = false;
     });
     if (resUser && resOther) {
+      OneSignal.shared.setExternalUserId(fireUser).then((results) {
+        print("setExternalUserId ${results.toString()}");
+      }).catchError((error) {
+        print("setExternalUserId:e ${error.toString()}");
+      });
+
       switch (widget.params["role"]) {
         case Users.Mechanic:
           {
@@ -209,11 +221,16 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
     }
   }
 
-  void externalTestData(String uid) async {
+  void externalSellerTestData(String uid) async {
     Future.wait([
       productController.addProductTest(uid),
-      advertisementController.addTestAdvertisment(uid)
+      advertisementController.addTestAdvertisment(uid),
+      orderController.addTestOrder(uid)
     ]);
+  }
+
+  void externalAllTestData(String uid) async {
+    Future.wait([notificationController.addNotificationTest(uid)]);
   }
 
   void authComplete(resUser, resOther, fireUser) {

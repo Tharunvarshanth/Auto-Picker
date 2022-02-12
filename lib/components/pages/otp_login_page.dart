@@ -17,6 +17,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class OtpLoginPage extends StatefulWidget {
   const OtpLoginPage();
@@ -62,7 +63,6 @@ class _OtpLoginPage extends State<OtpLoginPage> {
     autoOtpSubmit();
   }
 
-  //testng devices
   void redirect(UserCredential user) async {
     var _user = await userController.getUser((user.user.uid));
     print(_user['role']);
@@ -140,6 +140,17 @@ class _OtpLoginPage extends State<OtpLoginPage> {
         auth.signInWithCredential(credential).then((value) async {
           if (value.user != null) {
             var user = await userController.getUser((value.user.uid));
+            void setOneSignalToken() async {
+// Setting External User Id with Callback Available in SDK Version 3.9.3+
+              OneSignal.shared
+                  .setExternalUserId(value.user.uid)
+                  .then((results) {
+                print("setExternalUserId ${results.toString()}");
+              }).catchError((error) {
+                print("setExternalUserId:e ${error.toString()}");
+              });
+            }
+
             await userInfo.saveUser(
                 true, value.user.uid, value.user.phoneNumber, '', user["role"]);
             navigate(context, RouteGenerator.homePage);

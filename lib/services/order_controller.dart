@@ -41,6 +41,18 @@ class OrderController {
     return res;
   }
 
+  Future<dynamic> addTestOrder(String uId) async {
+    var res;
+    await orders.doc(uId).set({'test': 'test'}).then((value) {
+      print("addSpareAdvertisement:success");
+      res = true;
+    }).catchError((onError) {
+      print("addSpareAdvertisement: $onError");
+      res = null;
+    });
+    return res;
+  }
+
   Future<bool> updateOrderField(
       Order order, String field, dynamic value) async {
     var res = false;
