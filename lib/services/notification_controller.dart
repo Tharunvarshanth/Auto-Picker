@@ -38,14 +38,10 @@ class NotificationController {
     return res;
   }
 
-  Future<List<Seller>> getNotifications(String uid) async {
-    String uid = await userInfo.getId();
-    notificationCollection
+  Future<dynamic> getNotifications(String uid) async {
+    return await notificationCollection
         .doc(uid)
         .collection(FirebaseCollections.NotificationsList)
-        .doc()
-        .get()
-        .then((value) => print(value))
-        .onError((error, stackTrace) => null);
+        .get();
   }
 }

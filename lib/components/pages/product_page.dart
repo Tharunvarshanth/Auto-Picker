@@ -151,7 +151,7 @@ class _ProductPageState extends State<ProductPage> {
       if (res1) {
         List<String> list = [order.sellerId]; //[order.sellerId];
         var no = NotificationModel(ORDERTITLTE, ORDERBODY,
-            DateTime.now().toString(), NOTIFICATIONTYPES[0]);
+            DateTime.now().toString(), NOTIFICATIONTYPES[0], false);
         pushMessagingService.sendOrderNotification(
             list, ORDERBODY, ORDERTITLTE);
 

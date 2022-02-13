@@ -1,16 +1,19 @@
+import 'dart:io';
+
+import 'package:auto_picker/themes/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class NotificationTile extends StatelessWidget {
   String title;
-  String byOwner;
-  DateTime dateTime;
+
+  String dateTime;
   String description;
   String notificationImgUrl;
   bool read;
 
   NotificationTile(
       {Key key,
-      this.byOwner,
       this.dateTime,
       this.description,
       this.notificationImgUrl,
@@ -33,8 +36,8 @@ class NotificationTile extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 32,
-              backgroundImage: NetworkImage(notificationImgUrl),
-              foregroundImage: AssetImage(''),
+              foregroundColor: AppColors.white,
+              backgroundImage: AssetImage(notificationImgUrl),
             ),
             Expanded(
               child: Padding(
@@ -46,11 +49,9 @@ class NotificationTile extends StatelessWidget {
                       style: TextStyle(fontSize: 20),
                     ),
                     Text(
-                      byOwner,
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    Text(
-                      dateTime.toString(),
+                      DateFormat("yyyy-MM-dd hh:mm:ss")
+                          .parse(dateTime)
+                          .toString(),
                       style: TextStyle(fontSize: 16, color: Colors.grey),
                     ),
                     Text(

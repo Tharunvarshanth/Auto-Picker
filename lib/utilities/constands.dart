@@ -61,3 +61,4 @@ const ONESIGNALAPPID = "9118dd3d-282d-42e6-b3a2-78b5bee6c5a0";
 const ORDERTITLTE = "Product Order Received";
 const ORDERBODY = "You have Got a  Order from Please Check My Orders";
 const NOTIFICATIONTYPES = ["Order"];
+const NOTIFICATION_TYPE_ORDER = "Order";
