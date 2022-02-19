@@ -8,6 +8,7 @@ class Order {
   String descriptionCancelled;
   bool cancelled;
   String orderCreatedDate;
+  bool isConfirmed;
 
   Order(
       this.orderId,
@@ -18,7 +19,8 @@ class Order {
       this.noOfItems,
       this.descriptionCancelled,
       this.cancelled,
-      this.orderCreatedDate);
+      this.orderCreatedDate,
+      this.isConfirmed);
 
   void updateId(String id) {
     this.orderId = id;
@@ -38,7 +40,8 @@ class Order {
         json['noOfItems'],
         json['descriptionCancelled'],
         json['cancelled'],
-        json['orderCreatedDate']);
+        json['orderCreatedDate'],
+        json['isConfirmed']);
   }
 
   Map<String, Object> toJson() {
@@ -51,7 +54,8 @@ class Order {
       'descriptionCancelled': descriptionCancelled,
       'isCompleted': isCompleted,
       'cancelled': cancelled,
-      'orderCreatedDate': orderCreatedDate
+      'orderCreatedDate': orderCreatedDate,
+      'isConfirmed': isConfirmed
     };
   }
 }

@@ -1,4 +1,5 @@
 import 'package:auto_picker/components/atoms/generic_button.dart';
+import 'package:auto_picker/themes/colors.dart';
 import 'package:flutter/material.dart';
 
 class OrderTile extends StatelessWidget {
@@ -8,6 +9,13 @@ class OrderTile extends StatelessWidget {
   String orderedBy;
   String itemImgUrl;
   int itemCount;
+  bool isCompleted;
+  bool isConfirmed;
+  int index;
+  void Function() handleIsCompleted;
+  void Function() handleConfirmOrder;
+  void Function() makeCall;
+
   OrderTile(
       {Key key,
       this.ItemTitle,
@@ -15,7 +23,13 @@ class OrderTile extends StatelessWidget {
       this.itemCount,
       this.orderedBy,
       this.itemImgUrl,
-      this.itemPrice})
+      this.itemPrice,
+      this.isCompleted,
+      this.index,
+      this.handleIsCompleted,
+      this.handleConfirmOrder,
+      this.isConfirmed,
+      this.makeCall})
       : super(key: key);
 
   @override
@@ -53,7 +67,7 @@ class OrderTile extends StatelessWidget {
                         fit: BoxFit.cover,
                         loadingBuilder: (context, child, loadingProgress) {
                           if (loadingProgress == null) return child;
-                          return Center(
+                          return const Center(
                             child: CircularProgressIndicator(),
                           );
                         },
@@ -63,7 +77,7 @@ class OrderTile extends StatelessWidget {
                       ))
                 ],
               ),
-              Divider(
+              const Divider(
                 thickness: 2,
               ),
               Row(
@@ -71,7 +85,7 @@ class OrderTile extends StatelessWidget {
                   Expanded(
                     flex: 2,
                     child: ListTile(
-                      title: Text(
+                      title: const Text(
                         "Ordered By",
                         style: TextStyle(fontSize: 24),
                       ),
@@ -89,7 +103,7 @@ class OrderTile extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: const TextStyle(fontSize: 24),
                       ),
-                      subtitle: Text(
+                      subtitle: const Text(
                         'No Of Items',
                         style: TextStyle(fontSize: 20),
                       ),
@@ -105,12 +119,16 @@ class OrderTile extends StatelessWidget {
                         textColor: Colors.white,
                         backgroundColor: Colors.blue,
                         shadowColor: Colors.transparent,
-                        onPressed: () {},
+                        onPressed: () {
+                          makeCall();
+                        },
                       ),
                       GenericButton(
                         text: 'CHAT',
                         paddingHorizontal: 2,
                         paddingVertical: 2,
+                        textColor: AppColors.blue,
+                        backgroundColor: AppColors.white,
                         shadowColor: Colors.transparent,
                         onPressed: () {},
                       ),
@@ -118,23 +136,23 @@ class OrderTile extends StatelessWidget {
                   )
                 ],
               ),
-              Divider(
+              const Divider(
                 thickness: 2,
               ),
               Row(
                 children: [
                   Expanded(
                       child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Row(
                       children: [
-                        Text(
-                          'PRICE',
+                        const Text(
+                          'Price',
                           style: TextStyle(fontSize: 20),
                         ),
                         Text(
                           itemPrice,
-                          style: TextStyle(fontSize: 20),
+                          style: const TextStyle(fontSize: 20),
                         ),
                       ],
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -142,28 +160,34 @@ class OrderTile extends StatelessWidget {
                   )),
                   Expanded(
                       child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         border: Border(left: BorderSide(color: Colors.grey))),
-                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Column(
                       children: [
                         ListTile(
-                          trailing: Text(
+                          trailing: const Text(
                             'Completed',
                             style: TextStyle(fontSize: 20),
                           ),
                           leading: Radio(
-                              value: true,
-                              groupValue: true,
-                              onChanged: (value) {}),
+                            value: isCompleted,
+                            groupValue: isCompleted,
+                            onChanged: (value) {
+                              handleIsCompleted();
+                            },
+                          ),
                         ),
-                        GenericButton(
-                          text: 'CONFIRM ORDER',
-                          paddingVertical: 0,
-                          paddingHorizontal: 8,
-                          shadowColor: Colors.transparent,
-                          onPressed: () {},
-                        )
+                        if (!isConfirmed && !isCompleted)
+                          GenericButton(
+                            text: 'CONFIRM ORDER',
+                            paddingVertical: 0,
+                            paddingHorizontal: 8,
+                            shadowColor: Colors.transparent,
+                            onPressed: () {
+                              handleConfirmOrder();
+                            },
+                          )
                       ],
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     ),

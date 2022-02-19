@@ -63,8 +63,6 @@ class _MenuMoreState extends State<MenuMorePage> {
               getTile("Service Records", () {}),
               getTile("Fuel Manager", () {}),
               getTile("Notifications", () {}),
-              getTile("My Orders",
-                  () => {navigate(context, RouteGenerator.orderSellerPage)}),
             ],
             getTile("Mileage Calculator", () {}),
             getTile("Vehicle Information", () {}),

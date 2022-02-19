@@ -33,7 +33,8 @@ class _AdvertisementPaymentPageState extends State<AdvertisementPaymentPage> {
   var userController = UserController();
   var advertismentController = AdvertisementController();
   var existingUser = FirebaseAuth.instance.currentUser;
-  String payment;
+  String payment = '';
+  bool isLoading = true;
   void initState() {
     super.initState();
     getAdvertisementCharges();
@@ -42,10 +43,11 @@ class _AdvertisementPaymentPageState extends State<AdvertisementPaymentPage> {
   getAdvertisementCharges() async {
     var res = (await adminControl.getAdmin())["advertisementCharge"];
     setState(() {
-      payment = res;
+      payment = res.toString();
     });
-
-    print("${widget.params}  ${payment}");
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void showAlert(BuildContext context, String title, String msg) {
@@ -108,7 +110,6 @@ class _AdvertisementPaymentPageState extends State<AdvertisementPaymentPage> {
       showAlert(context, "Payment Failed", "$error");
     }, () {
       print("Thank you for your payment");
-      showAlert(context, "Thank you for your payment", "");
     });
   }
 
@@ -119,24 +120,26 @@ class _AdvertisementPaymentPageState extends State<AdvertisementPaymentPage> {
           isLogged: true,
           showBackButton: true,
         ),
-        body: Center(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            GenericText(
-              textAlign: TextAlign.center,
-              isBold: true,
-              textSize: 24,
-              text: 'Your advertisement charge $payment',
-            ),
-            GenericButton(
-              text: 'Pay Now',
-              textColor: AppColors.white,
-              backgroundColor: AppColors.Blue,
-              onPressed: () => payNow(context),
-            )
-          ],
-        )));
+        body: isLoading
+            ? Center(child: CircularProgressIndicator())
+            : Center(
+                child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  GenericText(
+                    textAlign: TextAlign.center,
+                    isBold: true,
+                    textSize: 24,
+                    text: 'Your advertisement charge $payment',
+                  ),
+                  GenericButton(
+                    text: 'Pay Now',
+                    textColor: AppColors.white,
+                    backgroundColor: AppColors.Blue,
+                    onPressed: () => payNow(context),
+                  )
+                ],
+              )));
   }
 }

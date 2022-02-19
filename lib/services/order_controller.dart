@@ -59,7 +59,7 @@ class OrderController {
     await orders
         .doc(order.sellerId)
         .collection(FirebaseCollections.OrdersList)
-        .doc(value)
+        .doc(order.orderId)
         .update({field: value}).whenComplete(() {
       res = true;
     }).onError((error, stackTrace) {

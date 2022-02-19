@@ -142,7 +142,8 @@ class _ProductPageState extends State<ProductPage> {
         int.parse(numberItems),
         '',
         false,
-        DateTime.now().toString());
+        DateTime.now().toString(),
+        false);
     var res = await orderController.addOrder(order);
     if (res != null) {
       var res1 = false;

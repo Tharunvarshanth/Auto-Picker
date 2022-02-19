@@ -6,6 +6,8 @@ import 'package:auto_picker/components/pages/add_new_product.dart';
 import 'package:auto_picker/components/pages/my_own_advertisement_listing_page.dart';
 import 'package:auto_picker/components/pages/my_own_product_listing_page.dart';
 import 'package:auto_picker/models/seller.dart';
+import 'package:auto_picker/routes.dart';
+import 'package:auto_picker/utilities/utils.dart';
 import 'package:flutter/material.dart';
 
 class SellerProfile extends StatefulWidget {
@@ -43,6 +45,10 @@ class _SellerProfileState extends State<SellerProfile> {
             MaterialPageRoute(builder: (context) => const AddNewProductPage()),
           ),
         ),
+        TextDescriptionWithButton(
+            title: 'My Order',
+            description: 'You can view and edit you received order',
+            onPress: () => navigate(context, RouteGenerator.orderSellerPage)),
         TextDescriptionWithButton(
           title: 'My Products',
           description: 'You can view and edit your own products',

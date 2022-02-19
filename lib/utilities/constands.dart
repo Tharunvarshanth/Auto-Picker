@@ -62,3 +62,8 @@ const ORDERTITLTE = "Product Order Received";
 const ORDERBODY = "You have Got a  Order from Please Check My Orders";
 const NOTIFICATIONTYPES = ["Order"];
 const NOTIFICATION_TYPE_ORDER = "Order";
+const ORDER_CONFIRM_TITLE = 'Order Confirmed';
+const ORDER_CONFIRM_BODY = 'Your order confirmed by product owner';
+
+const ORDER_COMPLETED_TITLE = "Your order completed";
+const ORDER_COMPLETED_BODY = "Your order marked as completed";

@@ -1,9 +1,11 @@
 import 'package:auto_picker/components/atoms/custom_app_bar%20copy.dart';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
+import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/image_corousal.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
+import 'package:auto_picker/components/pages/advertisement_payment_page.dart';
 import 'package:auto_picker/components/pages/edit_existing_advertisement.dart';
 import 'package:auto_picker/components/pages/edit_existing_product_page.dart';
 import 'package:auto_picker/models/carousel_data.dart';
@@ -108,6 +110,19 @@ class _AdvertisementPageState extends State<AdvertisementPage> {
     }
   }
 
+  void paymentPage() {
+    var params = {
+      'adId': widget.advertisement.aId,
+      'item': widget.advertisement.title
+    };
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AdvertisementPaymentPage(params: params),
+      ),
+    );
+  }
+
   void dispose() {
     super.dispose();
   }
@@ -146,6 +161,7 @@ class _AdvertisementPageState extends State<AdvertisementPage> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             GenericText(
                               text: widget.advertisement.title,
@@ -154,8 +170,15 @@ class _AdvertisementPageState extends State<AdvertisementPage> {
                             GenericText(
                                 text: widget.advertisement.subtitle,
                                 textSize: 18),
+                            if (widget.isOwner &&
+                                !widget.advertisement.isPaymentDone)
+                              GenericText(
+                                  text: 'Payment not done', textSize: 18),
+                            GenericTextButton(
+                              text: 'Click here for payment',
+                              onPressed: () => paymentPage(),
+                            )
                           ],
-                          mainAxisSize: MainAxisSize.min,
                         ),
                       ),
                     ),
