@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
      <!-- Provide required visibility configuration for API level 30 and above -->
   <queries>
     <intent>
@@ -31,7 +32,7 @@
 
         <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyD7n81mZhsYBJYucjZL4iAkhWtxWW9tg3s"/>
-               
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

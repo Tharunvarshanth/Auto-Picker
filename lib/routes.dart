@@ -17,6 +17,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'components/pages/advertisement_payment_page.dart';
+import 'components/pages/find_nearby_mechanics_page.dart';
 import 'components/pages/home_page.dart';
 import 'components/pages/mechanic_profile_page.dart';
 import 'components/pages/mechanics_listing_page.dart';
@@ -50,6 +51,7 @@ class RouteGenerator {
   static const String advertisementListingPage = '/advertisementListingPage';
   static const String orderSellerPage = "/orderPage";
   static const String notificationsPage = '/notificationPage';
+  static const String findNearByMechanicsPage = '/findNearByMechanicsPage';
 
   RouteGenerator._() {}
 
@@ -104,6 +106,9 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const OrdersSellerListPage());
       case notificationsPage:
         return MaterialPageRoute(builder: (_) => const NotificationsPage());
+      case findNearByMechanicsPage:
+        return MaterialPageRoute(builder: (_) => FindNearByMechanicsPage());
+
       case testPage:
         return MaterialPageRoute(builder: (_) => const TestPage());
       default:

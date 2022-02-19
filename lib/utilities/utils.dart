@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:latlong/latlong.dart';
 
 void navigate(BuildContext context, routeName) {
   Navigator.of(context)?.pushNamed(routeName);
@@ -28,4 +29,13 @@ stringToTimeFormat(String bigTime) {
   DateTime tempDate = DateFormat("hh:mm").parse(bigTime);
 
   return tempDate;
+}
+
+findDistanceBetweenLocations(l1, l2) {
+  final Distance distance = Distance();
+
+  // km = 423
+  final int km = distance.as(LengthUnit.Kilometer, l1, l2);
+
+  return km;
 }

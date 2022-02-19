@@ -59,7 +59,9 @@ class _MenuMoreState extends State<MenuMorePage> {
             if (isLogged) ...[
               getTile("Personal Controller",
                   () => {navigate(context, RouteGenerator.profilePage)}),
-              getTile("Find Mechanics Nearby", () {}),
+              getTile("Find Mechanics Nearby", () {
+                navigate(context, RouteGenerator.findNearByMechanicsPage);
+              }),
               getTile("Service Records", () {}),
               getTile("Fuel Manager", () {}),
               getTile("Notifications", () {}),

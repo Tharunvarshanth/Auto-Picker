@@ -66,6 +66,8 @@ dependencies:
   url_launcher: ^6.0.18
   flutter_local_notifications: ^9.2.0
   onesignal_flutter: ^3.0.0
+  latlong: ^0.6.1
+  flutter_google_places: ^0.3.0
 
 dev_dependencies:
   flutter_test:

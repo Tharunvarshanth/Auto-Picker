@@ -22,11 +22,12 @@ class MapLatLonPageState extends State<MapLatLonPage> {
   LatLng userLocation;
   LatLng myCurrentLocation;
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
+  static const CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(6.9271, 79.8612),
     zoom: 14.4746,
   );
 
+  @override
   void initState() {
     super.initState();
     _getLocation();
