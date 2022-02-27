@@ -35,7 +35,7 @@ findDistanceBetweenLocations(l1, l2) {
   final Distance distance = Distance();
 
   // km = 423
-  final int km = distance.as(LengthUnit.Kilometer, l1, l2);
+  final double km = distance.as(LengthUnit.Kilometer, l1, l2);
 
   return km;
 }

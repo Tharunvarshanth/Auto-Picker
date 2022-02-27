@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
@@ -13,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_picker/services/location_services.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:latlong/latlong.dart' as LatLonManager;
 import 'package:location/location.dart';
 
 class FindNearByMechanicsPage extends StatefulWidget {
@@ -37,6 +40,15 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
   LatLng myCurrentLocation;
   Set<Marker> _markers = Set<Marker>();
 
+  GoogleMapController mapController;
+  bool isShowMap = false;
+  double nearByDistance = 10.00;
+
+  static CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(6.9271, 79.8612),
+    zoom: 14.4746,
+  );
+
   @override
   void initState() {
     // TODO: implement initState
@@ -50,13 +62,13 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
   void filteringNearByMechanics() {}
 
   _getCurrentLocation() async {
-    var location = new Location();
+    var location = Location();
 
     try {
       var currentLocation = await location.getLocation();
       setState(() {
-        myCurrentLocation =
-            LatLng(currentLocation.latitude, currentLocation.longitude);
+        myCurrentLocation = LatLng(6.9271, 79.8612);
+        //Need to after production LatLng(currentLocation.latitude, currentLocation.longitude);
       });
       print(
           "My current Location: ${currentLocation.latitude}  ${currentLocation.longitude}");
@@ -65,21 +77,46 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
     }
 
     myCurrentLocation != null
-        ? _setMarker(myCurrentLocation)
-        : _setMarker(LatLng(37.42796133580664, -122.085749655962));
+        ? _setMyMarker(myCurrentLocation)
+        : _setMyMarker(const LatLng(6.9271, 79.8612));
+    _kGooglePlex = CameraPosition(
+      target: myCurrentLocation,
+      zoom: 14.4746,
+    );
   }
 
-  void _setMarker(LatLng point) {
+  Future<void> _setMyMarker(LatLng point) async {
+    BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(),
+      "assets/images/pin",
+    );
     setState(() {
-      _markers.add(Marker(markerId: MarkerId('marker'), position: point));
-      userLocation = point;
+      _markers.add(Marker(
+          markerId: const MarkerId('marker'),
+          position: point,
+          infoWindow: const InfoWindow(
+            title: 'My Location ',
+          )));
+    });
+  }
+
+  void setNearbyPlacesMarker(Mechanic mechanic) async {
+    print("setNearByPlaceMarker");
+    setState(() {
+      _markers.add(Marker(
+          markerId: MarkerId('marker ${mechanic?.id}'),
+          position: LatLng(double.parse(mechanic.location_lat),
+              double.parse(mechanic.location_lon)),
+          infoWindow: InfoWindow(
+            title: mechanic?.specialist,
+          )));
     });
   }
 
   getMechanicsList() async {
     List<dynamic> res = await mechanicsController.getMechanics();
     if (res != null) {
-      res.forEach((element) {
+      for (var element in res) {
         print("Mechanics: $element");
         Mechanic _mechanic = Mechanic.fromJson(element);
         if (!_mechanic.isBlocked && _mechanic.isPayed) {
@@ -88,35 +125,35 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
             mechanicListFiltered.add(_mechanic);
           });
         }
-      });
+      }
     }
+    handleNearByMechanics();
     setState(() {
       isLoading = false;
     });
   }
 
   void handleNearByMechanics() {
-    if (distanceController.text != null) {
-      setState(() {
-        isLoading = true;
-        mechanicListFiltered = [];
-      });
-      mechanicList.forEach((element) {
-        var distance = findDistanceBetweenLocations(
-            const LatLng(6.9271, 79.8612), //myCurrentLocation
-            LatLng(double.parse(element.location_lat),
-                double.parse(element.location_lon)));
-        if (distance <= double.parse(distanceController.text)) {
-          print("nearBy Mechanic ${element.workingCity}");
-          setState(() {
-            mechanicListFiltered.add(element);
-          });
-        }
-      });
-      setState(() {
-        isLoading = false;
-      });
-    }
+    setState(() {
+      isLoading = true;
+      mechanicListFiltered = [];
+    });
+    mechanicList.forEach((element) {
+      var distance = findDistanceBetweenLocations(
+          LatLonManager.LatLng(6.9271, 79.8612), //myCurrentLocation
+          LatLonManager.LatLng(double.parse(element.location_lat),
+              double.parse(element.location_lon)));
+      if (distance <= nearByDistance) {
+        print("nearBy Mechanic ${element.id}");
+        setState(() {
+          mechanicListFiltered.add(element);
+        });
+        setNearbyPlacesMarker(element);
+      }
+    });
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void navigateToMechanicProfilePage(int index) {
@@ -142,39 +179,85 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
     }
   }
 
-  Widget build(BuildContext context) {
-    //addProduct();
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
 
+  Widget mapWindow() {
+    return Expanded(
+      child: GoogleMap(
+        mapType: MapType.normal,
+        onMapCreated: _onMapCreated,
+        initialCameraPosition: _kGooglePlex,
+        markers: _markers,
+        myLocationEnabled: true,
+        onCameraMove: (position) => {print("onCameraMove $position")},
+      ),
+    );
+  }
+
+  Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const CustomAppBar(
-          title: 'Find NearBy',
-          isLogged: false,
-          showBackButton: true,
-        ),
-        body: isLoading
-            ? (CircularProgressIndicator())
-            : SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          TextFormField(
-                            controller: distanceController,
-                            decoration: InputDecoration(
-                                hintText: 'Enter distance in KM '),
-                            onChanged: (text) {},
-                          ),
-                          GenericButton(
-                            text: 'Search',
-                            onPressed: () => {},
+      appBar: const CustomAppBar(
+        title: 'Find Nearby',
+        isLogged: false,
+        showBackButton: true,
+      ),
+      body: isLoading
+          ? const Center(child: (CircularProgressIndicator()))
+          : SafeArea(
+              child: Padding(
+                padding: !isShowMap
+                    ? const EdgeInsets.symmetric(horizontal: 10, vertical: 20)
+                    : const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    !isShowMap
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  controller: distanceController,
+                                  decoration: const InputDecoration(
+                                      hintText: 'Enter distance in KM '),
+                                  onChanged: (text) {},
+                                ),
+                              ),
+                              IconButton(
+                                  onPressed: () {
+                                    if (distanceController.text != null &&
+                                        (distanceController.text).trim() !=
+                                            '' &&
+                                        (distanceController.text).isNotEmpty) {
+                                      print(
+                                          "1 ${distanceController.text.isNotEmpty}");
+                                      nearByDistance =
+                                          double.parse(distanceController.text);
+                                      handleNearByMechanics();
+                                    }
+                                  },
+                                  icon: const Icon(Icons.search))
+                            ],
                           )
-                        ],
-                      )
-                    ],
-                  ),
+                        : mapWindow()
+                  ],
                 ),
-              ));
+              ),
+            ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          setState(() {
+            isShowMap = !isShowMap;
+          });
+        },
+        label: !isShowMap
+            ? const Text('View in map')
+            : const Text('Close the map'),
+        icon: Icon(Icons.map),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+    );
   }
 }
