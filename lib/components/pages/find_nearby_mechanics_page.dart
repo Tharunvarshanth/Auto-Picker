@@ -200,7 +200,7 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
     return Scaffold(
       appBar: const CustomAppBar(
         title: 'Find Nearby',
-        isLogged: false,
+        isLogged: true,
         showBackButton: true,
       ),
       body: isLoading

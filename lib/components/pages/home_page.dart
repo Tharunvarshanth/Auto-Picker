@@ -56,6 +56,7 @@ class _HomePageState extends State<HomePage> {
     controller.addListener(() {});
     setData();
     // setOneSignalToken();
+    print("city  ${ReadCityJsonData()}");
   }
 
   void setOneSignalToken() async {

@@ -190,8 +190,10 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   ),
                   GenericTextButton(
-                    onPressed: () => {},
-                    text: 'Find Nearby Garage',
+                    onPressed: () => {
+                      navigate(context, RouteGenerator.findNearByMechanicsPage)
+                    },
+                    text: 'Find Nearby Mechanics',
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 8),
@@ -334,8 +336,6 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
                                 });
                           },
                         ),
-                        IconButton(
-                            onPressed: () {}, icon: Icon(Icons.sync_rounded))
                       ],
                     ),
                   ),

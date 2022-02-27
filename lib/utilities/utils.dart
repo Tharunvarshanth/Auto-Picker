@@ -1,5 +1,10 @@
+import 'dart:convert';
+
+import 'package:auto_picker/models/city.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong/latlong.dart';
 
@@ -38,4 +43,21 @@ findDistanceBetweenLocations(l1, l2) {
   final double km = distance.as(LengthUnit.Kilometer, l1, l2);
 
   return km;
+}
+
+Future<List<City>> ReadCityJsonData() async {
+  String data =
+      await rootBundle.loadString('assets/cities-and-postalcode.json');
+  var jsonResult = json.decode(data);
+
+  print(jsonResult[0]);
+  //read json file*/
+/*
+  final jsondata =
+      await rootBundle.loadString('assets/cities-and-postalcode.json');
+  //decode json data as list
+  final list = json.decode(jsondata) as List<dynamic>;
+
+  //map json and initialize using DataModel
+  return list.map((e) => City.fromJson(e)).toList();*/
 }
