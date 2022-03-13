@@ -1,4 +1,4 @@
-class CarServiceRecord {
+class VehicleServiceRecord {
   String serviceId;
   String date;
   String notificationDate;
@@ -6,7 +6,7 @@ class CarServiceRecord {
   String description;
   String mileage;
 
-  CarServiceRecord(
+  VehicleServiceRecord(
     this.serviceId,
     this.date,
     this.notificationDate,

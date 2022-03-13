@@ -32,7 +32,6 @@ const MechanicSpecialistSkills = [
 ];
 
 class FirebaseCollections {
-  static const CarServiceRecords = 'carServiceRecords';
   static const Chats = 'chats';
   static const Feedbacks = 'feedbacks';
   static const FeedbackList = 'feedbackList';
@@ -50,6 +49,8 @@ class FirebaseCollections {
   static const AdminControls = 'adminControls';
   static const Orders = 'orders';
   static const OrdersList = 'ordersList';
+  static const VehicleServiceMaintenance = 'vehicleServiceMaintenance';
+  static const VehicleServiceList = 'vehicleServiceList';
 }
 
 const SPAREPARTSCONDITIONLIST = ["Recondition", "Used", "Brand New"];

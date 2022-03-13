@@ -13,6 +13,7 @@ import 'package:auto_picker/components/pages/profile_page.dart';
 import 'package:auto_picker/components/pages/seller_signup_page.dart';
 import 'package:auto_picker/components/pages/sign_up_page.dart';
 import 'package:auto_picker/components/pages/splash_page.dart';
+import 'package:auto_picker/components/pages/vehicle_service_add_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -52,6 +53,7 @@ class RouteGenerator {
   static const String orderSellerPage = "/orderPage";
   static const String notificationsPage = '/notificationPage';
   static const String findNearByMechanicsPage = '/findNearByMechanicsPage';
+  static const String addVehcileServicePage = '/addVehcileServicePage';
 
   RouteGenerator._() {}
 
@@ -108,7 +110,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const NotificationsPage());
       case findNearByMechanicsPage:
         return MaterialPageRoute(builder: (_) => FindNearByMechanicsPage());
-
+      case addVehcileServicePage:
+        return MaterialPageRoute(builder: (_) => const VehicleServiceAddPage());
       case testPage:
         return MaterialPageRoute(builder: (_) => const TestPage());
       default:

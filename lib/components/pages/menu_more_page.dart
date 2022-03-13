@@ -62,7 +62,9 @@ class _MenuMoreState extends State<MenuMorePage> {
               getTile("Find Mechanics Nearby", () {
                 navigate(context, RouteGenerator.findNearByMechanicsPage);
               }),
-              getTile("Service Records", () {}),
+              getTile("Vehicle Service Records Maintainence", () {
+                navigate(context, RouteGenerator.addVehcileServicePage);
+              }),
               getTile("Fuel Manager", () {}),
               getTile("Notifications", () {}),
             ],

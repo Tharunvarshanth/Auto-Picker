@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
+import 'package:auto_picker/components/atoms/service_card_nearby_mechanic.dart';
 import 'package:auto_picker/components/pages/mechanic_profile_page.dart';
 import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/models/product.dart';
@@ -28,6 +29,7 @@ class FindNearByMechanicsPage extends StatefulWidget {
 
 class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
   List<String> imageList = ["value 1", "value 2"];
+  ScrollController _controller = ScrollController();
   bool isLoading = true;
   var mechanicsController = MechanicController();
   List<Mechanic> mechanicList = [];
@@ -39,12 +41,13 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
   LatLng userLocation;
   LatLng myCurrentLocation;
   Set<Marker> _markers = Set<Marker>();
+  List<double> distanceList = [];
 
   GoogleMapController mapController;
   bool isShowMap = false;
   double nearByDistance = 10.00;
 
-  static CameraPosition _kGooglePlex = CameraPosition(
+  static CameraPosition _kGooglePlex = const CameraPosition(
     target: LatLng(6.9271, 79.8612),
     zoom: 14.4746,
   );
@@ -52,6 +55,7 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
   @override
   void initState() {
     // TODO: implement initState
+    _controller.addListener(() {});
     super.initState();
     [getMechanicsList(), _getCurrentLocation()];
     setState(() {
@@ -147,6 +151,7 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
         print("nearBy Mechanic ${element.id}");
         setState(() {
           mechanicListFiltered.add(element);
+          distanceList.add(distance);
         });
         setNearbyPlacesMarker(element);
       }
@@ -203,48 +208,73 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
         isLogged: true,
         showBackButton: true,
       ),
+      resizeToAvoidBottomInset: false,
       body: isLoading
           ? const Center(child: (CircularProgressIndicator()))
           : SafeArea(
               child: Padding(
-                padding: !isShowMap
-                    ? const EdgeInsets.symmetric(horizontal: 10, vertical: 20)
-                    : const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    !isShowMap
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Expanded(
-                                child: TextFormField(
-                                  controller: distanceController,
-                                  decoration: const InputDecoration(
-                                      hintText: 'Enter distance in KM '),
-                                  onChanged: (text) {},
+                  padding: !isShowMap
+                      ? const EdgeInsets.symmetric(horizontal: 10, vertical: 20)
+                      : const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                  child: !isShowMap
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Expanded(
+                                  child: TextFormField(
+                                    controller: distanceController,
+                                    decoration: const InputDecoration(
+                                        hintText: 'Enter distance in KM '),
+                                    onChanged: (text) {},
+                                  ),
                                 ),
+                                IconButton(
+                                    onPressed: () {
+                                      if (distanceController.text != null &&
+                                          (distanceController.text).trim() !=
+                                              '' &&
+                                          (distanceController.text)
+                                              .isNotEmpty) {
+                                        print(
+                                            "1 ${distanceController.text.isNotEmpty}");
+                                        nearByDistance = double.parse(
+                                            distanceController.text);
+                                        handleNearByMechanics();
+                                      }
+                                    },
+                                    icon: const Icon(Icons.search))
+                              ],
+                            ),
+                            Container(
+                              height:
+                                  MediaQuery.of(context).size.height * 3 / 5,
+                              child: ListView.builder(
+                                controller: _controller,
+                                itemCount: mechanicListFiltered.length,
+                                itemBuilder: (context, index) {
+                                  return ServiceCardNearByMechanic(
+                                    padding: 20,
+                                    miniTitle:
+                                        mechanicListFiltered[index].specialist,
+                                    miniSubTitle: 'Specialist Field',
+                                    location:
+                                        mechanicListFiltered[index].workingCity,
+                                    buttonTitle: 'More Info',
+                                    distance: distanceList[index],
+                                    buttonPressed: () =>
+                                        navigateToMechanicProfilePage(index),
+                                    openHours:
+                                        "${utcTo12HourFormat(mechanicListFiltered[index].workingTime_From)} - ${utcTo12HourFormat(mechanicListFiltered[index].workingTime_To)}",
+                                  );
+                                },
                               ),
-                              IconButton(
-                                  onPressed: () {
-                                    if (distanceController.text != null &&
-                                        (distanceController.text).trim() !=
-                                            '' &&
-                                        (distanceController.text).isNotEmpty) {
-                                      print(
-                                          "1 ${distanceController.text.isNotEmpty}");
-                                      nearByDistance =
-                                          double.parse(distanceController.text);
-                                      handleNearByMechanics();
-                                    }
-                                  },
-                                  icon: const Icon(Icons.search))
-                            ],
-                          )
-                        : mapWindow()
-                  ],
-                ),
-              ),
+                            )
+                          ],
+                        )
+                      : mapWindow()),
             ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {

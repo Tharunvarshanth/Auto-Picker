@@ -20,6 +20,7 @@ import 'package:auto_picker/services/product_controller.dart';
 import 'package:auto_picker/services/seller_controller.dart';
 import 'package:auto_picker/services/spare_advertisement_controller.dart';
 import 'package:auto_picker/services/user_controller.dart';
+import 'package:auto_picker/services/vehicle_service_record_controller.dart';
 import 'package:auto_picker/store/cache/sharedPreferences/user_info.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/constands.dart';
@@ -51,6 +52,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
   var sellerController = SellerController();
   var orderController = OrderController();
   var notificationController = NotificationController();
+  var vehicleServiceHistoryController = VehicleServiceController();
   var userInfo = UserInfoCache();
   var addUserRes;
   bool isLoading = false;
@@ -230,7 +232,10 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
   }
 
   void externalAllTestData(String uid) async {
-    Future.wait([notificationController.addNotificationTest(uid)]);
+    Future.wait([
+      notificationController.addNotificationTest(uid),
+      vehicleServiceHistoryController.addVehicleServiceTest(uid)
+    ]);
   }
 
   void authComplete(resUser, resOther, fireUser) {
