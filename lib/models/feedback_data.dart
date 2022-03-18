@@ -1,13 +1,24 @@
 class FeedBackData {
   String userName;
-  DateTime dateTime;
+  String dateTime;
   String feedbackMessage;
-  String profilePicUrl;
 
   FeedBackData(
-      {this.userName = 'no user name',
-      this.feedbackMessage = 'no message',
-      this.profilePicUrl = ''}) {
-    this.dateTime = DateTime.now();
+    this.userName,
+    this.dateTime,
+    this.feedbackMessage,
+  );
+
+  factory FeedBackData.fromJson(dynamic json) {
+    return FeedBackData(
+        json["userName"], json["dateTime"], json["feedbackMessage"]);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'userName': userName,
+      'dateTime': dateTime,
+      'feedbackMessage': feedbackMessage
+    };
   }
 }

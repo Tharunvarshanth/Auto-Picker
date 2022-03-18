@@ -1,4 +1,4 @@
-import 'package:auto_picker/models/feedback.dart';
+import 'package:auto_picker/models/feedback_data.dart';
 import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/models/seller.dart';
 import 'package:auto_picker/utilities/constands.dart';
@@ -8,7 +8,7 @@ class FeedBackController {
   static CollectionReference feedbackCollection =
       FirebaseFirestore.instance.collection(FirebaseCollections.Feedbacks);
 
-  Future<bool> addFeedback(Feedback feedback, String uid) async {
+  Future<bool> addFeedback(FeedBackData feedback, String uid) async {
     await feedbackCollection
         .doc(uid)
         .collection(FirebaseCollections.FeedbackList)
@@ -23,8 +23,27 @@ class FeedBackController {
     });
   }
 
+  getFeedbackList(String id) async {
+    return await feedbackCollection
+        .doc(id)
+        .collection(FirebaseCollections.FeedbackList)
+        .get();
+  }
+
+  Future<dynamic> addTestAdvertisment(String uId) async {
+    var res;
+    await feedbackCollection.doc(uId).set({'test': 'test'}).then((value) {
+      print("addSpareAdvertisement:success");
+      res = true;
+    }).catchError((onError) {
+      print("addSpareAdvertisement: $onError");
+      res = null;
+    });
+    return res;
+  }
+
   Future<bool> updateFeedback(
-      Feedback feedback, String uid, String msgId) async {
+      FeedBackData feedback, String uid, String msgId) async {
     await feedbackCollection
         .doc(uid)
         .collection(FirebaseCollections.FeedbackList)

@@ -4,6 +4,7 @@ import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:auto_picker/models/feedback_data.dart';
 import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/models/user_model.dart';
+import 'package:auto_picker/services/feedback_controller.dart';
 import 'package:auto_picker/services/user_controller.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/utils.dart';
@@ -12,6 +13,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MechanicProfilePage extends StatefulWidget {
   Mechanic mechanic;
@@ -27,6 +29,7 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
   String phoneNumber = '';
   ScrollController _controller = ScrollController();
   var userController = UserController();
+  var feedbackController = FeedBackController();
   List<FeedBackData> feedBackList = [];
   String profileUrl;
   UserModel userModel;
@@ -34,6 +37,7 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
   bool _hasCallSupport = false;
   bool isLoading = true;
   Future<void> _launched;
+  String feedbackText = '';
   @override
   void initState() {
     // TODO: implement initState
@@ -63,18 +67,36 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
   }
 
   void setData() async {
-    var _user = await userController.getUser((existingUser.currentUser.uid));
+    var _user = await userController.getUser(widget.mechanic.id);
     userModel = UserModel.fromJson(_user);
+    QuerySnapshot res = await feedbackController
+        .getFeedbackList('UUw8Cu9hDEZQCtsz3PC0lIlpdN52');
+    print("feedback ${res.size}");
+    if (res.size > 0) {
+      res.docs.forEach((element) async {
+        print("feedback $element");
+        setState(() {
+          feedBackList.add(FeedBackData.fromJson(element));
+        });
+      });
+    }
+
     setState(() {
       isLoading = false;
     });
   }
 
+  void addFeedback() async {
+    // existingUser.currentUser.uid
+    var _user = await userController.getUser(widget.mechanic.id);
+    userModel = UserModel.fromJson(_user);
+    var feedback = FeedBackData(
+        userModel.fullName, DateTime.now().toString(), feedbackText);
+    var res =
+        feedbackController.addFeedback(feedback, existingUser.currentUser.uid);
+  }
+
   Future<void> _makePhoneCall(String phoneNumber) async {
-    // Use `Uri` to ensure that `phoneNumber` is properly URL-encoded.
-    // Just using 'tel:$phoneNumber' would create invalid URLs in some cases,
-    // such as spaces in the input, which would cause `launch` to fail on some
-    // platforms.
     final Uri launchUri = Uri(
       scheme: 'tel',
       path: phoneNumber,
@@ -108,7 +130,7 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   getHeader(),
@@ -141,21 +163,45 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
                     endIndent: MediaQuery.of(context).size.width * 1 / 8,
                     indent: MediaQuery.of(context).size.width * 1 / 8,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
-                  Text(
+                  const Text(
                     'Feedbacks',
                     textAlign: TextAlign.start,
                     style: TextStyle(fontSize: 20),
                   ),
+                  TextField(
+                    onChanged: (text) {
+                      feedbackText = text;
+                    },
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Enter Feedback'),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Center(
+                    child: GenericButton(
+                      text: 'Send Feedback',
+                      onPressed: () {
+                        addFeedback();
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   FutureBuilder(
                       future: Future.delayed(Duration(seconds: 5)),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting)
-                          return Center(
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
                             child: CircularProgressIndicator(),
                           );
+                        }
                         return Container(
                           child: feedBackList.length != 0
                               ? ListView.builder(
@@ -167,9 +213,9 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
                                 )
                               : Image.network(
                                   'https://cdn.dribbble.com/users/683081/screenshots/2728654/exfuse_app_main_nocontent.png',
-                                  height: 400,
+                                  height: 200,
                                 ),
-                          height: 300,
+                          height: 100,
                           width: MediaQuery.of(context).size.width,
                         );
                       })
@@ -202,7 +248,7 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
               ),
               backgroundColor: AppColors.green,
             ),
-            SizedBox(
+            const SizedBox(
               width: 16,
             ),
             Expanded(
@@ -234,7 +280,7 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
                               })
                           : null,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 8,
                     ),
                     GenericButton(
@@ -274,20 +320,15 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
 Widget feedBackTile(FeedBackData feedBackData) {
   return Card(
     child: ListTile(
-      leading: CircleAvatar(
-        foregroundImage: NetworkImage(feedBackData.profilePicUrl),
-        backgroundImage: AssetImage(''),
-        radius: 20,
-      ),
       title: Column(
         children: [
           Text(
             feedBackData.userName,
-            style: TextStyle(fontSize: 18),
+            style: const TextStyle(fontSize: 18),
           ),
           Text(
-            'Date: ${feedBackData.dateTime}',
-            style: TextStyle(fontSize: 14, color: Colors.grey),
+            'Date: ${feedBackData.dateTime.substring(0, 16)}',
+            style: const TextStyle(fontSize: 14, color: Colors.grey),
           )
         ],
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -295,7 +336,7 @@ Widget feedBackTile(FeedBackData feedBackData) {
       ),
       subtitle: Text(
         feedBackData.feedbackMessage,
-        style: TextStyle(fontSize: 14),
+        style: const TextStyle(fontSize: 14),
       ),
     ),
   );
