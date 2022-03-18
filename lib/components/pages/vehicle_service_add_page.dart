@@ -5,9 +5,13 @@ import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/models/product.dart';
 import 'package:auto_picker/models/vehicle_service_record.dart';
+import 'package:auto_picker/models/vehicle_service_remainder_notification.dart';
+import 'package:auto_picker/services/notification_service_imple.dart';
+import 'package:auto_picker/services/notifications_service.dart';
 import 'package:auto_picker/services/product_controller.dart';
 import 'package:auto_picker/services/vehicle_service_record_controller.dart';
 import 'package:auto_picker/themes/colors.dart';
+import 'package:auto_picker/utilities/constands.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,9 +31,11 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
 
   final descriptionController = TextEditingController();
   final currentMileage = TextEditingController();
+  var _notificationService = NotificationServiceImpl();
 
   String serviceDate;
   String notificationDate;
+  DateTime notificationDateTime;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -42,6 +48,13 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
       var pRes = await vehicleServiceController.updateServiceRecord(
           _auth.currentUser.uid, res, 'serviceId', res);
     }
+    var vehicleServiceRemainderNotification =
+        VehicleServiceRemainderNotification(
+            1, vehicleService.description, VEHICLE_SERVICE_REMAINDER, true);
+    _notificationService.scheduleNotificationServieDate(
+        vehicleServiceRemainderNotification,
+        vehicleService.description,
+        notificationDateTime);
   }
 
   @override
@@ -107,6 +120,7 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
                         }, onConfirm: (date) {
                           print('confirm $date');
                           setState(() {
+                            notificationDateTime = date;
                             serviceDate = date
                                 .toString()
                                 .replaceRange(10, date.toString().length, '');
@@ -161,6 +175,7 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
                       text: 'Next',
                       onPressed: () {
                         //validations ok
+                        addVehcileServiceHistory();
                       },
                       isBold: true,
                     )

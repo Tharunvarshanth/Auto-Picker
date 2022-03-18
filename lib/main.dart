@@ -1,11 +1,13 @@
 import 'package:auto_picker/components/pages/splash_page.dart';
 import 'package:auto_picker/routes.dart';
+import 'package:auto_picker/services/notification_service_imple.dart';
 import 'package:auto_picker/services/push_messaging_service.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_guards/flutter_guards.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,6 +16,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:get_it/get_it.dart';
+import 'services/notifications_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,16 +60,39 @@ class MyAppBoot extends StatefulWidget {
 }
 
 class _MyAppBootState extends State<MyAppBoot> {
+  final _notificationService = NotificationServiceImpl();
+
   void initState() {
     super.initState();
-
+    _notificationService.init(_onDidReceiveLocalNotification);
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification notification = message.notification;
       print("foreground ${message.notification.body}");
     });
   }
 
+  Future<dynamic> _onDidReceiveLocalNotification(
+      int id, String title, String body, String payload) async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+                title: Text(title ?? ''),
+                content: Text(body ?? ''),
+                actions: [
+                  TextButton(
+                      child: Text("Ok"),
+                      onPressed: () async {
+                        _notificationService
+                            .handleApplicationWasLaunchedFromNotification(
+                                payload ?? '');
+                      })
+                ]));
+  }
+
   void showNotification() {}
+  void _onClearNotifications() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +102,7 @@ class _MyAppBootState extends State<MyAppBoot> {
       onGenerateRoute: RouteGenerator.generateRoute,
       navigatorKey: RouteGenerator.key,
       debugShowCheckedModeBanner: false,
-      localizationsDelegates: [
+      localizationsDelegates: const [
         GlobalWidgetsLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,

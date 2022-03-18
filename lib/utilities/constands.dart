@@ -1,5 +1,7 @@
 import 'package:auto_picker/models/mechanic.dart';
 
+const String applicationName = "auto_picker";
+
 class Users {
   static const Admin = 'admin';
   static const NormalUser = 'user';
@@ -68,3 +70,5 @@ const ORDER_CONFIRM_BODY = 'Your order confirmed by product owner';
 
 const ORDER_COMPLETED_TITLE = "Your order completed";
 const ORDER_COMPLETED_BODY = "Your order marked as completed";
+
+const VEHICLE_SERVICE_REMAINDER = "Vehicle Service Remainder";

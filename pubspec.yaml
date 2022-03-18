@@ -69,6 +69,7 @@ dependencies:
   latlong: ^0.6.1
   flutter_google_places: ^0.3.0
   flutter_datetime_picker: ^1.5.1
+  get_it: ^7.2.0
 
 dev_dependencies:
   flutter_test:

@@ -12,26 +12,14 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
      <!-- Provide required visibility configuration for API level 30 and above -->
-  <queries>
-    <intent>
-      <action android:name="android.intent.action.VIEW" />
-      <data android:scheme="https" />
-    </intent>
-    <intent>
-      <action android:name="android.intent.action.DIAL" />
-      <data android:scheme="tel" />
-    </intent>
-    <intent>
-      <action android:name="android.intent.action.SENDTO" />
-      <data android:scheme="smsto" />
-    </intent>
-  </queries>
+
    <application
         android:label="auto_picker"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         tools:replace="android:label"
         >
+
 
         <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyD7n81mZhsYBJYucjZL4iAkhWtxWW9tg3s"/>
