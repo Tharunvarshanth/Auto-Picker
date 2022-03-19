@@ -66,12 +66,12 @@ class _MenuMoreState extends State<MenuMorePage> {
                 navigate(context, RouteGenerator.addVehcileServicePage);
               }),
               getTile("Fuel Manager", () {}),
-              getTile("Notifications", () {}),
             ],
             getTile("Mileage Calculator", () {}),
             getTile("Vehicle Information", () {}),
-            getTile("Contact Us", () {}),
-            getTile("About Us", () {}, borderColor: Colors.transparent),
+            getTile("About Us", () {
+              navigate(context, RouteGenerator.aboutUsPage);
+            }, borderColor: Colors.transparent),
             isLogged
                 ? getTile("Logout", () => {signOut()},
                     textColor: AppColors.blue, borderColor: Colors.transparent)
