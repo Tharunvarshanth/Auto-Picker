@@ -27,7 +27,7 @@ class GenericText extends StatelessWidget {
       style: TextStyle(
           color: color ?? AppColors.black,
           fontSize: textSize ?? 16,
-          fontWeight: isBold ? FontWeight.bold : FontWeight.normal),
+          fontWeight: isBold ? FontWeight.bold : FontWeight.w600),
     );
   }
 }

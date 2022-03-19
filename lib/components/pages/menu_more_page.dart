@@ -65,7 +65,9 @@ class _MenuMoreState extends State<MenuMorePage> {
               getTile("Vehicle Service Records Maintainence", () {
                 navigate(context, RouteGenerator.addVehcileServicePage);
               }),
-              getTile("Fuel Manager", () {}),
+              getTile("Fuel Manager", () {
+                navigate(context, RouteGenerator.fuelManagerPage);
+              }),
             ],
             getTile("Mileage Calculator", () {}),
             getTile("Vehicle Information", () {}),
@@ -104,7 +106,8 @@ Widget getTile(String text, void Function() onPressed,
           Expanded(
               child: Text(
             text,
-            style: TextStyle(fontSize: 18, color: textColor),
+            style: TextStyle(
+                fontSize: 18, color: textColor, fontWeight: FontWeight.w600),
           )),
           IconButton(
             icon: SvgPicture.asset('assets/images/chevron-right.svg'),

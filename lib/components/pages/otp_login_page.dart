@@ -213,7 +213,9 @@ class _OtpLoginPage extends State<OtpLoginPage> {
 
   void dispose() {
     super.dispose();
-    _timer.cancel();
+    if (_timer != null) {
+      _timer.cancel();
+    }
   }
 
   @override

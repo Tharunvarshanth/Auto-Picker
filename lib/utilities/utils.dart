@@ -4,7 +4,6 @@ import 'package:auto_picker/models/city.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong/latlong.dart';
 
@@ -45,12 +44,12 @@ findDistanceBetweenLocations(l1, l2) {
   return km;
 }
 
-Future<List<City>> ReadCityJsonData() async {
+readCityJsonData() async {
   String data =
       await rootBundle.loadString('assets/cities-and-postalcode.json');
   var jsonResult = json.decode(data);
 
-  print(jsonResult[0]);
+  return jsonResult;
   //read json file*/
 /*
   final jsondata =

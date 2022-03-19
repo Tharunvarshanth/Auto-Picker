@@ -53,6 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                           backgroundColor: AppColors.white,
                           textColor: AppColors.blue,
                           text: 'LOGIN WITH MOBILE NUMBER',
+                          isBold: true,
                           paddingVertical: 20,
                           onPressed: () {
                             navigate(context, RouteGenerator.otpLogin);
@@ -66,9 +67,10 @@ class _LoginPageState extends State<LoginPage> {
                         width: MediaQuery.of(context).size.width * 0.8,
                         child: GenericButton(
                           backgroundColor: AppColors.white,
-                          textColor: AppColors.blue,
+                          textColor: AppColors.green,
                           text: 'LOGIN WITH EMAIL',
                           paddingVertical: 20,
+                          isBold: true,
                           paddingHorizontal: 50,
                           onPressed: () {
                             Navigator.push(

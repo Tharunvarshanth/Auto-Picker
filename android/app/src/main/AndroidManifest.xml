@@ -14,7 +14,7 @@
      <!-- Provide required visibility configuration for API level 30 and above -->
 
    <application
-        android:label="auto_picker"
+        android:label="Auto Picker"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         tools:replace="android:label"

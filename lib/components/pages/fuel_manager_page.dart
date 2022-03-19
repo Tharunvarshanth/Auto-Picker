@@ -4,41 +4,19 @@ import 'package:auto_picker/services/product_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class TestPage extends StatefulWidget {
-  const TestPage();
+class FuelManagerPage extends StatefulWidget {
+  const FuelManagerPage();
 
   @override
-  _TestPageState createState() => _TestPageState();
+  _FuelManagerPageState createState() => _FuelManagerPageState();
 }
 
-class _TestPageState extends State<TestPage> {
+class _FuelManagerPageState extends State<FuelManagerPage> {
   List<String> imageList = ["value 1", "value 2"];
-  var _productController = ProductController();
-
-  void addProduct() async {
-    var testDate = {
-      "uid": "user-01",
-      "price": "12.22",
-      "description": "des",
-      "title": "title",
-      "subtitle": "subtitle",
-      "city": "city",
-      "condition": "condition",
-      "imagesList": imageList
-    };
-    Product product = Product.fromJson(testDate);
-    var res = await _productController.addProduct(product);
-  }
-
-  void getProduct() async {
-    var res =
-        await _productController.getProduct("user-01", "9LBVGRH7GkeAqi1K4tot");
-    print("Products $res");
-  }
 
   Widget build(BuildContext context) {
     //addProduct();
-    getProduct();
+
     return Scaffold(
         appBar: CustomAppBar(
           title: 'Fuel Cost Manager',

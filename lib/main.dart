@@ -110,7 +110,18 @@ class _MyAppBootState extends State<MyAppBoot> {
       supportedLocales: [Locale('en', 'LK')],
       title: 'Auto Picker',
       theme: ThemeData(
-          fontFamily: 'Mulish', primaryColor: AppColors.primaryVariant),
+          textTheme: const TextTheme(
+            headline1: TextStyle(
+                fontFamily: 'Mulish',
+                fontSize: 72.0,
+                fontWeight: FontWeight.bold),
+            headline6:
+                TextStyle(fontFamily: 'Mulish', fontWeight: FontWeight.w500),
+            bodyText2:
+                TextStyle(fontWeight: FontWeight.w500, fontFamily: 'Mulish'),
+          ),
+          fontFamily: 'Mulish',
+          primaryColor: AppColors.primaryVariant),
       home: SplashScreen(),
     );
   }

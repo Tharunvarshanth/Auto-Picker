@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:auto_picker/components/atoms/generic_button.dart';
+import 'package:auto_picker/components/atoms/generic_input_option_citys_select.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_select.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/pages/mechanics_signup_page.dart';
 import 'package:auto_picker/components/pages/otp_signup_page.dart';
 import 'package:auto_picker/components/pages/seller_signup_page.dart';
+import 'package:auto_picker/models/city.dart';
 import 'package:auto_picker/routes.dart';
 import 'package:auto_picker/services/user_controller.dart';
 import 'package:auto_picker/themes/colors.dart';
@@ -25,9 +27,23 @@ class _SignUpFormState extends State<SignUpForm> {
   final addressController = TextEditingController();
   final phoneNumberController = TextEditingController();
   var userController = UserController();
-  String city;
+  City city;
   String role;
   bool isvalidUser = false;
+  List<City> dropDownCityList = [];
+
+  void initState() {
+    super.initState();
+    setData();
+  }
+
+  void setData() async {
+    var citys = await readCityJsonData();
+    setState(() {
+      dropDownCityList = citys.cast<City>();
+    });
+  }
+
   void handleCity(cityName) {
     setState(() {
       city = cityName;
@@ -67,12 +83,13 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   void handleNext() {
+    print(city.city);
     if (isvalidUser) {
       var param = {
         'name': nameController.text,
         'address': addressController.text,
         'phoneNumber': TESTNUMBER, //phoneNumberController.text,
-        'city': city,
+        'city': city.city,
         'role': role
       };
       switch (role) {
@@ -143,11 +160,11 @@ class _SignUpFormState extends State<SignUpForm> {
               borderColor: AppColors.ash,
             ),
             SizedBox(height: size.height * 0.015),
-            GenericInputOptionSelect(
+            GenericInputOptionCitysSelect(
               width: size.width,
               labelText: 'City',
               value: city,
-              itemList: cityList,
+              itemList: dropDownCityList,
               onValueChange: (text) => handleCity(text),
             ),
             SizedBox(height: size.height * 0.015),

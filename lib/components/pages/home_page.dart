@@ -10,6 +10,7 @@ import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:auto_picker/components/organisms/mechanics_horizontal_scroll.dart';
 import 'package:auto_picker/components/pages/product_page.dart';
 import 'package:auto_picker/models/carousel_data.dart';
+import 'package:auto_picker/models/city.dart';
 import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/models/product.dart';
 import 'package:auto_picker/models/spare_advertisement.dart';
@@ -56,7 +57,6 @@ class _HomePageState extends State<HomePage> {
     controller.addListener(() {});
     setData();
     // setOneSignalToken();
-    print("city  ${ReadCityJsonData()}");
   }
 
   void setOneSignalToken() async {
