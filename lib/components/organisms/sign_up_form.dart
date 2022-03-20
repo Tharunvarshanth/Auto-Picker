@@ -40,14 +40,16 @@ class _SignUpFormState extends State<SignUpForm> {
   void setData() async {
     var citys = await readCityJsonData();
     setState(() {
-      dropDownCityList = citys.cast<City>();
+      dropDownCityList = citys;
     });
+    print(dropDownCityList[0].city);
   }
 
-  void handleCity(cityName) {
+  void handleCity(City cityName) {
     setState(() {
       city = cityName;
     });
+    print(city.city);
   }
 
   void handleRole(roleName) {
@@ -136,12 +138,12 @@ class _SignUpFormState extends State<SignUpForm> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     List<String> roleList = [Users.Mechanic, Users.NormalUser, Users.Seller];
-    List<String> cityList = [
+    /* List<String> cityList = [
       Users.Admin,
       Users.Mechanic,
       Users.NormalUser,
       Users.Seller
-    ];
+    ];*/
     return Form(
         key: _formKey,
         child: Column(

@@ -47,9 +47,9 @@ findDistanceBetweenLocations(l1, l2) {
 readCityJsonData() async {
   String data =
       await rootBundle.loadString('assets/cities-and-postalcode.json');
-  var jsonResult = json.decode(data);
+  var jsonResult = json.decode(data) as List<dynamic>;
+  return jsonResult.map((e) => City.fromJson(e)).toList();
 
-  return jsonResult;
   //read json file*/
 /*
   final jsondata =
