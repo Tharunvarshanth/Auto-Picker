@@ -302,6 +302,18 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
     }
   }
 
+  String formattedPhone(String text) {
+    String phonenumber = text.trim();
+    if (phonenumber.length == 10) {
+      return "+94" + phonenumber.substring(1);
+    }
+    if (phonenumber.length == 9) {
+      phonenumber = phonenumber;
+      return "+94" + phonenumber;
+    }
+    return null;
+  }
+
   void _verifyPhone() async {
     setState(() {
       timerCount = 60;

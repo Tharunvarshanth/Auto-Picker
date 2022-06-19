@@ -119,6 +119,18 @@ class _MechanicsSignUpEditFormState extends State<MechanicsSignUpEditForm> {
     });
   }
 
+  void fillRequiredFields() {
+    showDialog(
+        context: context,
+        builder: (context) => ItemDialogMessage(
+              icon: 'assets/images/x-circle.svg',
+              titleText: 'Fill Required Fields',
+              bodyText: "",
+              primaryButtonText: 'Ok',
+              onPressedPrimary: () => Navigator.pop(context),
+            ));
+  }
+
   @override
   void dispose() {
     addressController.dispose();
@@ -142,7 +154,7 @@ class _MechanicsSignUpEditFormState extends State<MechanicsSignUpEditForm> {
           children: <Widget>[
             GenericInputOptionSelect(
               width: size.width,
-              labelText: 'Specialist',
+              labelText: 'Specialist *',
               value: specialist,
               itemList: MechanicSpecialistSkills,
               onValueChange: (text) => handleMechanicsSpecialist(text),
@@ -150,7 +162,7 @@ class _MechanicsSignUpEditFormState extends State<MechanicsSignUpEditForm> {
             SizedBox(height: size.height * 0.015),
             GenericInputOptionSelect(
               width: size.width,
-              labelText: 'Working City',
+              labelText: 'Working City *',
               value: city,
               itemList: cityList,
               onValueChange: (text) => handleCity(text),
@@ -158,7 +170,7 @@ class _MechanicsSignUpEditFormState extends State<MechanicsSignUpEditForm> {
             SizedBox(height: size.height * 0.015),
             GenericTextField(
               controller: addressController,
-              labelText: 'Address',
+              labelText: 'Address *',
               hintText: "No 16 , Galle Road",
               borderColor: AppColors.ash,
             ),
@@ -170,7 +182,7 @@ class _MechanicsSignUpEditFormState extends State<MechanicsSignUpEditForm> {
                   width: 150,
                   child: GenericTimePicker(
                       controller: timePickerToController,
-                      labelText: 'Start',
+                      labelText: 'Start *',
                       onChanged: (value) => {
                             print("time ${value}"),
                             setState(() {
@@ -187,7 +199,7 @@ class _MechanicsSignUpEditFormState extends State<MechanicsSignUpEditForm> {
                   width: 150,
                   child: GenericTimePicker(
                       controller: timePickerFromController,
-                      labelText: 'Finish',
+                      labelText: 'Finish *',
                       onChanged: (value) => {
                             print("time ${value}"),
                             setState(() {
@@ -235,7 +247,13 @@ class _MechanicsSignUpEditFormState extends State<MechanicsSignUpEditForm> {
               paddingHorizontal: 80,
               text: 'Next',
               onPressed: () {
-                //validations ok
+                if (addressController.text.isEmpty ||
+                    timePickerFromController.text.isEmpty ||
+                    specialist.toString().isEmpty ||
+                    city.toString().isEmpty) {
+                  fillRequiredFields();
+                  return;
+                }
                 handleNext();
               },
               isBold: true,

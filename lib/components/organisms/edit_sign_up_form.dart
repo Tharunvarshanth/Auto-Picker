@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_select.dart';
+import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
+import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/pages/mechanics_form_edit_page.dart';
 import 'package:auto_picker/components/pages/mechanics_signup_page.dart';
 import 'package:auto_picker/components/pages/otp_signup_page.dart';
@@ -82,6 +84,18 @@ class _EditSignUpFormState extends State<EditSignUpForm> {
     }
   }
 
+  void fillRequiredFields() {
+    showDialog(
+        context: context,
+        builder: (context) => ItemDialogMessage(
+              icon: 'assets/images/x-circle.svg',
+              titleText: 'Fill Required Fields',
+              bodyText: "",
+              primaryButtonText: 'Ok',
+              onPressedPrimary: () => Navigator.pop(context),
+            ));
+  }
+
   @override
   void dispose() {
     nameController.dispose();
@@ -105,23 +119,29 @@ class _EditSignUpFormState extends State<EditSignUpForm> {
         key: _formKey,
         child: Column(
           children: <Widget>[
+            GenericText(
+              textAlign: TextAlign.left,
+              text: 'Required *',
+              color: AppColors.red,
+              isBold: true,
+            ),
             GenericTextField(
               controller: nameController,
-              labelText: 'Name',
+              labelText: 'Name *',
               hintText: "Kamal",
               borderColor: AppColors.ash,
             ),
             SizedBox(height: size.height * 0.015),
             GenericTextField(
               controller: addressController,
-              labelText: 'Address',
+              labelText: 'Address *',
               hintText: 'No 16,Galle Road',
               borderColor: AppColors.ash,
             ),
             SizedBox(height: size.height * 0.015),
             GenericInputOptionSelect(
               width: size.width,
-              labelText: 'City',
+              labelText: 'City *',
               value: city,
               itemList: cityList,
               onValueChange: (text) => handleCity(text),
@@ -135,7 +155,12 @@ class _EditSignUpFormState extends State<EditSignUpForm> {
               paddingHorizontal: 80,
               text: 'Next',
               onPressed: () {
-                //validations ok
+                if (nameController.text.isEmpty ||
+                    addressController.text.isEmpty ||
+                    city.toString().isEmpty) {
+                  fillRequiredFields();
+                  return;
+                }
                 handleNext();
               },
               isBold: true,

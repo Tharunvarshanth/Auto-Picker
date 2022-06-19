@@ -3,6 +3,7 @@ import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
+import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/models/product.dart';
 import 'package:auto_picker/models/vehicle_service_record.dart';
 import 'package:auto_picker/models/vehicle_service_remainder_notification.dart';
@@ -57,6 +58,18 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
         notificationDateTime);
   }
 
+  void fillRequiredFields() {
+    showDialog(
+        context: context,
+        builder: (context) => ItemDialogMessage(
+              icon: 'assets/images/x-circle.svg',
+              titleText: 'Fill Required Fields',
+              bodyText: "",
+              primaryButtonText: 'Ok',
+              onPressedPrimary: () => Navigator.pop(context),
+            ));
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -87,18 +100,24 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
               textSize: 36,
               isBold: true,
             ),
+            GenericText(
+              textAlign: TextAlign.left,
+              text: 'Required *',
+              color: AppColors.red,
+              isBold: true,
+            ),
             Form(
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
                     GenericTextField(
                       controller: currentMileage,
-                      labelText: 'Current Mileage',
+                      labelText: 'Current Mileage *',
                       hintText: "150,000",
                       borderColor: AppColors.ash,
                     ),
                     GenericTextButton(
-                      text: serviceDate ?? 'Serviced Date',
+                      text: serviceDate ?? 'Serviced Date *',
                       onPressed: () {
                         DatePicker.showDatePicker(context,
                             showTitleActions: true,
@@ -131,7 +150,7 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
                       },
                     ),
                     GenericTextButton(
-                      text: notificationDate ?? 'Next Serivce Remainder Date',
+                      text: notificationDate ?? 'Next Serivce Remainder Date *',
                       onPressed: () {
                         DatePicker.showDatePicker(context,
                             showTitleActions: true,
@@ -163,7 +182,7 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
                     ),
                     GenericTextField(
                       controller: descriptionController,
-                      labelText: 'Description',
+                      labelText: 'Description *',
                       hintText: '',
                       borderColor: AppColors.ash,
                     ),
@@ -175,7 +194,13 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
                       paddingHorizontal: 80,
                       text: 'Next',
                       onPressed: () {
-                        //validations ok
+                        if (serviceDate.toString().isEmpty ||
+                            descriptionController.text.isEmpty ||
+                            notificationDate.toString().isEmpty ||
+                            currentMileage.text.isEmpty) {
+                          fillRequiredFields();
+                          return;
+                        }
                         addVehcileServiceHistory();
                       },
                       isBold: true,

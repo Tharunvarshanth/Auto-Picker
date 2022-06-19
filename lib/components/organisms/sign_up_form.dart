@@ -31,7 +31,7 @@ class _SignUpFormState extends State<SignUpForm> {
   String role;
   bool isvalidUser = false;
   List<City> dropDownCityList = [];
-
+  String formattedNumber;
   void initState() {
     super.initState();
     setData();
@@ -58,8 +58,8 @@ class _SignUpFormState extends State<SignUpForm> {
     });
   }
 
-  Future<bool> isNumberAlreadyHaveAccount() async {
-    var number = TESTNUMBER; //phoneNumberController.text ;
+  Future<bool> isNumberAlreadyHaveAccount(String numberText) async {
+    var number = numberText;
     var res = await userController.isNumberAlreadyHaveAccount(number);
     if (res) {
       //if user has account already  error pop up go login page
@@ -90,7 +90,7 @@ class _SignUpFormState extends State<SignUpForm> {
       var param = {
         'name': nameController.text,
         'address': addressController.text,
-        'phoneNumber': TESTNUMBER, //phoneNumberController.text,
+        'phoneNumber': formattedNumber,
         'city': city.city,
         'role': role
       };
@@ -125,6 +125,30 @@ class _SignUpFormState extends State<SignUpForm> {
     }
   }
 
+  void fillRequiredFields(text) {
+    showDialog(
+        context: context,
+        builder: (context) => ItemDialogMessage(
+              icon: 'assets/images/x-circle.svg',
+              titleText: text,
+              bodyText: "",
+              primaryButtonText: 'Ok',
+              onPressedPrimary: () => Navigator.pop(context),
+            ));
+  }
+
+  String formattedPhone(String text) {
+    String phonenumber = text.trim();
+    if (phonenumber.length == 10) {
+      return "+94" + phonenumber.substring(1);
+    }
+    if (phonenumber.length == 9) {
+      phonenumber = phonenumber;
+      return "+94" + phonenumber;
+    }
+    return null;
+  }
+
   @override
   void dispose() {
     nameController.dispose();
@@ -138,48 +162,43 @@ class _SignUpFormState extends State<SignUpForm> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     List<String> roleList = [Users.Mechanic, Users.NormalUser, Users.Seller];
-    /* List<String> cityList = [
-      Users.Admin,
-      Users.Mechanic,
-      Users.NormalUser,
-      Users.Seller
-    ];*/
     return Form(
         key: _formKey,
         child: Column(
           children: <Widget>[
             GenericTextField(
               controller: nameController,
-              labelText: 'Name',
+              labelText: 'Name *',
               hintText: "Kamal",
               borderColor: AppColors.ash,
             ),
             SizedBox(height: size.height * 0.015),
             GenericTextField(
               controller: addressController,
-              labelText: 'Address',
+              labelText: 'Address *',
               hintText: 'No 16,Galle Road',
               borderColor: AppColors.ash,
             ),
             SizedBox(height: size.height * 0.015),
             GenericInputOptionCitysSelect(
               width: size.width,
-              labelText: 'City',
+              labelText: 'City *',
               value: city,
               itemList: dropDownCityList,
               onValueChange: (text) => handleCity(text),
             ),
             SizedBox(height: size.height * 0.015),
             GenericTextField(
+              prefixText: "+94",
               controller: phoneNumberController,
-              labelText: 'Phone Number',
-              hintText: '077 - 1234567',
+              labelText: 'Phone Number *',
+              hintText: '771234567',
               borderColor: AppColors.ash,
             ),
             SizedBox(height: size.height * 0.015),
             GenericInputOptionSelect(
               width: size.width,
-              labelText: 'Role',
+              labelText: 'Role *',
               value: role,
               itemList: roleList,
               borderColor: AppColors.ash,
@@ -193,8 +212,21 @@ class _SignUpFormState extends State<SignUpForm> {
               paddingHorizontal: 80,
               text: 'Next',
               onPressed: () {
-                //validations ok
-                isNumberAlreadyHaveAccount();
+                if (nameController.text.isEmpty ||
+                    addressController.text.isEmpty ||
+                    phoneNumberController.text.isEmpty ||
+                    role.toString().isEmpty ||
+                    city.toString().isEmpty) {
+                  fillRequiredFields('Fill Required Fields');
+                  return;
+                }
+
+                formattedNumber = formattedPhone(phoneNumberController.text);
+                if (formattedNumber == null) {
+                  fillRequiredFields('Phone number invalid');
+                  return;
+                }
+                isNumberAlreadyHaveAccount(formattedNumber);
               },
               isBold: true,
             )

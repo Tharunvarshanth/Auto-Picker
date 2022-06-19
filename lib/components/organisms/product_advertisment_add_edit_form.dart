@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_icon_button.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_select.dart';
+import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/atoms/generic_time_picker.dart';
@@ -141,6 +142,18 @@ class _ProductAdvertisementAddFormState
     }
   }
 
+  void fillRequiredFields() {
+    showDialog(
+        context: context,
+        builder: (context) => ItemDialogMessage(
+              icon: 'assets/images/x-circle.svg',
+              titleText: 'Fill Required Fields',
+              bodyText: "",
+              primaryButtonText: 'Ok',
+              onPressedPrimary: () => Navigator.pop(context),
+            ));
+  }
+
   @override
   void dispose() {
     priceController.dispose();
@@ -243,28 +256,34 @@ class _ProductAdvertisementAddFormState
         key: _formKey,
         child: Column(
           children: <Widget>[
+            GenericText(
+              textAlign: TextAlign.left,
+              text: 'Required *',
+              color: AppColors.red,
+              isBold: true,
+            ),
             GenericTextField(
               controller: productTitleController,
-              labelText: 'Product Title',
+              labelText: 'Product Title *',
               hintText: "Front Bumper",
               borderColor: AppColors.ash,
             ),
             SizedBox(height: size.height * 0.015),
             GenericTextField(
               controller: productSubTitleController,
-              labelText: 'SubTitle',
+              labelText: 'SubTitle *',
               hintText: "discount 5% offer",
               borderColor: AppColors.ash,
             ),
             GenericTextField(
               controller: descriptionController,
-              labelText: 'Description',
+              labelText: 'Description *',
               hintText: "Panel -40000, Shell -25000 ,Lower Mesh -20000",
               borderColor: AppColors.ash,
             ),
             GenericTextField(
               controller: priceController,
-              labelText: 'Price(rs)',
+              labelText: 'Price(rs) *',
               hintText: "400.00 Rs",
               borderColor: AppColors.ash,
             ),
@@ -274,7 +293,7 @@ class _ProductAdvertisementAddFormState
                 backgroundColor: AppColors.white,
                 textColor: AppColors.black,
                 shadowColor: AppColors.ash,
-                text: 'Upload Images',
+                text: 'Upload Images *',
                 borderRadius: 30,
                 onPressed: loadAssets,
                 iconLeft: 'assets/images/camera.svg',
@@ -291,7 +310,13 @@ class _ProductAdvertisementAddFormState
                     paddingHorizontal: 80,
                     text: 'Add',
                     onPressed: () {
-                      //validations ok
+                      if (productTitleController.text.isEmpty ||
+                          descriptionController.text.isEmpty ||
+                          priceController.text.isEmpty ||
+                          images.length == 0) {
+                        fillRequiredFields();
+                        return;
+                      }
                       handleAdd();
                     },
                     isBold: true,
@@ -303,7 +328,13 @@ class _ProductAdvertisementAddFormState
                     paddingHorizontal: 80,
                     text: 'Update',
                     onPressed: () {
-                      //validations ok
+                      if (productTitleController.text.isEmpty ||
+                          descriptionController.text.isEmpty ||
+                          priceController.text.isEmpty ||
+                          images.length == 0) {
+                        fillRequiredFields();
+                        return;
+                      }
                       handleUpdate();
                     },
                     isBold: true,

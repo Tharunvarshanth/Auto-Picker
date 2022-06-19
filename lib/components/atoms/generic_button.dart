@@ -14,6 +14,7 @@ class GenericButton extends StatelessWidget {
   double elevation;
   double textsize;
   bool isBold;
+  bool isDisabled;
   GenericButton(
       {Key key,
       this.backgroundColor,
@@ -27,13 +28,14 @@ class GenericButton extends StatelessWidget {
       this.paddingVertical,
       this.textsize = 16,
       this.isBold = false,
+      this.isDisabled = false,
       this.text})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: onPressed,
+      onPressed: isDisabled ? null : onPressed,
       child: Text(
         text,
         style: TextStyle(

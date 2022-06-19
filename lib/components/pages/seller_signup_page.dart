@@ -48,6 +48,12 @@ class _SellerSignUpPageState extends State<SellerSignUpPage> {
                   'As a Seller we need an additional information for you please fill below form complete the registration',
               textSize: 18,
             ),
+            GenericText(
+              textAlign: TextAlign.left,
+              text: 'Required *',
+              color: AppColors.red,
+              isBold: true,
+            ),
             const SizedBox(
               height: 30,
             ),

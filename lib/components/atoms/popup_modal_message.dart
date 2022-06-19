@@ -39,6 +39,8 @@ class ItemDialogMessage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               GenericText(
+                maxLines: 2,
+                textAlign: TextAlign.center,
                 text: titleText,
                 textSize: 24,
                 isBold: true,
