@@ -7,6 +7,7 @@ import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/models/product.dart';
 import 'package:auto_picker/models/vehicle_service_record.dart';
 import 'package:auto_picker/models/vehicle_service_remainder_notification.dart';
+import 'package:auto_picker/routes.dart';
 import 'package:auto_picker/services/notification_service_imple.dart';
 import 'package:auto_picker/services/notifications_service.dart';
 import 'package:auto_picker/services/product_controller.dart';
@@ -18,6 +19,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'dart:math';
 
 class VehicleServiceAddPage extends StatefulWidget {
   const VehicleServiceAddPage();
@@ -41,21 +43,48 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
   final _formKey = GlobalKey<FormState>();
 
   addVehcileServiceHistory() async {
-    var vehicleService = VehicleServiceRecord('', serviceDate, notificationDate,
+    var vehicleService = VehicleService('', serviceDate, notificationDate,
         false, descriptionController.text, currentMileage.text);
     var res = await vehicleServiceController.addvehicleService(
         vehicleService, _auth.currentUser.uid);
+
     if (res != null) {
       var pRes = await vehicleServiceController.updateServiceRecord(
           _auth.currentUser.uid, res, 'serviceId', res);
+      //success
+      Random random = new Random();
+      int randomNumber = random.nextInt(100); //
+      var vehicleServiceRemainderNotification =
+          VehicleServiceRemainderNotification(randomNumber,
+              vehicleService.description, VEHICLE_SERVICE_REMAINDER, true);
+      print("notification date ${notificationDateTime}");
+
+      _notificationService.scheduleNotificationServieDate(
+          vehicleServiceRemainderNotification,
+          vehicleService.description,
+          notificationDateTime);
+
+      showDialog(
+          context: context,
+          builder: (context) => ItemDialogMessage(
+                icon: 'assets/images/plus-circle.svg',
+                titleText: 'Successfully Added',
+                bodyText: "",
+                primaryButtonText: 'Ok',
+                onPressedPrimary: () => navigate(
+                    context, RouteGenerator.vehicleServiceMaintainancePage),
+              ));
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) => ItemDialogMessage(
+                icon: 'assets/images/x-circle.svg',
+                titleText: 'Failure',
+                bodyText: "",
+                primaryButtonText: 'Ok',
+                onPressedPrimary: () => Navigator.pop(context),
+              ));
     }
-    var vehicleServiceRemainderNotification =
-        VehicleServiceRemainderNotification(
-            1, vehicleService.description, VEHICLE_SERVICE_REMAINDER, true);
-    _notificationService.scheduleNotificationServieDate(
-        vehicleServiceRemainderNotification,
-        vehicleService.description,
-        notificationDateTime);
   }
 
   void fillRequiredFields() {
@@ -84,7 +113,6 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
         icon: const Icon(Icons.arrow_back),
         color: AppColors.black,
         onPressed: () {
-          print("103");
           navigateBack(context);
         },
       ),
@@ -140,7 +168,6 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
                         }, onConfirm: (date) {
                           print('confirm $date');
                           setState(() {
-                            notificationDateTime = date;
                             serviceDate = date
                                 .toString()
                                 .replaceRange(10, date.toString().length, '');
@@ -173,6 +200,7 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
                         }, onConfirm: (date) {
                           print('confirm $date');
                           setState(() {
+                            notificationDateTime = date;
                             notificationDate = date
                                 .toString()
                                 .replaceRange(10, date.toString().length, '');
@@ -194,9 +222,10 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
                       paddingHorizontal: 80,
                       text: 'Next',
                       onPressed: () {
-                        if (serviceDate.toString().isEmpty ||
+                        print(serviceDate);
+                        if (serviceDate == null ||
                             descriptionController.text.isEmpty ||
-                            notificationDate.toString().isEmpty ||
+                            notificationDate == null ||
                             currentMileage.text.isEmpty) {
                           fillRequiredFields();
                           return;

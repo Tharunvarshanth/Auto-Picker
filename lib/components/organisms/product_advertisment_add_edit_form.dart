@@ -77,7 +77,7 @@ class _ProductAdvertisementAddFormState
           context: context,
           builder: (context) => ItemDialogMessage(
                 icon: 'assets/images/plus-circle.svg',
-                titleText: 'Done ok',
+                titleText: 'Successfully Added',
                 bodyText: "",
                 primaryButtonText: 'Ok',
                 onPressedPrimary: () =>

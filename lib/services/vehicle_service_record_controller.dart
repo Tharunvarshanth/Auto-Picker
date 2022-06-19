@@ -8,8 +8,15 @@ class VehicleServiceController {
   static CollectionReference vehicleService = FirebaseFirestore.instance
       .collection(FirebaseCollections.VehicleServiceMaintenance);
 
+  Future<QuerySnapshot> getVehicleServiceRecords(String uid) async {
+    return await vehicleService
+        .doc(uid)
+        .collection(FirebaseCollections.VehicleServiceList)
+        .get();
+  }
+
   Future<dynamic> addvehicleService(
-      VehicleServiceRecord vehicleServiceRecord, String id) async {
+      VehicleService vehicleServiceRecord, String id) async {
     var res;
     await vehicleService
         .doc(id)

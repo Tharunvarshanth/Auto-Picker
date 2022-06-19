@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/generic_button.dart';
+import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/atoms/service_card_nearby_mechanic.dart';
 import 'package:auto_picker/components/pages/mechanic_profile_page.dart';
@@ -11,7 +12,6 @@ import 'package:auto_picker/services/mechanic_controller.dart';
 import 'package:auto_picker/services/product_controller.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_picker/services/location_services.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +71,8 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
     try {
       var currentLocation = await location.getLocation();
       setState(() {
-        myCurrentLocation = LatLng(6.9271, 79.8612);
+        myCurrentLocation =
+            LatLng(currentLocation.latitude, currentLocation.longitude);
         //Need to after production LatLng(currentLocation.latitude, currentLocation.longitude);
       });
       print(
@@ -105,7 +106,6 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
   }
 
   void setNearbyPlacesMarker(Mechanic mechanic) async {
-    print("setNearByPlaceMarker");
     setState(() {
       _markers.add(Marker(
           markerId: MarkerId('marker ${mechanic?.id}'),
@@ -123,7 +123,9 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
       for (var element in res) {
         print("Mechanics: $element");
         Mechanic _mechanic = Mechanic.fromJson(element);
-        if (!_mechanic.isBlocked && _mechanic.isPayed) {
+        if (!_mechanic.isBlocked &&
+            _mechanic.isPayed &&
+            _mechanic.id != _auth.currentUser.uid) {
           setState(() {
             mechanicList.add(_mechanic);
             mechanicListFiltered.add(_mechanic);
@@ -141,6 +143,7 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
     setState(() {
       isLoading = true;
       mechanicListFiltered = [];
+      distanceList = [];
     });
     mechanicList.forEach((element) {
       var distance = findDistanceBetweenLocations(
@@ -148,11 +151,13 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
           LatLonManager.LatLng(double.parse(element.location_lat),
               double.parse(element.location_lon)));
       if (distance <= nearByDistance) {
-        print("nearBy Mechanic ${element.id}");
+        print("nearBy Mechanic ${element.id} ${distance}");
         setState(() {
-          mechanicListFiltered.add(element);
           distanceList.add(distance);
+          mechanicListFiltered.add(element);
         });
+        print(mechanicListFiltered.length);
+        print(distanceList.length);
         setNearbyPlacesMarker(element);
       }
     });
@@ -246,6 +251,14 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
                                       }
                                     },
                                     icon: const Icon(Icons.search))
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                GenericText(
+                                  text: "Current Distance : ${nearByDistance}",
+                                )
                               ],
                             ),
                             Container(
