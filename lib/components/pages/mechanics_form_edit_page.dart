@@ -65,6 +65,12 @@ class _MechanicsFormEditPageState extends State<MechanicsFormEditPage> {
             SizedBox(
               height: 30,
             ),
+            GenericText(
+              textAlign: TextAlign.left,
+              text: 'Required *',
+              color: AppColors.red,
+              isBold: true,
+            ),
             MechanicsSignUpEditForm(
               userModel: widget.userModel,
               mechanic: widget.mechanic,

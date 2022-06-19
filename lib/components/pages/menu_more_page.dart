@@ -63,14 +63,12 @@ class _MenuMoreState extends State<MenuMorePage> {
                 navigate(context, RouteGenerator.findNearByMechanicsPage);
               }),
               getTile("Vehicle Service Records Maintainence", () {
-                navigate(context, RouteGenerator.addVehcileServicePage);
-              }),
-              getTile("Fuel Manager", () {
-                navigate(context, RouteGenerator.fuelManagerPage);
+                navigate(
+                    context, RouteGenerator.vehicleServiceMaintainancePage);
               }),
             ],
-            getTile("Mileage Calculator", () {}),
-            getTile("Vehicle Information", () {}),
+            /*  getTile("Mileage Calculator", () {}),*/
+            /*   getTile("Vehicle Information", () {}),*/
             getTile("About Us", () {
               navigate(context, RouteGenerator.aboutUsPage);
             }, borderColor: Colors.transparent),

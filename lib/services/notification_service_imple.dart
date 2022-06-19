@@ -60,10 +60,10 @@ class NotificationServiceImpl {
       String notificationMessage,
       DateTime remainderDate) async {
     DateTime now = DateTime.now();
-    DateTime birthdayDate = DateTime.now().add(Duration(minutes: 1));
-    Duration difference = now.isAfter(birthdayDate)
-        ? now.difference(birthdayDate)
-        : birthdayDate.difference(now);
+    //  DateTime birthdayDate = DateTime.now().add(Duration(minutes: 1));
+    Duration difference = now.isAfter(remainderDate)
+        ? now.difference(remainderDate)
+        : remainderDate.difference(now);
 /*
     bool didApplicationLaunchFromNotification =
         await _wasApplicationLaunchedFromNotification();

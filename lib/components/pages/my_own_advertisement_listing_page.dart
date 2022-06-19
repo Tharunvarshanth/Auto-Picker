@@ -57,7 +57,7 @@ class _MyOwnAdvertismentListingPageState
     //List<Product> prodList = [];
     QuerySnapshot res = await advertisementController
         .getAdvertisementsBySeller(_auth.currentUser.uid);
-    print(res.docs);
+
     if (res.size > 0) {
       res.docs.forEach((element) {
         advertisementList.add(SpareAdvertisement.fromJson(element.data()));

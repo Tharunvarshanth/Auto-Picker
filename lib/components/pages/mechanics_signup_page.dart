@@ -60,6 +60,12 @@ class _MechanicsSignUpPageState extends State<MechanicsSignUpPage> {
                   'As a Mechanics we need an additional information for you please fill below form complete the registration',
               textSize: 16,
             ),
+            GenericText(
+              textAlign: TextAlign.left,
+              text: 'Required *',
+              color: AppColors.red,
+              isBold: true,
+            ),
             const SizedBox(
               height: 30,
             ),

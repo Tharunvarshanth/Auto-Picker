@@ -59,8 +59,8 @@ class _AdvertisementPaymentPageState extends State<AdvertisementPaymentPage> {
             context: context,
             builder: (context) => ItemDialogMessage(
                   icon: 'assets/images/plus-circle.svg',
-                  titleText: 'Success',
-                  bodyText: "Advertisement successfully added",
+                  titleText: title,
+                  bodyText: msg,
                   primaryButtonText: 'Ok',
                   onPressedPrimary: () =>
                       navigate(context, RouteGenerator.homePage),

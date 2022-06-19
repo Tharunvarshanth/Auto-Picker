@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_select.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
+import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/pages/mechanics_signup_page.dart';
 import 'package:auto_picker/components/pages/otp_signup_page.dart';
 import 'package:auto_picker/components/pages/seller_signup_page.dart';
@@ -47,6 +48,18 @@ class _SellerSignUpFormState extends State<SellerSignUpForm> {
     );
   }
 
+  void fillRequiredFields() {
+    showDialog(
+        context: context,
+        builder: (context) => ItemDialogMessage(
+              icon: 'assets/images/x-circle.svg',
+              titleText: 'Fill Required Fields',
+              bodyText: "",
+              primaryButtonText: 'Ok',
+              onPressedPrimary: () => Navigator.pop(context),
+            ));
+  }
+
   @override
   void dispose() {
     shopAddressController.dispose();
@@ -71,21 +84,21 @@ class _SellerSignUpFormState extends State<SellerSignUpForm> {
           children: <Widget>[
             GenericTextField(
               controller: shopNameController,
-              labelText: 'Shop Name',
+              labelText: 'Shop Name *',
               hintText: "TM Motors",
               borderColor: AppColors.ash,
             ),
             SizedBox(height: size.height * 0.015),
             GenericTextField(
               controller: shopNumberController,
-              labelText: 'Shop Phone Number',
+              labelText: 'Shop Phone Number *',
               hintText: '011 - 1234567',
               borderColor: AppColors.ash,
             ),
             SizedBox(height: size.height * 0.015),
             GenericInputOptionSelect(
               width: size.width,
-              labelText: 'City',
+              labelText: 'City *',
               value: city,
               itemList: cityList,
               onValueChange: (text) => handleCity(text),
@@ -93,7 +106,7 @@ class _SellerSignUpFormState extends State<SellerSignUpForm> {
             SizedBox(height: size.height * 0.015),
             GenericTextField(
               controller: shopAddressController,
-              labelText: 'Shop Address',
+              labelText: 'Shop Address *',
               hintText: 'NO 16, Galle Road',
               borderColor: AppColors.ash,
             ),
@@ -105,7 +118,13 @@ class _SellerSignUpFormState extends State<SellerSignUpForm> {
               paddingHorizontal: 80,
               text: 'Next',
               onPressed: () {
-                //validations ok
+                if (shopNameController.text.isEmpty ||
+                    shopNumberController.text.isEmpty ||
+                    shopAddressController.text.isEmpty ||
+                    city.toString().isEmpty) {
+                  fillRequiredFields();
+                  return;
+                }
                 handleNext();
               },
               isBold: true,

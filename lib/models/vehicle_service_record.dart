@@ -1,4 +1,4 @@
-class VehicleServiceRecord {
+class VehicleService {
   String serviceId;
   String date;
   String notificationDate;
@@ -6,7 +6,7 @@ class VehicleServiceRecord {
   String description;
   String mileage;
 
-  VehicleServiceRecord(
+  VehicleService(
     this.serviceId,
     this.date,
     this.notificationDate,
@@ -17,6 +17,17 @@ class VehicleServiceRecord {
 
   void updateId(String id) {
     this.serviceId = id;
+  }
+
+  factory VehicleService.fromJson(dynamic json) {
+    return VehicleService(
+      json["serviceId"],
+      json["date"],
+      json["notificationDate"],
+      json["isNotificationSented"],
+      json["description"],
+      json["mileage"],
+    );
   }
 
   Map<String, Object> toJson() {

@@ -25,12 +25,27 @@ class _AboutUsPageState extends State<AboutUsPage> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            GenericText(
-              text: 'About us',
-            ),
-            GenericText(
-              text: 'Contact us Our Team',
-            ),
+            Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+              GenericText(
+                isBold: true,
+                text: 'About us',
+              ),
+              GenericText(
+                text:
+                    'A mobile application called “Auto Picker” helps people who have vehicles, at the same time those who import and export vehicle spare parts, modification parts, and mechanics will get some benefits.',
+              ),
+            ]),
+            Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+              GenericText(
+                text: 'Contact us Our Team',
+              ),
+              GenericText(
+                text: 'Contact : 076 8407950',
+              ),
+              GenericText(
+                text: 'Email : tharunvar10@gmail.com',
+              ),
+            ]),
             GenericText(
               text: 'App Version 1.0.0',
             ),

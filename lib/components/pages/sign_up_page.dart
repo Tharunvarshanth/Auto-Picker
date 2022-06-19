@@ -45,6 +45,12 @@ class _SignUpPageState extends State<SignUpPage> {
                       textSize: 36,
                       isBold: true,
                     ),
+                    GenericText(
+                      textAlign: TextAlign.left,
+                      text: 'Required *',
+                      color: AppColors.red,
+                      isBold: true,
+                    ),
                     SignUpForm()
                   ],
                 ),

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_icon_button.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_select.dart';
+import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/atoms/generic_time_picker.dart';
@@ -45,6 +46,7 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
   List<String> imageList;
   List<Asset> images = <Asset>[];
   String _error = 'No Error Dectected';
+  bool isButtonDisabled = true;
   var productController = ProductController();
 
   void initState() {
@@ -131,6 +133,18 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
                     navigate(context, RouteGenerator.homePage),
               ));
     }
+  }
+
+  void fillRequiredFields() {
+    showDialog(
+        context: context,
+        builder: (context) => ItemDialogMessage(
+              icon: 'assets/images/x-circle.svg',
+              titleText: 'Fill Required Fields',
+              bodyText: "",
+              primaryButtonText: 'Ok',
+              onPressedPrimary: () => Navigator.pop(context),
+            ));
   }
 
   void handleUpdate() async {
@@ -252,6 +266,19 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
     });
   }
 
+  setButtonStatus() {
+    if (productTitleController.text.isEmpty) {
+      setState(() {
+        isButtonDisabled = true;
+      });
+      return;
+    }
+    setState(() {
+      isButtonDisabled = false;
+    });
+    return;
+  }
+
   Widget buildGridView() {
     return GridView.count(
       crossAxisCount: 3,
@@ -274,28 +301,34 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
         key: _formKey,
         child: Column(
           children: <Widget>[
+            GenericText(
+              textAlign: TextAlign.left,
+              text: 'Required *',
+              color: AppColors.red,
+              isBold: true,
+            ),
             GenericTextField(
               controller: productTitleController,
-              labelText: 'Product Title',
+              labelText: 'Product Title *',
               hintText: "Front Bumper",
               borderColor: AppColors.ash,
             ),
             SizedBox(height: size.height * 0.015),
             GenericTextField(
               controller: descriptionController,
-              labelText: 'Description',
+              labelText: 'Description *',
               hintText: "Panel -40000, Shell -25000 ,Lower Mesh -20000",
               borderColor: AppColors.ash,
             ),
             GenericTextField(
               controller: priceController,
-              labelText: 'Price(rs)',
+              labelText: 'Price(rs) *',
               hintText: "400.00 Rs",
               borderColor: AppColors.ash,
             ),
             GenericInputOptionSelect(
               width: size.width,
-              labelText: 'Condition',
+              labelText: 'Condition *',
               value: condition,
               itemList: SPAREPARTSCONDITIONLIST,
               onValueChange: (text) => handleConditionChange(text),
@@ -306,7 +339,7 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
                 backgroundColor: AppColors.white,
                 textColor: AppColors.black,
                 shadowColor: AppColors.ash,
-                text: 'Upload Images',
+                text: 'Upload Images *',
                 borderRadius: 30,
                 onPressed: loadAssets,
                 iconLeft: 'assets/images/camera.svg',
@@ -323,19 +356,35 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
                     paddingHorizontal: 80,
                     text: 'Add',
                     onPressed: () {
+                      if (productTitleController.text.isEmpty ||
+                          descriptionController.text.isEmpty ||
+                          priceController.text.isEmpty ||
+                          condition.toString().isEmpty ||
+                          images.length == 0) {
+                        fillRequiredFields();
+                        return;
+                      }
                       //validations ok
                       handleAdd();
                     },
                     isBold: true,
                   )
                 : GenericButton(
+                    // isDisabled: isButtonDisabled,
                     textColor: AppColors.white,
                     backgroundColor: AppColors.Blue,
                     paddingVertical: 20,
                     paddingHorizontal: 80,
                     text: 'Update',
                     onPressed: () {
-                      //validations ok
+                      if (productTitleController.text.isEmpty ||
+                          descriptionController.text.isEmpty ||
+                          priceController.text.isEmpty ||
+                          condition.toString().isEmpty ||
+                          images.length == 0) {
+                        fillRequiredFields();
+                        return;
+                      }
                       handleUpdate();
                     },
                     isBold: true,

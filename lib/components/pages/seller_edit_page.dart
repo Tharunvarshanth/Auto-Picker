@@ -42,6 +42,12 @@ class _SellerEditPageState extends State<SellerEditPage> {
           mainAxisSize: MainAxisSize.max,
           children: [
             GenericText(
+              textAlign: TextAlign.left,
+              text: 'Required *',
+              color: AppColors.red,
+              isBold: true,
+            ),
+            GenericText(
               text: 'Hi, Seller',
               textSize: 36,
               isBold: true,

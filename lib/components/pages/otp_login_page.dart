@@ -44,6 +44,7 @@ class _OtpLoginPage extends State<OtpLoginPage> {
   bool isvalidUser = true;
   int timerCount = 60;
   Timer _timer;
+  String formattedNumber;
 
   void initState() {
     super.initState();
@@ -100,13 +101,13 @@ class _OtpLoginPage extends State<OtpLoginPage> {
     }
   }
 
-  Future<bool> isNumberAlreadyHaveAccount() async {
-    var number = TESTNUMBER; //_numberController.text ;
+  Future<bool> isNumberAlreadyHaveAccount(String number) async {
+    //  var number = TESTNUMBER; //_numberController.text ;
     var res = await userController.isNumberAlreadyHaveAccount(number);
     print("res:isNumberAlreadyHaveAccount ${res}");
     if (res) {
       isOtpScreen = true;
-      _verifyPhone();
+      _verifyPhone(number);
     } else {
       isvalidUser = true;
       showDialog(
@@ -125,10 +126,10 @@ class _OtpLoginPage extends State<OtpLoginPage> {
     }
   }
 
-  void _verifyPhone() async {
+  void _verifyPhone(String number) async {
     timerCount = 60;
     startTimer();
-    var testingNumber = TESTNUMBER;
+    var testingNumber = number;
     await auth.verifyPhoneNumber(
       phoneNumber: testingNumber,
       timeout: const Duration(seconds: 60),
@@ -211,6 +212,30 @@ class _OtpLoginPage extends State<OtpLoginPage> {
     );
   }
 
+  void fillRequiredFields(String title) {
+    showDialog(
+        context: context,
+        builder: (context) => ItemDialogMessage(
+              icon: 'assets/images/x-circle.svg',
+              titleText: title,
+              bodyText: "",
+              primaryButtonText: 'Ok',
+              onPressedPrimary: () => Navigator.pop(context),
+            ));
+  }
+
+  String formattedPhone(String text) {
+    String phonenumber = text.trim();
+    if (phonenumber.length == 10) {
+      return "+94" + phonenumber.substring(1);
+    }
+    if (phonenumber.length == 9) {
+      phonenumber = phonenumber;
+      return "+94" + phonenumber;
+    }
+    return null;
+  }
+
   void dispose() {
     super.dispose();
     if (_timer != null) {
@@ -249,17 +274,30 @@ class _OtpLoginPage extends State<OtpLoginPage> {
                     textSize: 30,
                   ),
                   GenericTextField(
+                    prefixText: "+94",
                     controller: _numberController,
                     inputType: TextInputType.phone,
                     labelText: '',
-                    hintText: "077 - 1234567",
+                    hintText: "771234567",
                     borderColor: AppColors.ash,
                   ),
                   GenericButton(
-                    text: 'Submit',
-                    paddingVertical: 20,
-                    onPressed: () => isNumberAlreadyHaveAccount(),
-                  )
+                      text: 'Submit',
+                      paddingVertical: 20,
+                      onPressed: () {
+                        if (_numberController.text.isEmpty) {
+                          fillRequiredFields('Phone number connot be empty');
+                          return;
+                        }
+                        formattedNumber =
+                            formattedPhone(_numberController.text);
+                        if (formattedNumber == null) {
+                          fillRequiredFields('Phone number invalid');
+                          return;
+                        } else {
+                          isNumberAlreadyHaveAccount(formattedNumber);
+                        }
+                      })
                 ])
               : Column(
                   children: [
@@ -321,7 +359,7 @@ class _OtpLoginPage extends State<OtpLoginPage> {
                         text: ' Resend',
                         color: AppColors.Blue,
                         isBold: true,
-                        onPressed: () => _verifyPhone(),
+                        onPressed: () => _verifyPhone(formattedNumber),
                       )
                   ],
                 ),
