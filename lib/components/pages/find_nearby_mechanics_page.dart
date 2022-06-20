@@ -57,7 +57,13 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
     // TODO: implement initState
     _controller.addListener(() {});
     super.initState();
-    if (_getCurrentLocation() != null) {
+    setPageData();
+  }
+
+  void setPageData() async {
+    print(await _getCurrentLocation());
+    if (await _getCurrentLocation() != null) {
+      print(myCurrentLocation.latitude);
       getMechanicsList();
     }
     setState(() {
@@ -90,7 +96,7 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
       target: myCurrentLocation,
       zoom: 14.4746,
     );
-    return myCurrentLocation;
+    return await myCurrentLocation;
   }
 
   Future<void> _setMyMarker(LatLng point) async {
