@@ -166,69 +166,113 @@ class _SignUpFormState extends State<SignUpForm> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            GenericTextField(
+            TextFormField(
               controller: nameController,
-              labelText: 'Name *',
-              hintText: "Kamal",
-              borderColor: AppColors.ash,
+              decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'Enter your Name here',
+                  labelStyle: TextStyle(fontSize: 15)),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter Your Name';
+                }
+                return null;
+              },
             ),
             SizedBox(height: size.height * 0.015),
-            GenericTextField(
+            TextFormField(
               controller: addressController,
-              labelText: 'Address *',
-              hintText: 'No 16,Galle Road',
-              borderColor: AppColors.ash,
+              decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'Enter your Address here',
+                  labelStyle: TextStyle(fontSize: 15)),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter Your Address';
+                }
+                return null;
+              },
             ),
-            SizedBox(height: size.height * 0.015),
+            SizedBox(height: size.height * 0.020),
             GenericInputOptionCitysSelect(
               width: size.width,
-              labelText: 'City *',
+              labelText: '  City',
               value: city,
               itemList: dropDownCityList,
               onValueChange: (text) => handleCity(text),
             ),
             SizedBox(height: size.height * 0.015),
-            GenericTextField(
-              prefixText: "+94",
+            TextFormField(
+              decoration: const InputDecoration(
+                  prefixText: '+94',
+                  prefixStyle: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                  border: UnderlineInputBorder(),
+                  labelText: 'Enter your Phone number here',
+                  labelStyle: TextStyle(
+                    fontSize: 15,
+                  )),
               controller: phoneNumberController,
-              labelText: 'Phone Number *',
-              hintText: '771234567',
-              borderColor: AppColors.ash,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter Your Phone number';
+                }
+                return null;
+              },
             ),
-            SizedBox(height: size.height * 0.015),
+            SizedBox(height: size.height * 0.030),
             GenericInputOptionSelect(
               width: size.width,
-              labelText: 'Role *',
+              labelText: '  Role',
               value: role,
               itemList: roleList,
               borderColor: AppColors.ash,
               onValueChange: (text) => handleRole(text),
             ),
             SizedBox(height: size.height * 0.015),
-            GenericButton(
-              textColor: AppColors.white,
-              backgroundColor: AppColors.Blue,
-              paddingVertical: 20,
-              paddingHorizontal: 80,
-              text: 'Next',
-              onPressed: () {
-                if (nameController.text.isEmpty ||
-                    addressController.text.isEmpty ||
-                    phoneNumberController.text.isEmpty ||
-                    role.toString().isEmpty ||
-                    city.toString().isEmpty) {
-                  fillRequiredFields('Fill Required Fields');
-                  return;
-                }
-
-                formattedNumber = formattedPhone(phoneNumberController.text);
-                if (formattedNumber == null) {
-                  fillRequiredFields('Phone number invalid');
-                  return;
-                }
-                isNumberAlreadyHaveAccount(formattedNumber);
-              },
-              isBold: true,
+            Row(
+              children: [
+                GenericButton(
+                  textColor: AppColors.white,
+                  backgroundColor: AppColors.Blue,
+                  borderRadius: 10,
+                  paddingVertical: 15,
+                  paddingHorizontal: 70,
+                  text: 'Next',
+                  onPressed: () {
+                    if (nameController.text.isEmpty ||
+                        addressController.text.isEmpty ||
+                        phoneNumberController.text.isEmpty ||
+                        role.toString().isEmpty ||
+                        city.toString().isEmpty) {
+                      fillRequiredFields('Fill Required Fields');
+                      return;
+                    }
+                    formattedNumber =
+                        formattedPhone(phoneNumberController.text);
+                    if (formattedNumber == null) {
+                      fillRequiredFields('Phone number invalid');
+                      return;
+                    }
+                    isNumberAlreadyHaveAccount(formattedNumber);
+                  },
+                  isBold: true,
+                ),
+                SizedBox(width: size.width * 0.030),
+                GenericButton(
+                  textColor: AppColors.blue,
+                  backgroundColor: AppColors.white,
+                  borderColor: AppColors.blue,
+                  borderRadius: 10,
+                  paddingVertical: 15,
+                  paddingHorizontal: 60,
+                  text: 'Cancel',
+                  onPressed: () {
+                    print("1");
+                    navigateBack(context);
+                  },
+                  isBold: true,
+                )
+              ],
             )
           ],
         ));

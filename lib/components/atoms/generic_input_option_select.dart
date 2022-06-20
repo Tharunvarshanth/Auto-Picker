@@ -47,6 +47,7 @@ class GenericInputOptionSelect extends StatelessWidget {
       children: [
         GenericText(
           text: labelText,
+          textSize: 15,
           isBold: true,
         ),
         const SizedBox(
@@ -55,7 +56,7 @@ class GenericInputOptionSelect extends StatelessWidget {
         DecoratedBox(
           decoration: BoxDecoration(
               border: Border.all(color: AppColors.ash, width: 1),
-              borderRadius: BorderRadius.circular(3),
+              borderRadius: BorderRadius.circular(5),
               boxShadow: <BoxShadow>[]),
           child: SizedBox(
             width: width,
@@ -64,7 +65,7 @@ class GenericInputOptionSelect extends StatelessWidget {
               isExpanded: true,
               borderRadius: BorderRadius.circular(30),
               value: value,
-              icon: const Icon(Icons.arrow_downward),
+              icon: const Icon(Icons.arrow_drop_down),
               elevation: 16,
               style: const TextStyle(color: AppColors.blue),
               underline: Container(),
