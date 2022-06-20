@@ -57,7 +57,9 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
     // TODO: implement initState
     _controller.addListener(() {});
     super.initState();
-    [getMechanicsList(), _getCurrentLocation()];
+    if (_getCurrentLocation() != null) {
+      getMechanicsList();
+    }
     setState(() {
       isLogged = _auth.currentUser != null;
     });
@@ -76,7 +78,7 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
         //Need to after production LatLng(currentLocation.latitude, currentLocation.longitude);
       });
       print(
-          "My current Location: ${currentLocation.latitude}  ${currentLocation.longitude}");
+          "My current Locati ${myCurrentLocation.latitude}  ${currentLocation.longitude}");
     } on Exception {
       myCurrentLocation = null;
     }
@@ -88,6 +90,7 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
       target: myCurrentLocation,
       zoom: 14.4746,
     );
+    return myCurrentLocation;
   }
 
   Future<void> _setMyMarker(LatLng point) async {
@@ -146,8 +149,10 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
       distanceList = [];
     });
     mechanicList.forEach((element) {
+      LatLng tempLocation;
       var distance = findDistanceBetweenLocations(
-          LatLonManager.LatLng(6.9271, 79.8612), //myCurrentLocation
+          LatLonManager.LatLng(
+              myCurrentLocation.latitude, myCurrentLocation.longitude),
           LatLonManager.LatLng(double.parse(element.location_lat),
               double.parse(element.location_lon)));
       if (distance <= nearByDistance) {
