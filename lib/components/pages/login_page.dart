@@ -25,8 +25,10 @@ class _LoginPageState extends State<LoginPage> {
           padding: EdgeInsets.all(12),
           iconSize: 40,
           alignment: Alignment.topLeft,
-          icon: const Icon(Icons.arrow_back),
-          color: AppColors.black,
+          icon: Image.asset(
+            "assets/images/back-arrow.png",
+            scale: 1.2,
+          ),
           onPressed: () {
             navigateBack(context);
           },
@@ -35,24 +37,48 @@ class _LoginPageState extends State<LoginPage> {
           alignment: Alignment.center,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
-              Container(
-                width: 200,
-                height: 200,
-                child: Image.asset("assets/images/login.png"),
+              Padding(
+                padding: EdgeInsets.fromLTRB(20, 25, 10, 50),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    SizedBox(
+                      height: 100,
+                    ),
+                    Text(
+                      "Login",
+                      style:
+                          TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text(
+                      "Login to your Account",
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
               ),
               Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.values[0],
                   children: [
                     SizedBox(
                         width: MediaQuery.of(context).size.width * 0.8,
                         child: GenericButton(
-                          backgroundColor: AppColors.white,
-                          textColor: AppColors.blue,
+                          backgroundColor: AppColors.blue,
+                          textColor: AppColors.white,
                           text: 'LOGIN WITH MOBILE NUMBER',
+                          textsize: 15,
                           isBold: true,
                           paddingVertical: 20,
                           onPressed: () {
@@ -64,10 +90,11 @@ class _LoginPageState extends State<LoginPage> {
                       height: 20,
                     ),
                     SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.8,
+                        width: MediaQuery.of(context).size.width * 0.7,
                         child: GenericButton(
-                          backgroundColor: AppColors.white,
-                          textColor: AppColors.green,
+                          backgroundColor: AppColors.green,
+                          textColor: AppColors.white,
+                          textsize: 15,
                           text: 'LOGIN WITH EMAIL',
                           paddingVertical: 20,
                           isBold: true,
@@ -82,24 +109,43 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             );
                           },
-                        ))
+                        )),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GenericText(
+                          text: 'Don\'t have an Account? ',
+                          isBold: true,
+                          textSize: 14,
+                        ),
+                        GenericTextButton(
+                          text: 'Sign up',
+                          isBold: true,
+                          textSize: 15,
+                          color: AppColors.blue,
+                          onPressed: () {
+                            navigate(context, RouteGenerator.signUpPage);
+                          },
+                        )
+                      ],
+                    )
                   ]),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GenericText(
-                    text: 'New User ?',
-                  ),
-                  GenericTextButton(
-                    text: 'Sign Up',
-                    color: AppColors.blue,
-                    onPressed: () {
-                      navigate(context, RouteGenerator.signUpPage);
-                    },
-                  )
-                ],
-              )
+              SizedBox(
+                height: 50,
+              ),
+              Container(
+                width: 200,
+                height: 200,
+                margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+                child: Image.asset(
+                  "assets/images/login.png",
+                  scale: 0.5,
+                ),
+              ),
             ],
           ),
         )
