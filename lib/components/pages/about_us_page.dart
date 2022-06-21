@@ -19,7 +19,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
     return Scaffold(
         appBar: const CustomAppBar(
           title: 'About Us',
-          isLogged: false,
+          isLogged: true,
           showBackButton: true,
         ),
         body: Column(
