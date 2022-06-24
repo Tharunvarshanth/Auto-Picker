@@ -72,15 +72,12 @@ class _MenuMoreState extends State<MenuMorePage> {
               getTile("Products", () {
                 navigate(context, RouteGenerator.productsListingPage);
               }),
-              getTile("Advertisements", () {
-                navigate(context, RouteGenerator.advertisementListingPage);
-              }),
-              getTile("Notifications", () {
-                navigate(context, RouteGenerator.notificationsPage);
-              }),
             ],
             /*  getTile("Mileage Calculator", () {}),*/
             /*   getTile("Vehicle Information", () {}),*/
+            getTile("Fuel Alert Chat", () {
+              navigate(context, RouteGenerator.fuelAlertPage);
+            }),
             getTile("About Us", () {
               navigate(context, RouteGenerator.aboutUsPage);
             }, borderColor: Colors.transparent),
