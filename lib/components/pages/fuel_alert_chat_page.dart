@@ -11,6 +11,7 @@ import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class FuelAlertChatPage extends StatefulWidget {
@@ -22,8 +23,9 @@ class FuelAlertChatPage extends StatefulWidget {
 
 class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
   ScrollController _controller = ScrollController();
-  var _fuelController = FuelAlertController();
+  var fuelController = FuelAlertController();
   List<FuelAlert> fuelAlertList = [];
+  final messageController = TextEditingController();
 
   Set<Marker> _markers = Set<Marker>();
   List<double> distanceList = [];
@@ -47,7 +49,7 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
   }
 
   void setData() async {
-    List<dynamic> res = await _fuelController.getFuelAlerts();
+    List<dynamic> res = await fuelController.getFuelAlerts();
     if (res != null) {
       res.forEach((element) {
         print("Fuel Alert chat: $element");
@@ -83,6 +85,7 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
                     child: Column(
                       children: <Widget>[
                         TextFormField(
+                          controller: messageController,
                           decoration: const InputDecoration(
                             labelText: 'Message',
                             icon: Icon(Icons.message),
@@ -137,13 +140,24 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
                   RaisedButton(
                       child: Text("Submit"),
                       onPressed: () {
-                        // your code
+                        if (city?.city == '' || city == null) {
+                          return;
+                        }
+                        addMessage();
                       })
                 ],
               );
             },
           );
         });
+  }
+
+  void addMessage() {
+    var alert = FuelAlert(DateTime.now().toUtc().toString(),
+        messageController.text, '', '', '', city.city, dieselMsg, petrolMsg);
+    fuelController.addFuelAlert(alert);
+    setData();
+    Navigator.pop(context);
   }
 
   viewPetrolStationLoc(FuelAlert fuelAlert) {
@@ -175,7 +189,6 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
     setState(() {
       city = cityName;
     });
-    print(city.city);
   }
 
   Widget build(BuildContext context) {

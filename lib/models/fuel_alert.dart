@@ -27,7 +27,7 @@ class FuelAlert {
   factory FuelAlert.fromJson(dynamic json) {
     return FuelAlert(
         json["timeStamp"],
-        json["timeStamp"],
+        json["message"],
         json["senderId"],
         json["fillingStationLat"],
         json["fillingStationLon"],

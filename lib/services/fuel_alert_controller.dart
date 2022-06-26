@@ -7,7 +7,6 @@ class FuelAlertController {
       FirebaseFirestore.instance.collection(FirebaseCollections.FuelAlertList);
 
   Future<bool> addFuelAlert(FuelAlert fa) async {
-    // Call the user's CollectionReference to add a new user
     var res = false;
     await fuelAlertlist
         .doc()

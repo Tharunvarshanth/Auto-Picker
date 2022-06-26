@@ -26,74 +26,75 @@ class FuelAlertTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Row(
-      children: [
-        Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    message,
-                    maxLines: 2,
-                    style: TextStyle(fontSize: 12, color: AppColors.black),
-                    textAlign: TextAlign.start,
+    return Card(
+        child: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                message,
+                maxLines: 2,
+                style: TextStyle(fontSize: 12, color: AppColors.black),
+                textAlign: TextAlign.start,
+              ),
+              Text(
+                DateTime.parse(timeStamp).toLocal().toString(),
+                maxLines: 2,
+                style: TextStyle(fontSize: 12, color: AppColors.black),
+                textAlign: TextAlign.start,
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                children: <Widget>[
+                  ListTile(
+                      title: const Text('Petrol'),
+                      leading: Checkbox(
+                        checkColor: AppColors.Blue,
+                        value: diesel,
+                      )),
+                  ListTile(
+                    title: const Text('Petrol'),
+                    leading: Checkbox(
+                      checkColor: AppColors.Blue,
+                      value: petrol,
+                    ),
                   ),
                 ],
-              ),
-            ),
-            flex: 4),
-        Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    children: <Widget>[
-                      ListTile(
-                        title: const Text('Petrol'),
-                        leading: Radio<bool>(
-                          value: petrol,
-                        ),
-                      ),
-                      ListTile(
-                        title: const Text('Diesel'),
-                        leading: Radio<bool>(
-                          value: diesel,
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-            flex: 4),
-        Expanded(
-            child: Text(
-              'City : ${city}',
-              style: TextStyle(
-                  fontSize: 14,
-                  color: AppColors.green,
-                  fontWeight: FontWeight.w600),
-              textAlign: TextAlign.start,
-            ),
-            flex: 2),
-        Expanded(
-            child: IconButton(
-              icon: Icon(Icons.map_sharp),
-              color: AppColors.black,
-              onPressed: () {},
-            ),
-            flex: 2),
+              )
+            ],
+          ),
+        ),
+        Text(
+          'City : ${city}',
+          style: TextStyle(
+              fontSize: 14,
+              color: AppColors.green,
+              fontWeight: FontWeight.w600),
+          textAlign: TextAlign.start,
+        ),
+        /*
+        IconButton(
+          icon: Icon(Icons.map_sharp),
+          color: AppColors.black,
+          onPressed: () {},
+        ),*/
       ],
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-    );
+    ));
   }
 }
