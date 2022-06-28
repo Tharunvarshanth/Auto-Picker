@@ -1,7 +1,9 @@
 import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/fuel_alert_tile.dart';
+import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_citys_select.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
+import 'package:auto_picker/components/pages/map_gas_station_page.dart';
 import 'package:auto_picker/models/city.dart';
 import 'package:auto_picker/models/fuel_alert.dart';
 import 'package:auto_picker/models/product.dart';
@@ -14,8 +16,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import 'map_page.dart';
+
 class FuelAlertChatPage extends StatefulWidget {
-  const FuelAlertChatPage();
+  Map<String, dynamic> params;
+
+  FuelAlertChatPage({Map<String, dynamic> this.params});
 
   @override
   _FuelAlertChatPageState createState() => _FuelAlertChatPageState();
@@ -46,6 +52,23 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
   void initState() {
     super.initState();
     setData();
+    if (widget.params?.isEmpty != null) {
+      buildWidget();
+    }
+  }
+
+  void buildWidget() {
+    setState(() {
+      dieselMsg = widget.params["diesel"];
+      petrolMsg = widget.params["petrol"];
+      messageController.text = widget.params["messsage"];
+    });
+
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      setState(() {
+        createMessage(context);
+      });
+    });
   }
 
   void setData() async {
@@ -94,17 +117,6 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
                         const SizedBox(
                           height: 10,
                         ),
-                        GenericInputOptionCitysSelect(
-                          width: size.width,
-                          labelText: 'City *',
-                          value: city,
-                          itemList: dropDownCityList,
-                          onValueChange: (text) => {
-                            setState(() {
-                              city = text;
-                            })
-                          },
-                        ),
                         const SizedBox(
                           height: 10,
                         ),
@@ -131,6 +143,38 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
                               });
                             },
                           ),
+                        ),
+                        Container(
+                          width: 150,
+                          child: GenericButton(
+                              text: 'Choose Gas Station location',
+                              onPressed: () {
+                                Map<String, dynamic> m = {
+                                  'petrol': petrolMsg,
+                                  'diesel': dieselMsg,
+                                  'messsage': messageController.text,
+                                  'city': city
+                                };
+                                widget.params = m;
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MapGasStationPage(
+                                        params: widget.params),
+                                  ),
+                                );
+                              }),
+                        ),
+                        GenericInputOptionCitysSelect(
+                          width: size.width,
+                          labelText: 'City *',
+                          value: city,
+                          itemList: dropDownCityList,
+                          onValueChange: (text) => {
+                            setState(() {
+                              city = text;
+                            })
+                          },
                         ),
                       ],
                     ),
@@ -196,7 +240,7 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
       appBar: const CustomAppBar(
         title: 'Fuel Alert',
         isLogged: true,
-        showBackButton: false,
+        showBackButton: true,
       ),
       body: SafeArea(
         child: Padding(
