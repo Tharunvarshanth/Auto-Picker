@@ -164,39 +164,63 @@ class _SignUpFormState extends State<SignUpForm> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            GenericTextField(
+            TextFormField(
               controller: nameController,
-              labelText: 'Name *',
-              hintText: "Kamal",
-              borderColor: AppColors.ash,
+              decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'Enter your Name here',
+                  labelStyle: TextStyle(fontSize: 15)),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter Your Name';
+                }
+                return null;
+              },
             ),
             SizedBox(height: size.height * 0.015),
-            GenericTextField(
+            TextFormField(
               controller: addressController,
-              labelText: 'Address *',
-              hintText: 'No 16,Galle Road',
-              borderColor: AppColors.ash,
+              decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'Enter your Address here',
+                  labelStyle: TextStyle(fontSize: 15)),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter Your Address';
+                }
+                return null;
+              },
             ),
-            SizedBox(height: size.height * 0.015),
+            SizedBox(height: size.height * 0.020),
             GenericInputOptionCitysSelect(
               width: size.width,
-              labelText: 'City *',
+              labelText: '  City',
               value: city,
               itemList: dropDownCityList,
               onValueChange: (text) => handleCity(text),
             ),
             SizedBox(height: size.height * 0.015),
-            GenericTextField(
-              prefixText: "+94",
+            TextFormField(
+              decoration: const InputDecoration(
+                  prefixText: '+94',
+                  prefixStyle: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                  border: UnderlineInputBorder(),
+                  labelText: 'Enter your Phone number here',
+                  labelStyle: TextStyle(
+                    fontSize: 15,
+                  )),
               controller: phoneNumberController,
-              labelText: 'Phone Number *',
-              hintText: '771234567',
-              borderColor: AppColors.ash,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter Your Phone number';
+                }
+                return null;
+              },
             ),
-            SizedBox(height: size.height * 0.015),
+            SizedBox(height: size.height * 0.030),
             GenericInputOptionSelect(
               width: size.width,
-              labelText: 'Role *',
+              labelText: '  Role',
               value: role,
               itemList: roleList,
               borderColor: AppColors.ash,

@@ -17,22 +17,12 @@ class _SignUpPageState extends State<SignUpPage> {
   void initState() {}
 
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
         body: SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
+            padding: EdgeInsets.fromLTRB(0, 25, 0, 0),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              IconButton(
-                padding: EdgeInsets.all(12),
-                iconSize: 36,
-                alignment: Alignment.topLeft,
-                icon: const Icon(Icons.arrow_back),
-                color: AppColors.black,
-                onPressed: () {
-                  print("1");
-                  navigateBack(context);
-                },
-              ),
               Padding(
                 padding: EdgeInsets.fromLTRB(20, 25, 10, 50),
                 child: Column(
@@ -40,16 +30,37 @@ class _SignUpPageState extends State<SignUpPage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    GenericText(
-                      text: 'Sign Up',
-                      textSize: 36,
-                      isBold: true,
+                    Container(
+                      height: 200,
+                      margin:
+                          EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+                      child: Image.asset(
+                        "assets/images/signup2.png",
+                        scale: 0.5,
+                      ),
                     ),
-                    GenericText(
-                      textAlign: TextAlign.left,
-                      text: 'Required *',
-                      color: AppColors.red,
-                      isBold: true,
+                    // SizedBox(
+                    //   height: size.height * 0.015,
+                    // ),
+                    Text(
+                      "Sign up",
+                      style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,),
+                    ),
+                    SizedBox(
+                      height: size.height * 0.015,
+                    ),
+                    Text(
+                      "Register your Account",
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: size.height * 0.020,
                     ),
                     SignUpForm()
                   ],
