@@ -42,14 +42,12 @@ class _SignUpFormState extends State<SignUpForm> {
     setState(() {
       dropDownCityList = citys;
     });
-    print(dropDownCityList[0].city);
   }
 
   void handleCity(City cityName) {
     setState(() {
       city = cityName;
     });
-    print(city.city);
   }
 
   void handleRole(roleName) {
@@ -229,50 +227,30 @@ class _SignUpFormState extends State<SignUpForm> {
               onValueChange: (text) => handleRole(text),
             ),
             SizedBox(height: size.height * 0.015),
-            Row(
-              children: [
-                GenericButton(
-                  textColor: AppColors.white,
-                  backgroundColor: AppColors.Blue,
-                  borderRadius: 10,
-                  paddingVertical: 15,
-                  paddingHorizontal: 70,
-                  text: 'Next',
-                  onPressed: () {
-                    if (nameController.text.isEmpty ||
-                        addressController.text.isEmpty ||
-                        phoneNumberController.text.isEmpty ||
-                        role.toString().isEmpty ||
-                        city.toString().isEmpty) {
-                      fillRequiredFields('Fill Required Fields');
-                      return;
-                    }
-                    formattedNumber =
-                        formattedPhone(phoneNumberController.text);
-                    if (formattedNumber == null) {
-                      fillRequiredFields('Phone number invalid');
-                      return;
-                    }
-                    isNumberAlreadyHaveAccount(formattedNumber);
-                  },
-                  isBold: true,
-                ),
-                SizedBox(width: size.width * 0.030),
-                GenericButton(
-                  textColor: AppColors.blue,
-                  backgroundColor: AppColors.white,
-                  borderColor: AppColors.blue,
-                  borderRadius: 10,
-                  paddingVertical: 15,
-                  paddingHorizontal: 60,
-                  text: 'Cancel',
-                  onPressed: () {
-                    print("1");
-                    navigateBack(context);
-                  },
-                  isBold: true,
-                )
-              ],
+            GenericButton(
+              textColor: AppColors.white,
+              backgroundColor: AppColors.Blue,
+              paddingVertical: 20,
+              paddingHorizontal: 80,
+              text: 'Next',
+              onPressed: () {
+                if (nameController.text.isEmpty ||
+                    addressController.text.isEmpty ||
+                    phoneNumberController.text.isEmpty ||
+                    role.toString().isEmpty ||
+                    city.city.toString().isEmpty) {
+                  fillRequiredFields('Fill Required Fields');
+                  return;
+                }
+
+                formattedNumber = formattedPhone(phoneNumberController.text);
+                if (formattedNumber == null) {
+                  fillRequiredFields('Phone number invalid');
+                  return;
+                }
+                isNumberAlreadyHaveAccount(formattedNumber);
+              },
+              isBold: true,
             )
           ],
         ));

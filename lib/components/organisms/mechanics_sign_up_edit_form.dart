@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:auto_picker/components/atoms/generic_button.dart';
+import 'package:auto_picker/components/atoms/generic_input_option_citys_select.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_select.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
@@ -11,6 +12,7 @@ import 'package:auto_picker/components/pages/map_page.dart';
 import 'package:auto_picker/components/pages/mechanics_signup_page.dart';
 import 'package:auto_picker/components/pages/otp_signup_page.dart';
 import 'package:auto_picker/components/pages/seller_signup_page.dart';
+import 'package:auto_picker/models/city.dart';
 import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/models/user_model.dart';
 import 'package:auto_picker/routes.dart';
@@ -47,8 +49,9 @@ class _MechanicsSignUpEditFormState extends State<MechanicsSignUpEditForm> {
   String _valueToValidateFinish = '';
   String _valueSavedFinish = '';
   bool isMapclicked = false;
-  String city;
+  City city;
   String specialist;
+  List<City> dropDownCityList = [];
 
   void initState() {
     super.initState();
@@ -62,7 +65,7 @@ class _MechanicsSignUpEditFormState extends State<MechanicsSignUpEditForm> {
       _valueToValidateStart = widget.mechanic.workingTime_To;
       _valueChangedFinish = widget.mechanic.workingTime_From;
       _valueToValidateFinish = widget.mechanic.workingTime_From;
-      city = widget.mechanic.workingCity;
+      city.city = widget.mechanic.workingCity;
       specialist = widget.mechanic.specialist;
     });
   }
@@ -82,7 +85,7 @@ class _MechanicsSignUpEditFormState extends State<MechanicsSignUpEditForm> {
   void handleNext() {
     print("TO handleNext ${_valueChangedStart}");
     widget.mechanic.specialist = specialist;
-    widget.mechanic.workingCity = city;
+    widget.mechanic.workingCity = city.city;
     widget.mechanic.workingAddress = addressController.text;
     widget.mechanic.workingTime_To = _valueChangedStart;
     widget.mechanic.workingTime_From = _valueChangedFinish;
@@ -142,12 +145,6 @@ class _MechanicsSignUpEditFormState extends State<MechanicsSignUpEditForm> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    List<String> cityList = [
-      Users.Admin,
-      Users.Mechanic,
-      Users.NormalUser,
-      Users.Seller,
-    ];
     return Form(
         key: _formKey,
         child: Column(
@@ -160,11 +157,11 @@ class _MechanicsSignUpEditFormState extends State<MechanicsSignUpEditForm> {
               onValueChange: (text) => handleMechanicsSpecialist(text),
             ),
             SizedBox(height: size.height * 0.015),
-            GenericInputOptionSelect(
+            GenericInputOptionCitysSelect(
               width: size.width,
               labelText: 'Working City *',
               value: city,
-              itemList: cityList,
+              itemList: dropDownCityList,
               onValueChange: (text) => handleCity(text),
             ),
             SizedBox(height: size.height * 0.015),
@@ -223,7 +220,7 @@ class _MechanicsSignUpEditFormState extends State<MechanicsSignUpEditForm> {
                   : 'Update your working Location',
               onPressed: () {
                 widget.mechanic.specialist = specialist;
-                widget.mechanic.workingCity = city;
+                widget.mechanic.workingCity = city.city;
                 widget.mechanic.workingAddress = addressController.text;
                 widget.mechanic.workingTime_To = _valueChangedStart;
                 widget.mechanic.workingTime_From = _valueChangedFinish;
