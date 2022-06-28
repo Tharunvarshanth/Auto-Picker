@@ -23,6 +23,7 @@ import 'package:flutter/material.dart';
 import 'components/pages/about_us_page.dart';
 import 'components/pages/advertisement_payment_page.dart';
 import 'components/pages/find_nearby_mechanics_page.dart';
+import 'components/pages/fuel_alert_chat_page.dart';
 import 'components/pages/home_page.dart';
 import 'components/pages/mechanic_profile_page.dart';
 import 'components/pages/mechanics_listing_page.dart';
@@ -62,6 +63,7 @@ class RouteGenerator {
   static const String fuelManagerPage = '/fuelManagerPage';
   static const String vehicleServiceMaintainancePage =
       '/vehicleServiceMaintainancePage';
+  static const String fuelAlertPage = '/fuelAlertPage';
 
   RouteGenerator._() {}
 
@@ -127,6 +129,8 @@ class RouteGenerator {
       case vehicleServiceMaintainancePage:
         return MaterialPageRoute(
             builder: (_) => const VehicleServiceDateListingPage());
+      case fuelAlertPage:
+        return MaterialPageRoute(builder: (_) => FuelAlertChatPage());
       case testPage:
         return MaterialPageRoute(builder: (_) => const TestPage());
       default:

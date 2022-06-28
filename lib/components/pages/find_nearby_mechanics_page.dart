@@ -167,8 +167,6 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
           distanceList.add(distance);
           mechanicListFiltered.add(element);
         });
-        print(mechanicListFiltered.length);
-        print(distanceList.length);
         setNearbyPlacesMarker(element);
       }
     });

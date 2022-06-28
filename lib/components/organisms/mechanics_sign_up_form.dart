@@ -67,7 +67,6 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
     setState(() {
       dropDownCityList = citys;
     });
-    print(dropDownCityList[0].city);
   }
 
   void handleCity(City cityName) {

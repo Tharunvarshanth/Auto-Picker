@@ -42,14 +42,12 @@ class _SignUpFormState extends State<SignUpForm> {
     setState(() {
       dropDownCityList = citys;
     });
-    print(dropDownCityList[0].city);
   }
 
   void handleCity(City cityName) {
     setState(() {
       city = cityName;
     });
-    print(city.city);
   }
 
   void handleRole(roleName) {
@@ -216,7 +214,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     addressController.text.isEmpty ||
                     phoneNumberController.text.isEmpty ||
                     role.toString().isEmpty ||
-                    city.toString().isEmpty) {
+                    city.city.toString().isEmpty) {
                   fillRequiredFields('Fill Required Fields');
                   return;
                 }

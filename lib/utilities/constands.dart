@@ -53,6 +53,7 @@ class FirebaseCollections {
   static const OrdersList = 'ordersList';
   static const VehicleServiceMaintenance = 'vehicleServiceMaintenance';
   static const VehicleServiceList = 'vehicleServiceList';
+  static const FuelAlertList = 'fuelAlertList';
 }
 
 const SPAREPARTSCONDITIONLIST = ["Recondition", "Used", "Brand New"];
