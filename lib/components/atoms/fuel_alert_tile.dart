@@ -10,6 +10,7 @@ class FuelAlertTile extends StatelessWidget {
   String city;
   bool diesel;
   bool petrol;
+  void Function() onView;
 
   FuelAlertTile(
       {Key key,
@@ -20,7 +21,8 @@ class FuelAlertTile extends StatelessWidget {
       this.fillingStationLon = '',
       this.city = '',
       this.diesel,
-      this.petrol})
+      this.petrol,
+      this.onView})
       : super(key: key);
 
   @override
@@ -88,12 +90,13 @@ class FuelAlertTile extends StatelessWidget {
               fontWeight: FontWeight.w600),
           textAlign: TextAlign.start,
         ),
-        /*
-        IconButton(
-          icon: Icon(Icons.map_sharp),
-          color: AppColors.black,
-          onPressed: () {},
-        ),*/
+        fillingStationLat != ""
+            ? IconButton(
+                icon: Icon(Icons.map_sharp),
+                color: AppColors.black,
+                onPressed: onView,
+              )
+            : Text(''),
       ],
     ));
   }

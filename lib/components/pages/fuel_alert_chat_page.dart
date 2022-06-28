@@ -197,8 +197,15 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
   }
 
   void addMessage() {
-    var alert = FuelAlert(DateTime.now().toUtc().toString(),
-        messageController.text, '', '', '', city.city, dieselMsg, petrolMsg);
+    var alert = FuelAlert(
+        DateTime.now().toUtc().toString(),
+        messageController.text,
+        '',
+        widget.params["location-lat"] ?? '',
+        widget.params["location-lon"] ?? '',
+        city.city,
+        dieselMsg,
+        petrolMsg);
     fuelController.addFuelAlert(alert);
     setData();
     Navigator.pop(context);
@@ -206,6 +213,7 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
 
   viewPetrolStationLoc(FuelAlert fuelAlert) {
     setState(() {
+      isShowMap = true;
       _markers.add(Marker(
           markerId: MarkerId('marker 1'),
           position: LatLng(double.parse(fuelAlert.fillingStationLat),
@@ -255,6 +263,8 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
                         itemCount: fuelAlertList.length,
                         itemBuilder: (context, index) {
                           return FuelAlertTile(
+                              onView: () =>
+                                  viewPetrolStationLoc(fuelAlertList[index]),
                               timeStamp: fuelAlertList[index]?.timeStamp,
                               message: fuelAlertList[index]?.message,
                               senderId: fuelAlertList[index]?.senderId,
@@ -269,38 +279,50 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
                       )
                     : const Text('No Messages')
                 : mapWindow(),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: Container(
-                padding: EdgeInsets.only(left: 10, bottom: 10, top: 10),
-                height: 60,
-                width: double.infinity,
-                color: Colors.white,
-                child: Row(
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () => createMessage(context),
-                      child: Container(
-                        height: 30,
-                        width: 30,
-                        decoration: BoxDecoration(
-                          color: Colors.lightBlue,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: const Icon(
-                          Icons.add,
-                          color: Colors.white,
-                          size: 20,
+            if (!isShowMap)
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: Container(
+                  padding: const EdgeInsets.only(left: 10, bottom: 10, top: 10),
+                  height: 60,
+                  width: double.infinity,
+                  color: Colors.white,
+                  child: Row(
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () => createMessage(context),
+                        child: Container(
+                          height: 30,
+                          width: 30,
+                          decoration: BoxDecoration(
+                            color: Colors.lightBlue,
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: const Icon(
+                            Icons.add,
+                            color: Colors.white,
+                            size: 20,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ),
+              )
           ]),
         ),
       ),
+      floatingActionButton: isShowMap
+          ? FloatingActionButton.extended(
+              onPressed: () {
+                setState(() {
+                  isShowMap = !isShowMap;
+                });
+              },
+              label: const Text('Close the map'),
+              icon: Icon(Icons.map),
+            )
+          : null,
     );
   }
 }
