@@ -258,46 +258,79 @@ class _OtpLoginPage extends State<OtpLoginPage> {
           padding: EdgeInsets.all(12),
           iconSize: 40,
           alignment: Alignment.topLeft,
-          icon: const Icon(Icons.arrow_back),
-          color: AppColors.black,
+          icon: Image.asset(
+            "assets/images/back-arrow.png",
+            scale: 1.2,
+          ),
           onPressed: () {
             navigateBack(context);
           },
         ),
+        Container(
+          alignment: Alignment.center,
+          height: 200,
+          margin: EdgeInsets.symmetric(vertical: 50.0, horizontal: 0.0),
+          child: Image.asset(
+            "assets/images/phone-number-input.png",
+            scale: 0.5,
+          ),
+        ),
         Padding(
-          padding: EdgeInsets.fromLTRB(10, 100, 10, 50),
+          padding: EdgeInsets.fromLTRB(10, 225, 10, 50),
           child: !isOtpScreen
               ? Column(children: [
-                  GenericText(
-                    text: 'Enter the Phone Number ',
-                    isBold: true,
-                    textSize: 30,
+                  Text(
+                    'Enter the Phone Number ',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                    ),
                   ),
-                  GenericTextField(
-                    prefixText: "+94",
+                  SizedBox(height: 10),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                        prefixText: '+94',
+                        prefixStyle:
+                            TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                        border: UnderlineInputBorder(),
+                        labelText: 'Enter your Phone number here',
+                        labelStyle: TextStyle(
+                          fontSize: 15,
+                        )),
                     controller: _numberController,
-                    inputType: TextInputType.phone,
-                    labelText: '',
-                    hintText: "771234567",
-                    borderColor: AppColors.ash,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter Your Phone number';
+                      }
+                      return null;
+                    },
                   ),
-                  GenericButton(
-                      text: 'Submit',
-                      paddingVertical: 20,
-                      onPressed: () {
-                        if (_numberController.text.isEmpty) {
-                          fillRequiredFields('Phone number connot be empty');
-                          return;
-                        }
-                        formattedNumber =
-                            formattedPhone(_numberController.text);
-                        if (formattedNumber == null) {
-                          fillRequiredFields('Phone number invalid');
-                          return;
-                        } else {
-                          isNumberAlreadyHaveAccount(formattedNumber);
-                        }
-                      })
+                  SizedBox(height: 15),
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      child: GenericButton(
+                        backgroundColor: AppColors.blue,
+                        textColor: AppColors.white,
+                        text: 'Submit',
+                        textsize: 15,
+                        isBold: true,
+                        paddingVertical: 20,
+                        onPressed: () {
+                          if (_numberController.text.isEmpty) {
+                            fillRequiredFields('Phone number connot be empty');
+                            return;
+                          }
+                          formattedNumber =
+                              formattedPhone(_numberController.text);
+                          if (formattedNumber == null) {
+                            fillRequiredFields('Phone number invalid');
+                            return;
+                          } else {
+                            isNumberAlreadyHaveAccount(formattedNumber);
+                          }
+                        },
+                      )),
                 ])
               : Column(
                   children: [
