@@ -239,7 +239,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     phoneNumberController.text.isEmpty ||
                     role.toString().isEmpty ||
                     city.city.toString().isEmpty) {
-                  fillRequiredFields('Fill Required Fields');
+                  fillRequiredFields('Fill All Required Fields');
                   return;
                 }
 

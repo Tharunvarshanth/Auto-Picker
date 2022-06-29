@@ -29,75 +29,86 @@ class FuelAlertTile extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Card(
-        child: Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                message,
-                maxLines: 2,
-                style: TextStyle(fontSize: 12, color: AppColors.black),
-                textAlign: TextAlign.start,
-              ),
-              Text(
-                DateTime.parse(timeStamp).toLocal().toString(),
-                maxLines: 2,
-                style: TextStyle(fontSize: 12, color: AppColors.black),
-                textAlign: TextAlign.start,
-              ),
-            ],
+        margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
+        elevation: 0,
+        shape: const RoundedRectangleBorder(
+          side: BorderSide(
+            color: AppColors.whitishBlue,
           ),
+          borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(5, 10, 5, 15),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
-                children: <Widget>[
-                  ListTile(
-                      title: const Text('Petrol'),
-                      leading: Checkbox(
-                        checkColor: AppColors.Blue,
-                        value: diesel,
-                      )),
-                  ListTile(
-                    title: const Text('Petrol'),
-                    leading: Checkbox(
-                      checkColor: AppColors.Blue,
-                      value: petrol,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      message,
+                      maxLines: 2,
+                      style: TextStyle(fontSize: 16, color: AppColors.black),
+                      textAlign: TextAlign.start,
                     ),
+                    fillingStationLat != ""
+                        ? IconButton(
+                            icon: Image.asset('assets/images/gas-station.png'),
+                            iconSize: 35,
+                            onPressed: onView,
+                          )
+                        : Text(''),
+                  ],
+                ),
+              ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Column(
+                    children: <Widget>[
+                      ListTile(
+                          title: const Text('Diesel'),
+                          leading: Checkbox(
+                            checkColor: AppColors.Blue,
+                            value: diesel,
+                          )),
+                      ListTile(
+                        title: const Text('Petrol'),
+                        leading: Checkbox(
+                          checkColor: AppColors.Blue,
+                          value: petrol,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                    'City : ${city}',
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: AppColors.black,
+                        fontWeight: FontWeight.w600),
+                    textAlign: TextAlign.start,
+                  ),
+                  Text(
+                    "${DateTime.parse(timeStamp).year}-${DateTime.parse(timeStamp).month}-${DateTime.parse(timeStamp).day}  ${DateTime.parse(timeStamp).hour}:${DateTime.parse(timeStamp).minute}",
+                    maxLines: 2,
+                    style: TextStyle(fontSize: 12, color: AppColors.black),
+                    textAlign: TextAlign.start,
                   ),
                 ],
-              )
+              ),
             ],
           ),
-        ),
-        Text(
-          'City : ${city}',
-          style: TextStyle(
-              fontSize: 14,
-              color: AppColors.green,
-              fontWeight: FontWeight.w600),
-          textAlign: TextAlign.start,
-        ),
-        fillingStationLat != ""
-            ? IconButton(
-                icon: Icon(Icons.map_sharp),
-                color: AppColors.black,
-                onPressed: onView,
-              )
-            : Text(''),
-      ],
-    ));
+        ));
   }
 }

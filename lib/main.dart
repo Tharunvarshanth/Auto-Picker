@@ -111,16 +111,12 @@ class _MyAppBootState extends State<MyAppBoot> {
       title: 'Auto Picker',
       theme: ThemeData(
           textTheme: const TextTheme(
-            headline1: TextStyle(
-                fontFamily: 'Mulish',
-                fontSize: 72.0,
-                fontWeight: FontWeight.bold),
-            headline6:
-                TextStyle(fontFamily: 'Mulish', fontWeight: FontWeight.w500),
-            bodyText2:
-                TextStyle(fontWeight: FontWeight.w500, fontFamily: 'Mulish'),
+            headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+            headline6: TextStyle(fontWeight: FontWeight.w500),
+            bodyText2: TextStyle(
+              fontWeight: FontWeight.w400,
+            ),
           ),
-          fontFamily: 'Mulish',
           primaryColor: AppColors.primaryVariant),
       home: SplashScreen(),
     );

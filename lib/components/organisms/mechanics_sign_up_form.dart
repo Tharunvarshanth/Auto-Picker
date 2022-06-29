@@ -102,7 +102,7 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
         context: context,
         builder: (context) => ItemDialogMessage(
               icon: 'assets/images/x-circle.svg',
-              titleText: 'Fill Required Fields',
+              titleText: 'Fill All Required Fields',
               bodyText: "",
               primaryButtonText: 'Ok',
               onPressedPrimary: () => Navigator.pop(context),

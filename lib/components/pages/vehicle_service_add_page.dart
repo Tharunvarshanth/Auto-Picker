@@ -92,7 +92,7 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
         context: context,
         builder: (context) => ItemDialogMessage(
               icon: 'assets/images/x-circle.svg',
-              titleText: 'Fill Required Fields',
+              titleText: 'Fill All Required Fields',
               bodyText: "",
               primaryButtonText: 'Ok',
               onPressedPrimary: () => Navigator.pop(context),
