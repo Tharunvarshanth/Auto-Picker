@@ -64,7 +64,7 @@ class GenericInputOptionCitysSelect extends StatelessWidget {
       children: [
         GenericText(
           text: labelText,
-          textSize: 15,
+          textSize: 14,
           isBold: true,
         ),
         const SizedBox(

@@ -47,7 +47,7 @@ class GenericInputOptionSelect extends StatelessWidget {
       children: [
         GenericText(
           text: labelText,
-          textSize: 15,
+          textSize: 14,
           isBold: true,
         ),
         const SizedBox(
@@ -63,6 +63,7 @@ class GenericInputOptionSelect extends StatelessWidget {
             child: DropdownButton<String>(
               onTap: () => onTap,
               isExpanded: true,
+              menuMaxHeight: 500,
               borderRadius: BorderRadius.circular(30),
               value: value,
               icon: const Icon(Icons.arrow_drop_down),

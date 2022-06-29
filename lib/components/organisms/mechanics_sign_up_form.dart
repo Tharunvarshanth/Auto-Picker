@@ -132,7 +132,7 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
           children: <Widget>[
             GenericInputOptionSelect(
               width: size.width,
-              labelText: 'Specialist *',
+              labelText: '  Specialist',
               value: specialist,
               itemList: MechanicSpecialistSkills,
               onValueChange: (text) => handleMechanicsSpecialist(text),
@@ -140,27 +140,36 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
             SizedBox(height: size.height * 0.015),
             GenericInputOptionCitysSelect(
               width: size.width,
-              labelText: 'Working City *',
+              labelText: '  Working City',
               value: city,
               itemList: dropDownCityList,
               onValueChange: (text) => handleCity(text),
             ),
             SizedBox(height: size.height * 0.015),
-            GenericTextField(
+            TextFormField(
               controller: addressController,
-              labelText: 'Address *',
-              hintText: "No 16 , Galle Road",
-              borderColor: AppColors.ash,
+              decoration: const InputDecoration(
+                  hintText: ' No 16, Galle Rd, Colombo 11.',
+                  hintStyle:
+                      TextStyle(color: Color.fromARGB(255, 145, 145, 145)),
+                  border: UnderlineInputBorder(),
+                  labelText: 'Enter your Work place Address',
+                  labelStyle: TextStyle(fontSize: 14)),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter Your Address';
+                }
+                return null;
+              },
             ),
-            SizedBox(height: size.height * 0.015),
+            SizedBox(height: size.height * 0.030),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 Container(
-                  width: 150,
+                  width: 155,
                   child: GenericTimePicker(
                       controller: timePickerToController,
-                      labelText: 'Start *',
+                      labelText: 'Opens From',
                       onChanged: (value) => {
                             print("time ${value}"),
                             setState(() {
@@ -173,11 +182,12 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
                             })
                           }),
                 ),
+                SizedBox(width: size.width * 0.1),
                 Container(
-                  width: 150,
+                  width: 155,
                   child: GenericTimePicker(
                       controller: timePickerFromController,
-                      labelText: 'Finish *',
+                      labelText: 'Closes at',
                       onChanged: (value) => {
                             print("time ${value}"),
                             setState(() {
@@ -193,7 +203,7 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
                 ),
               ],
             ),
-            SizedBox(height: size.height * 0.015),
+            SizedBox(height: size.height * 0.03),
             Container(
                 child: GenericTextButton(
               text: widget.params["location-lat"] != null
@@ -214,7 +224,7 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
                 );
               },
             )),
-            SizedBox(height: size.height * 0.015),
+            SizedBox(height: size.height * 0.03),
             GenericButton(
               textColor: AppColors.white,
               backgroundColor: AppColors.Blue,
