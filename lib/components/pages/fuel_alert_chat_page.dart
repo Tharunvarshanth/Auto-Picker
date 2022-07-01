@@ -120,7 +120,6 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
 
         DateTime tempDateTime = dateFormat.parse(_fuelAlert.timeStamp);
         if (!tempDateTime.isAtSameMomentAs(prevTimeStampe)) {
-          print("Fuel Alert if:   ");
           setState(() {
             data.add(GroupModel(
                 prevTimeStampe.toString().substring(0, 10), tempList));
@@ -130,7 +129,6 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
           tempList = [];
           tempList.add(_fuelAlert);
         } else {
-          print("Fuel Alert else:   ");
           tempList.add(_fuelAlert);
         }
         ++i;
@@ -141,11 +139,6 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
                 prevTimeStampe.toString().substring(0, 10), tempList));
           });
         }
-        print("Fuel Alert total length ${data.length}");
-
-        // setState(() {
-        //  fuelAlertList.add(_fuelAlert);
-        // });
       }
     }
 

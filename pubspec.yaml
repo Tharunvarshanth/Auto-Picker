@@ -72,6 +72,7 @@ dependencies:
   get_it: ^7.2.0
   rflutter_alert: ^2.0.4
   section_view: ^2.0.5
+  dropdown_search: ^3.0.1
 
 dev_dependencies:
   flutter_test:
