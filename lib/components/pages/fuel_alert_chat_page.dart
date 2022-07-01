@@ -321,7 +321,7 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
       body: SafeArea(
         child: Padding(
           padding: !isShowMap
-              ? const EdgeInsets.symmetric(horizontal: 10, vertical: 10)
+              ? const EdgeInsets.fromLTRB(5, 5, 5, 80)
               : const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
           child: Stack(children: <Widget>[
             !isShowMap
@@ -330,7 +330,7 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
                         source: data,
                         onFetchListData: (header) => header.fuelAlert,
                         headerBuilder: getDefaultHeaderBuilder((d) => d.date,
-                            bkColor: Colors.green,
+                            bkColor: AppColors.blue,
                             style: const TextStyle(
                                 fontSize: 18, color: Colors.white)),
                         itemBuilder: (context, itemData, index, headerData,
@@ -347,37 +347,7 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
                                 diesel: itemData?.diesel,
                                 city: itemData?.city))
                     : const Text('No Messages')
-                : mapWindow(),
-            if (!isShowMap)
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: Container(
-                  padding: const EdgeInsets.only(left: 10, bottom: 5, top: 10),
-                  height: 60,
-                  width: double.infinity,
-                  color: Colors.white,
-                  child: Row(
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () => createMessage(context),
-                        child: Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                            color: Colors.lightBlue,
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: const Icon(
-                            Icons.add,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
+                : mapWindow()
           ]),
         ),
       ),
@@ -391,7 +361,14 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
               label: const Text('Close the map'),
               icon: Icon(Icons.map),
             )
-          : null,
+          : FloatingActionButton(
+              onPressed: () => createMessage(context),
+              child: const Icon(
+                Icons.edit,
+                color: Colors.white,
+              ),
+            ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
