@@ -100,7 +100,7 @@ class FuelAlertTile extends StatelessWidget {
                     textAlign: TextAlign.start,
                   ),
                   Text(
-                    "${DateTime.parse(timeStamp).year}-${DateTime.parse(timeStamp).month}-${DateTime.parse(timeStamp).day}  ${DateTime.parse(timeStamp).hour}:${DateTime.parse(timeStamp).minute}",
+                    timeStamp,
                     maxLines: 2,
                     style: TextStyle(fontSize: 12, color: AppColors.black),
                     textAlign: TextAlign.start,

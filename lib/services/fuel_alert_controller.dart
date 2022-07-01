@@ -18,7 +18,8 @@ class FuelAlertController {
   }
 
   Future<dynamic> getFuelAlerts() async {
-    QuerySnapshot querySnapshot = await fuelAlertlist.get();
+    QuerySnapshot querySnapshot =
+        await fuelAlertlist.orderBy('timeStamp', descending: true).get();
     if (querySnapshot.size > 0) {
       final data = querySnapshot.docs.map((doc) => doc.data()).toList();
       return data;
