@@ -28,7 +28,9 @@ class NotificationController {
 
   Future<dynamic> addNotificationTest(String uid) async {
     var res;
-    await notificationCollection.doc(uid).set({"test": "test"}).then((value) {
+    await notificationCollection
+        .doc(uid)
+        .set({"createdAt": DateTime.now().toLocal().toString()}).then((value) {
       print("add product ");
       res = true;
     }).catchError((onError) {

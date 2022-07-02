@@ -138,7 +138,9 @@ class ProductController {
 
   Future<dynamic> addProductTest(String user) async {
     var res;
-    await products.doc(user).set({"test": "test"}).then((value) {
+    await products
+        .doc(user)
+        .set({"createdAt": DateTime.now().toLocal().toString()}).then((value) {
       print("add product ");
       res = true;
     }).catchError((onError) {
