@@ -1,5 +1,6 @@
 import 'package:auto_picker/components/atoms/generic_icon_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
+import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/ui/backgroud.dart';
 import 'package:auto_picker/routes.dart';
@@ -114,6 +115,14 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
     }
   }
 
+  void emailSkipAction() async {
+    var existingUser = FirebaseAuth.instance.currentUser;
+    var user = await userController.getUser((existingUser.uid));
+    await userInfo.saveUser(
+        true, existingUser.uid, existingUser.phoneNumber, "", user['role']);
+    navigate(context, RouteGenerator.homePage);
+  }
+
   void dispose() {
     super.dispose();
   }
@@ -124,55 +133,62 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
         body: SafeArea(
       child: Stack(children: [
         isLinkingPage
-            ? Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Hello There!",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Hello There!",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: Image.asset(
+                      'assets/images/google_patches.png',
+                      width: MediaQuery.of(context).size.width,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      child: Image.asset(
-                        'assets/images/google_patches.png',
-                        width: MediaQuery.of(context).size.width,
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  const Center(
+                    child: Text(
+                      "Link your google account with your mobile number incase if you have not sim in your device you can login with your google account",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.ash,
                       ),
                     ),
-                    SizedBox(
-                      height: 30,
+                  ),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
+                      child: Container(
+                          width: 250,
+                          height: 50,
+                          child: SignInButton(
+                            Buttons.Google,
+                            text: "Sign up with Google",
+                            onPressed: () => linkEmailGoogle(),
+                          )),
                     ),
-                    const Center(
-                      child: Text(
-                        "Link your google account with your mobile number incase if you have not sim in your device you can login with your google account",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: Padding(
+                  ),
+                  Center(
+                    child: Padding(
                         padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
-                        child: Container(
-                            width: 250,
-                            height: 50,
-                            child: SignInButton(
-                              Buttons.Google,
-                              mini: true,
-                              text: "Sign up with Google",
-                              onPressed: () => linkEmailGoogle(),
-                            )),
-                      ),
-                    )
-                  ],
-                )
-              ])
+                        child: GenericTextButton(
+                          text: ' Skip',
+                          color: Colors.grey[300],
+                          isBold: true,
+                          onPressed: () => emailSkipAction(),
+                        )),
+                  ),
+                ],
+              )
             : Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                     IconButton(

@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
@@ -103,6 +101,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
         widget.params["city"],
         widget.params["address"],
         false);
+    // adding user info in common db collection
     var resUser = await userController.addUser(user);
     externalAllTestData(fireUser);
     var resOther = true;
@@ -189,21 +188,6 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
           }
           break;
       }
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              UserSignUpPaymentPage(id: fireUser, isSeller: false),
-        ),
-      ); /*
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const GoogleLinkingPage(
-            isLinkingPage: true,
-          ),
-        ),
-      );*/
     } else {
       // error pop up
       showDialog(
@@ -428,6 +412,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
               textSize: 30,
             ),
             GenericText(
+              maxLines: 3,
               text:
                   'Enter the 6 digit code you will to your number ${widget.params["phoneNumber"]}',
               textSize: 18,

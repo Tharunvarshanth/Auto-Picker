@@ -159,7 +159,7 @@ class _SignUpFormState extends State<SignUpForm> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    List<String> roleList = [Users.Mechanic, Users.NormalUser, Users.Seller];
+    List<String> roleList = [Users.NormalUser, Users.Mechanic, Users.Seller];
     return Form(
         key: _formKey,
         child: Column(
@@ -201,7 +201,6 @@ class _SignUpFormState extends State<SignUpForm> {
             ),
             SizedBox(height: size.height * 0.015),
             TextFormField(
-              autofocus: true,
               keyboardType: TextInputType.phone,
               maxLength: 10,
               decoration: const InputDecoration(
