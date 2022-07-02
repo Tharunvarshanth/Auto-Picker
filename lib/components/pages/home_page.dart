@@ -1,22 +1,22 @@
 import 'package:auto_picker/components/atoms/custom_app_bar.dart';
-import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
-import 'package:auto_picker/components/atoms/image_corousal.dart';
 import 'package:auto_picker/components/atoms/image_corousal_advertisment.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/atoms/product_tile.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:auto_picker/components/organisms/mechanics_horizontal_scroll.dart';
 import 'package:auto_picker/components/pages/product_page.dart';
-import 'package:auto_picker/models/carousel_data.dart';
-import 'package:auto_picker/models/city.dart';
+import 'package:auto_picker/components/pages/user_payment_page.dart';
 import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/models/product.dart';
+import 'package:auto_picker/models/seller.dart';
 import 'package:auto_picker/models/spare_advertisement.dart';
 import 'package:auto_picker/services/mechanic_controller.dart';
 import 'package:auto_picker/services/product_controller.dart';
+import 'package:auto_picker/services/seller_controller.dart';
 import 'package:auto_picker/services/spare_advertisement_controller.dart';
+import 'package:auto_picker/services/user_controller.dart';
 import 'package:auto_picker/store/cache/sharedPreferences/user_info.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/constands.dart';
@@ -25,7 +25,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
-
 import '../../routes.dart';
 
 class HomePage extends StatefulWidget {
@@ -47,16 +46,46 @@ class _HomePageState extends State<HomePage> {
   var userInfo = UserInfoCache();
   bool isLogged = false;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  var sellerController = SellerController();
+  var userController = UserController();
+  var userRole;
 
   @override
   void initState() {
     super.initState();
     setState(() {
-      isLogged = _auth.currentUser != null ? true : false;
+      isLogged = _auth?.currentUser != null ? true : false;
     });
     controller.addListener(() {});
     setData();
+    validatePayedUser();
     // setOneSignalToken();
+  }
+
+  //validating mechanics and seller login then they payed or not
+  void validatePayedUser() async {
+    if (!isLogged) return;
+    var _user = await userController.getUser(_auth.currentUser.uid);
+    userRole = _user["role"];
+    switch (userRole) {
+      case Users.Mechanic:
+        {
+          var _m =
+              await mechanicsController.getMechanic((_auth.currentUser.uid));
+          var mechanicModel = Mechanic.fromJson(_m);
+          print("user smechanics ${_m}");
+          if (!mechanicModel.isPayed) showAlert(context);
+        }
+
+        break;
+      case Users.Seller:
+        {
+          var _s = await sellerController.getSeller((_auth.currentUser.uid));
+          var sellerModel = Seller.fromJson(_s);
+          if (!sellerModel.isPayed) showAlert(context);
+        }
+        break;
+    }
   }
 
   void setOneSignalToken() async {
@@ -184,6 +213,40 @@ class _HomePageState extends State<HomePage> {
 
   testFunction() {
     navigate(context, RouteGenerator.mapLatLonGetter);
+  }
+
+  void showAlert(BuildContext context) {
+    // show the dialog
+    showDialog(
+        context: context,
+        builder: (context) => ItemDialogMessage(
+            icon: 'assets/images/x-circle.svg',
+            titleText: 'Payment Pending',
+            bodyText:
+                'You need to complete a payment to continue on this application',
+            primaryButtonText: "Retry",
+            secondaryButtonText: "Log out",
+            onPressedSecondary: () {
+              signOut();
+            },
+            onPressedPrimary: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UserSignUpPaymentPage(
+                      id: _auth.currentUser.uid,
+                      isSeller: userRole == Users.Seller),
+                ),
+              );
+            }));
+  }
+
+  void signOut() {
+    //usually called after the user logs out of your app
+    OneSignal.shared.removeExternalUserId();
+    //redirect
+    userInfo.clearValue();
+    _auth.signOut().then((value) => navigate(context, RouteGenerator.homePage));
   }
 
   @override

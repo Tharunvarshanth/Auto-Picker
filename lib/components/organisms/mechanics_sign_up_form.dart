@@ -54,7 +54,6 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
         specialist = widget.params['specialist'];
         _valueChangedStart = widget.params['workingTime_To'];
         _valueChangedFinish = widget.params['workingTime_From'];
-        city = widget.params['workingCity'];
       });
       addressController.text = widget.params['address'];
       timePickerToController.text = widget.params['workingTime_To'];
@@ -73,7 +72,6 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
     setState(() {
       city = cityName;
     });
-    print(city.city);
   }
 
   void handleMechanicsSpecialist(skill) {
@@ -84,7 +82,7 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
 
   void handleNext() {
     widget.params['specialist'] = specialist;
-    widget.params['workingCity'] = city;
+    widget.params['workingCity'] = city.city;
     widget.params['workingAddress'] = addressController.text;
     widget.params['workingTime_To'] = _valueChangedStart;
     widget.params['workingTime_From'] = _valueChangedFinish;
@@ -120,12 +118,6 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    List<String> cityList = [
-      Users.Admin,
-      Users.Mechanic,
-      Users.NormalUser,
-      Users.Seller
-    ];
     return Form(
         key: _formKey,
         child: Column(
@@ -136,14 +128,6 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
               value: specialist,
               itemList: MechanicSpecialistSkills,
               onValueChange: (text) => handleMechanicsSpecialist(text),
-            ),
-            SizedBox(height: size.height * 0.015),
-            GenericInputOptionCitysSelect(
-              width: size.width,
-              labelText: '  Working City',
-              value: city,
-              itemList: dropDownCityList,
-              onValueChange: (text) => handleCity(text),
             ),
             SizedBox(height: size.height * 0.015),
             TextFormField(
@@ -211,7 +195,6 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
                   : 'Pick your working Location',
               onPressed: () {
                 widget.params['specialist'] = specialist;
-                widget.params['workingCity'] = city;
                 widget.params['address'] = addressController.text;
                 widget.params['workingTime_To'] = _valueChangedStart;
                 widget.params['workingTime_From'] = _valueChangedFinish;
@@ -224,6 +207,14 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
                 );
               },
             )),
+            SizedBox(height: size.height * 0.015),
+            GenericInputOptionCitysSelect(
+              width: size.width,
+              labelText: '  Working City',
+              value: city,
+              itemList: dropDownCityList,
+              onValueChange: (text) => handleCity(text),
+            ),
             SizedBox(height: size.height * 0.03),
             GenericButton(
               textColor: AppColors.white,
@@ -233,7 +224,8 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
               text: 'Next',
               onPressed: () {
                 if (specialist.toString().isEmpty ||
-                    city.toString().isEmpty ||
+                    city?.city == '' ||
+                    city == null ||
                     addressController.text.isEmpty ||
                     _valueChangedFinish.toString().isEmpty ||
                     _valueChangedStart.toString().isEmpty) {

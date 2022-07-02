@@ -1,10 +1,5 @@
-import 'package:auto_picker/components/atoms/custom_app_bar.dart';
-import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/organisms/sign_up_form.dart';
-import 'package:auto_picker/themes/colors.dart';
-import 'package:auto_picker/utilities/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:auto_picker/routes.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage();
@@ -45,9 +40,10 @@ class _SignUpPageState extends State<SignUpPage> {
                     Text(
                       "Sign up",
                       style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue,),
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                      ),
                     ),
                     SizedBox(
                       height: size.height * 0.015,

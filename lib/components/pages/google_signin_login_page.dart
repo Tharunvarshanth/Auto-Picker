@@ -1,15 +1,15 @@
-import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/generic_icon_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
-import 'package:auto_picker/models/product.dart';
+import 'package:auto_picker/components/atoms/generic_text_button.dart';
+import 'package:auto_picker/components/atoms/popup_modal_message.dart';
+import 'package:auto_picker/components/ui/backgroud.dart';
 import 'package:auto_picker/routes.dart';
-import 'package:auto_picker/services/product_controller.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:auto_picker/services/user_controller.dart';
 import 'package:auto_picker/store/cache/sharedPreferences/user_info.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -32,6 +32,7 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
     });
   }
 
+  //first time sign up
   linkEmailGoogle() async {
     //get currently logged in user
     var existingUser = FirebaseAuth.instance.currentUser;
@@ -63,12 +64,25 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
       navigate(context, RouteGenerator.homePage);
     } else {
       //error popup
+      showDialog(
+          context: context,
+          builder: (context) => ItemDialogMessage(
+                icon: 'assets/images/x-circle.svg',
+                titleText: 'Linking With Email Failed',
+                bodyText: "",
+                primaryButtonText: 'Ok',
+                onPressedPrimary: () => Navigator.pop(context),
+              ));
     }
   }
 
   signInWithGoogle() async {
     // Trigger the authentication flow
-    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAccount googleUser =
+        await GoogleSignIn().signIn().catchError((onError) => print(onError));
+    ;
+// Return null to prevent further exceptions if googleSignInAccount is null
+    if (googleUser == null) return null;
 
     // Obtain the auth details from the request
     final GoogleSignInAuthentication googleAuth =
@@ -89,55 +103,139 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
     if (userCred != null) {
       navigate(context, RouteGenerator.homePage);
     } else {
-      //error popup
+      showDialog(
+          context: context,
+          builder: (context) => ItemDialogMessage(
+                icon: 'assets/images/x-circle.svg',
+                titleText: 'Sign In With Email Failed',
+                bodyText: "",
+                primaryButtonText: 'Ok',
+                onPressedPrimary: () => Navigator.pop(context),
+              ));
     }
   }
 
+  void emailSkipAction() async {
+    var existingUser = FirebaseAuth.instance.currentUser;
+    var user = await userController.getUser((existingUser.uid));
+    await userInfo.saveUser(
+        true, existingUser.uid, existingUser.phoneNumber, "", user['role']);
+    navigate(context, RouteGenerator.homePage);
+  }
+
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
       child: Stack(children: [
         isLinkingPage
-            ? Align(
-                alignment: Alignment.center,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GenericText(
-                      text: 'Email Linking',
-                      isBold: true,
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Hello There!",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: Image.asset(
+                      'assets/images/google_patches.png',
+                      width: MediaQuery.of(context).size.width,
                     ),
-                    const SizedBox(
-                      height: 2,
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  const Center(
+                    child: Text(
+                      "Link your google account with your mobile number incase if you have not sim in your device you can login with your google account",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.ash,
+                      ),
                     ),
-                    GenericText(
-                      text:
-                          'Link your google account with your mobile number incase if you have not sim in your device you can login with your google account',
+                  ),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
+                      child: Container(
+                          width: 250,
+                          height: 50,
+                          child: SignInButton(
+                            Buttons.Google,
+                            text: "Sign up with Google",
+                            onPressed: () => linkEmailGoogle(),
+                          )),
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    GenericIconButton(
-                      backgroundColor: AppColors.white,
-                      textColor: AppColors.black,
-                      shadowColor: AppColors.ash,
-                      text: 'Link with Google Account',
-                      onPressed: () => linkEmailGoogle(),
-                      iconLeft: 'assets/images/at-sign.svg',
-                    ),
-                  ],
-                ),
+                  ),
+                  Center(
+                    child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
+                        child: GenericTextButton(
+                          text: ' Skip',
+                          color: Colors.grey[300],
+                          isBold: true,
+                          onPressed: () => emailSkipAction(),
+                        )),
+                  ),
+                ],
               )
-            : Center(
-                child: GenericIconButton(
-                  backgroundColor: AppColors.white,
-                  textColor: AppColors.black,
-                  shadowColor: AppColors.ash,
-                  text: 'Login with Account',
-                  onPressed: () => signInWithGoogle(),
-                  iconLeft: 'assets/images/at-sign.svg',
-                ),
-              ),
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                    IconButton(
+                      padding: EdgeInsets.fromLTRB(15, 15, 0, 0),
+                      iconSize: 40,
+                      alignment: Alignment.topLeft,
+                      icon: Image.asset(
+                        "assets/images/back-arrow.png",
+                        scale: 1.2,
+                      ),
+                      onPressed: () {
+                        navigateBack(context);
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: Image.asset(
+                        'assets/images/google_patches.png',
+                        width: MediaQuery.of(context).size.width,
+                      ),
+                    ),
+                    const Center(
+                      child: Text(
+                        "Sign In With Google Account",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
+                        child: Container(
+                          width: 250,
+                          height: 50,
+                          child: SignInButton(
+                            Buttons.Google,
+                            text: "Login with Account",
+                            onPressed: () => signInWithGoogle(),
+                          ),
+                        ),
+                      ),
+                    )
+                  ]),
       ]),
     ));
   }

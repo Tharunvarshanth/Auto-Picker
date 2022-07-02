@@ -11,17 +11,13 @@ import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/models/product.dart';
 import 'package:auto_picker/models/seller.dart';
 import 'package:auto_picker/models/user_model.dart';
-import 'package:auto_picker/routes.dart';
 import 'package:auto_picker/services/mechanic_controller.dart';
-import 'package:auto_picker/services/product_controller.dart';
 import 'package:auto_picker/services/seller_controller.dart';
 import 'package:auto_picker/services/user_controller.dart';
 import 'package:auto_picker/store/cache/sharedPreferences/user_info.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/constands.dart';
-import 'package:auto_picker/utilities/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 

@@ -52,7 +52,7 @@ class _SellerSignUpFormState extends State<SellerSignUpForm> {
     widget.params['shopName'] = shopNameController.text;
     widget.params['shopAddress'] = shopAddressController.text;
     widget.params['shopPhoneNumber'] = shopNumberController.text;
-    widget.params['shopcity'] = city;
+    widget.params['shopcity'] = city.city;
 
     Navigator.push(
       context,
@@ -90,33 +90,62 @@ class _SellerSignUpFormState extends State<SellerSignUpForm> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            GenericTextField(
+            TextFormField(
               controller: shopNameController,
-              labelText: 'Shop Name *',
-              hintText: "TM Motors",
-              borderColor: AppColors.ash,
+              decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'Shop Name',
+                  hintText: "TM Motors",
+                  labelStyle: TextStyle(fontSize: 15)),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter Your shop name';
+                }
+                return null;
+              },
             ),
             SizedBox(height: size.height * 0.015),
-            GenericTextField(
+            TextFormField(
+              keyboardType: TextInputType.phone,
+              maxLength: 10,
+              decoration: const InputDecoration(
+                  prefixText: '+94',
+                  prefixStyle: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                  border: UnderlineInputBorder(),
+                  labelText: 'Enter your Phone number here',
+                  labelStyle: TextStyle(
+                    fontSize: 15,
+                  )),
               controller: shopNumberController,
-              labelText: 'Shop Phone Number *',
-              hintText: '011 - 1234567',
-              borderColor: AppColors.ash,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter Your Phone number';
+                }
+                return null;
+              },
             ),
             SizedBox(height: size.height * 0.015),
             GenericInputOptionCitysSelect(
               width: size.width,
-              labelText: 'City *',
+              labelText: 'City',
               value: city,
               itemList: dropDownCityList,
               onValueChange: (text) => handleCity(text),
             ),
             SizedBox(height: size.height * 0.015),
-            GenericTextField(
+            TextFormField(
               controller: shopAddressController,
-              labelText: 'Shop Address *',
-              hintText: 'NO 16, Galle Road',
-              borderColor: AppColors.ash,
+              decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'Shop Address',
+                  hintText: 'NO 16, Galle Road',
+                  labelStyle: TextStyle(fontSize: 15)),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter Your shop address';
+                }
+                return null;
+              },
             ),
             SizedBox(height: size.height * 0.015),
             GenericButton(
@@ -129,7 +158,8 @@ class _SellerSignUpFormState extends State<SellerSignUpForm> {
                 if (shopNameController.text.isEmpty ||
                     shopNumberController.text.isEmpty ||
                     shopAddressController.text.isEmpty ||
-                    city.toString().isEmpty) {
+                    city?.city == '' ||
+                    city == null) {
                   fillRequiredFields();
                   return;
                 }

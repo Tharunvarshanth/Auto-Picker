@@ -17,6 +17,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class OtpLoginPage extends StatefulWidget {
@@ -102,7 +103,6 @@ class _OtpLoginPage extends State<OtpLoginPage> {
   }
 
   Future<bool> isNumberAlreadyHaveAccount(String number) async {
-    //  var number = TESTNUMBER; //_numberController.text ;
     var res = await userController.isNumberAlreadyHaveAccount(number);
     print("res:isNumberAlreadyHaveAccount ${res}");
     if (res) {
@@ -139,6 +139,8 @@ class _OtpLoginPage extends State<OtpLoginPage> {
           isLoading = true;
         });
         auth.signInWithCredential(credential).then((value) async {
+          // ANDROID ONLY!
+          // Sign the user in (or link) with the auto-generated credential
           if (value.user != null) {
             var user = await userController.getUser((value.user.uid));
             void setOneSignalToken() async {
@@ -247,157 +249,172 @@ class _OtpLoginPage extends State<OtpLoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-      child: Stack(children: [
-        if (isLoading)
+      child: SingleChildScrollView(
+        child: Stack(children: [
+          if (isLoading)
+            Container(
+                alignment: Alignment.center,
+                child: CircularProgressIndicator(
+                  color: AppColors.blue,
+                )),
+          IconButton(
+            padding: EdgeInsets.all(12),
+            iconSize: 40,
+            alignment: Alignment.topLeft,
+            icon: Image.asset(
+              "assets/images/back-arrow.png",
+              scale: 1.2,
+            ),
+            onPressed: () {
+              navigateBack(context);
+            },
+          ),
           Container(
-              alignment: Alignment.center,
-              child: CircularProgressIndicator(
-                color: AppColors.blue,
-              )),
-        IconButton(
-          padding: EdgeInsets.all(12),
-          iconSize: 40,
-          alignment: Alignment.topLeft,
-          icon: Image.asset(
-            "assets/images/back-arrow.png",
-            scale: 1.2,
+            alignment: Alignment.center,
+            height: 200,
+            margin: EdgeInsets.symmetric(vertical: 25.0, horizontal: 0.0),
+            child: Image.asset(
+              "assets/images/phone-number-input.png",
+              scale: 0.5,
+            ),
           ),
-          onPressed: () {
-            navigateBack(context);
-          },
-        ),
-        Container(
-          alignment: Alignment.center,
-          height: 200,
-          margin: EdgeInsets.symmetric(vertical: 50.0, horizontal: 0.0),
-          child: Image.asset(
-            "assets/images/phone-number-input.png",
-            scale: 0.5,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(10, 225, 10, 50),
-          child: !isOtpScreen
-              ? Column(children: [
-                  Text(
-                    'Enter the Phone Number ',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                        prefixText: '+94',
-                        prefixStyle:
-                            TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                        border: UnderlineInputBorder(),
-                        labelText: 'Enter your Phone number here',
-                        labelStyle: TextStyle(
-                          fontSize: 15,
-                        )),
-                    controller: _numberController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter Your Phone number';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 15),
-                  SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      child: GenericButton(
-                        backgroundColor: AppColors.blue,
-                        textColor: AppColors.white,
-                        text: 'Submit',
-                        textsize: 15,
-                        isBold: true,
-                        paddingVertical: 20,
-                        onPressed: () {
-                          if (_numberController.text.isEmpty) {
-                            fillRequiredFields('Phone number connot be empty');
-                            return;
-                          }
-                          formattedNumber =
-                              formattedPhone(_numberController.text);
-                          if (formattedNumber == null) {
-                            fillRequiredFields('Phone number invalid');
-                            return;
-                          } else {
-                            isNumberAlreadyHaveAccount(formattedNumber);
-                          }
-                        },
-                      )),
-                ])
-              : Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(50),
-                      child: GenericText(
-                        text: 'Otp Login',
-                        isBold: true,
-                        textSize: 30,
+          Padding(
+            padding: EdgeInsets.fromLTRB(10, 240, 10, 50),
+            child: !isOtpScreen
+                ? Column(children: [
+                    Text(
+                      'Enter the Phone Number ',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
                       ),
                     ),
-                    Padding(
-                        padding: EdgeInsets.fromLTRB(0, 50, 0, 50),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              SizedBox(height: 10),
-                              SingleDigitField(
-                                widthPercentage: 0.1,
-                                fontSize: 16,
-                                controller: d1,
-                              ),
-                              SingleDigitField(
-                                widthPercentage: 0.1,
-                                fontSize: 16,
-                                controller: d2,
-                              ),
-                              SingleDigitField(
-                                widthPercentage: 0.1,
-                                fontSize: 16,
-                                controller: d3,
-                              ),
-                              SingleDigitField(
-                                widthPercentage: 0.1,
-                                fontSize: 16,
-                                controller: d4,
-                              ),
-                              SingleDigitField(
-                                widthPercentage: 0.1,
-                                fontSize: 16,
-                                controller: d5,
-                              ),
-                              SingleDigitField(
-                                widthPercentage: 0.1,
-                                fontSize: 16,
-                                controller: d6,
-                              ),
-                            ])),
-                    SizedBox(height: 2),
-                    GenericText(
-                      text: 'Resend timer ',
+                    SizedBox(height: 10),
+                    TextFormField(
+                      autofocus: true,
+                      keyboardType: TextInputType.phone,
+                      maxLength: 10,
+                      decoration: const InputDecoration(
+                          prefixText: '+94',
+                          prefixStyle:
+                              TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                          border: UnderlineInputBorder(),
+                          labelText: 'Enter your Phone number here',
+                          labelStyle: TextStyle(
+                            fontSize: 15,
+                          )),
+                      controller: _numberController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter Your Phone number';
+                        }
+                        return null;
+                      },
                     ),
-                    GenericText(
-                      text: timerCount.toString(),
-                      isBold: true,
-                    ),
-                    if (timerCount == 0)
-                      GenericTextButton(
-                        text: ' Resend',
-                        color: AppColors.Blue,
+                    SizedBox(height: 15),
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        child: GenericButton(
+                          backgroundColor: AppColors.blue,
+                          textColor: AppColors.white,
+                          text: 'Submit',
+                          textsize: 15,
+                          isBold: true,
+                          paddingVertical: 20,
+                          onPressed: () {
+                            if (_numberController.text.isEmpty) {
+                              fillRequiredFields(
+                                  'Phone number connot be empty');
+                              return;
+                            }
+                            formattedNumber =
+                                formattedPhone(_numberController.text);
+                            if (formattedNumber == null) {
+                              fillRequiredFields('Phone number invalid');
+                              return;
+                            } else {
+                              //validate phone number submit redirect to firebase login
+                              isNumberAlreadyHaveAccount(formattedNumber);
+                            }
+                          },
+                        )),
+                  ])
+                : Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(50, 25, 50, 10),
+                        child: GenericText(
+                          text: 'Verify Phone',
+                          isBold: true,
+                          textSize: 30,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(50, 25, 50, 10),
+                        child: Text(
+                          'Code is send to ${formattedNumber}',
+                          style:
+                              TextStyle(fontSize: 18, color: Colors.grey[400]),
+                        ),
+                      ),
+                      Padding(
+                          padding: EdgeInsets.fromLTRB(0, 50, 0, 50),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                SizedBox(height: 10),
+                                SingleDigitField(
+                                  widthPercentage: 0.1,
+                                  fontSize: 16,
+                                  controller: d1,
+                                ),
+                                SingleDigitField(
+                                  widthPercentage: 0.1,
+                                  fontSize: 16,
+                                  controller: d2,
+                                ),
+                                SingleDigitField(
+                                  widthPercentage: 0.1,
+                                  fontSize: 16,
+                                  controller: d3,
+                                ),
+                                SingleDigitField(
+                                  widthPercentage: 0.1,
+                                  fontSize: 16,
+                                  controller: d4,
+                                ),
+                                SingleDigitField(
+                                  widthPercentage: 0.1,
+                                  fontSize: 16,
+                                  controller: d5,
+                                ),
+                                SingleDigitField(
+                                  widthPercentage: 0.1,
+                                  fontSize: 16,
+                                  controller: d6,
+                                ),
+                              ])),
+                      SizedBox(height: 2),
+                      GenericText(
+                        text: 'Resend timer ',
+                      ),
+                      GenericText(
+                        text: timerCount.toString(),
                         isBold: true,
-                        onPressed: () => _verifyPhone(formattedNumber),
-                      )
-                  ],
-                ),
-        ),
-      ]),
+                      ),
+                      if (timerCount == 0)
+                        GenericTextButton(
+                          text: "Didn't receive code? Request again",
+                          color: AppColors.Blue,
+                          isBold: true,
+                          onPressed: () => _verifyPhone(formattedNumber),
+                        )
+                    ],
+                  ),
+          ),
+        ]),
+      ),
     ));
   }
 }

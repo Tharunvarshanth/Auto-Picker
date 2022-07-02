@@ -49,7 +49,9 @@ class VehicleServiceController {
 
   Future<dynamic> addVehicleServiceTest(String user) async {
     var res;
-    await vehicleService.doc(user).set({"test": "test"}).then((value) {
+    await vehicleService
+        .doc(user)
+        .set({"createdAt": DateTime.now().toLocal().toString()}).then((value) {
       print("add product ");
       res = true;
     }).catchError((onError) {

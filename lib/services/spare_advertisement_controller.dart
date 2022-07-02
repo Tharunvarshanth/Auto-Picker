@@ -82,7 +82,9 @@ class AdvertisementController {
 
   Future<dynamic> addTestAdvertisment(String uId) async {
     var res;
-    await advertisements.doc(uId).set({'test': 'test'}).then((value) {
+    await advertisements
+        .doc(uId)
+        .set({"createdAt": DateTime.now().toLocal().toString()}).then((value) {
       print("addSpareAdvertisement:success");
       res = true;
     }).catchError((onError) {

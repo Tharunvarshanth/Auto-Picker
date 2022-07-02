@@ -1,14 +1,10 @@
 import 'dart:async';
-
-import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/atoms/single_digit_field.dart';
 import 'package:auto_picker/components/pages/google_signin_login_page.dart';
-import 'package:auto_picker/components/pages/home_page_test.dart';
 import 'package:auto_picker/components/pages/user_payment_page.dart';
-import 'package:auto_picker/models/account.dart';
 import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/models/seller.dart';
 import 'package:auto_picker/models/user_model.dart';
@@ -71,7 +67,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
   }
 
   Future<bool> isNumberAlreadyHaveAccount() async {
-    var number = TESTNUMBER; //_numberController.text ;
+    var number = widget.params["phoneNumber"];
     var res = await userController.isNumberAlreadyHaveAccount(number);
     print("res:isNumberAlreadyHaveAccount ${res}");
     if (!res) {
@@ -105,6 +101,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
         widget.params["city"],
         widget.params["address"],
         false);
+    // adding user info in common db collection
     var resUser = await userController.addUser(user);
     externalAllTestData(fireUser);
     var resOther = true;
@@ -191,21 +188,6 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
           }
           break;
       }
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              UserSignUpPaymentPage(id: fireUser, isSeller: false),
-        ),
-      ); /*
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const GoogleLinkingPage(
-            isLinkingPage: true,
-          ),
-        ),
-      );*/
     } else {
       // error pop up
       showDialog(
@@ -319,7 +301,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
       timerCount = 60;
     });
     startTimer();
-    var testingNumber = TESTNUMBER;
+    var testingNumber = widget.params["phoneNumber"];
     await auth.verifyPhoneNumber(
       phoneNumber: testingNumber,
       timeout: const Duration(seconds: 60),
@@ -430,6 +412,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
               textSize: 30,
             ),
             GenericText(
+              maxLines: 3,
               text:
                   'Enter the 6 digit code you will to your number ${widget.params["phoneNumber"]}',
               textSize: 18,

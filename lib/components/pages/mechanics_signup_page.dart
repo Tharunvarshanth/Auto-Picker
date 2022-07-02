@@ -1,12 +1,9 @@
-import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/organisms/mechanics_sign_up_form.dart';
-import 'package:auto_picker/components/organisms/sign_up_form.dart';
 import 'package:auto_picker/models/Location.dart';
-import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:auto_picker/routes.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 
 class MechanicsSignUpPage extends StatefulWidget {
@@ -33,8 +30,10 @@ class _MechanicsSignUpPageState extends State<MechanicsSignUpPage> {
         padding: EdgeInsets.all(12),
         iconSize: 40,
         alignment: Alignment.topLeft,
-        icon: const Icon(Icons.arrow_back),
-        color: AppColors.black,
+        icon: Image.asset(
+          "assets/images/back-arrow.png",
+          scale: 1.2,
+        ),
         onPressed: () {
           navigateBack(context);
         },
@@ -50,6 +49,11 @@ class _MechanicsSignUpPageState extends State<MechanicsSignUpPage> {
               text: 'Hi, Mechanics',
               textSize: 36,
               isBold: true,
+            ),
+            Container(
+              height: 200,
+              margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+              child: SvgPicture.asset('assets/images/mechanic-svgrepo-com.svg'),
             ),
             const SizedBox(
               height: 1,

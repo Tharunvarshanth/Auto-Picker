@@ -7,7 +7,7 @@ class SingleDigitField extends StatelessWidget {
   TextEditingController controller;
   SingleDigitField(
       {Key key,
-      this.borderRadius = 20,
+      this.borderRadius = 5,
       this.fontSize = 16,
       this.widthPercentage = 0.10,
       this.controller})
@@ -22,13 +22,13 @@ class SingleDigitField extends StatelessWidget {
         textAlign: TextAlign.center,
         maxLength: 1,
         keyboardType: TextInputType.number,
+        decoration: InputDecoration(
+            fillColor: Colors.grey[300],
+            border:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
         style: TextStyle(
           fontSize: fontSize,
         ),
-        decoration: InputDecoration(
-            counterText: '',
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(20))),
       ),
     );
   }

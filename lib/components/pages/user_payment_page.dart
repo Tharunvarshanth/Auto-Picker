@@ -42,10 +42,10 @@ class _UserSignUpPaymentPageState extends State<UserSignUpPaymentPage> {
   String payment;
   void initState() {
     super.initState();
-    getMechanicCharges();
+    getSignUpCharges();
   }
 
-  getMechanicCharges() async {
+  getSignUpCharges() async {
     var res = (await adminControl.getAdmin())["userSignUpPaymentCharge"];
     setState(() {
       payment = res;
@@ -60,19 +60,39 @@ class _UserSignUpPaymentPageState extends State<UserSignUpPaymentPage> {
         showDialog(
             context: context,
             builder: (context) => ItemDialogMessage(
-                icon: 'assets/images/plus-circle.svg',
-                titleText: 'Success',
-                bodyText: "successfully payment done",
-                primaryButtonText: 'Ok',
+                icon: "Payment Success!" != title
+                    ? 'assets/images/x-circle.svg'
+                    : 'assets/images/done.svg',
+                titleText: title,
+                bodyText: msg,
+                primaryButtonText: "Payment Success!" == title ? 'Ok' : "Retry",
+                secondaryButtonText:
+                    "Payment Success!" != title ? 'Go Home' : null,
+                onPressedSecondary: () {
+                  if ("Payment Success!" != title) {
+                    navigate(context, RouteGenerator.homePage);
+                  }
+                },
                 onPressedPrimary: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const GoogleLinkingPage(
-                        isLinkingPage: true,
+                  if ("Payment Success!" == title) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const GoogleLinkingPage(
+                          isLinkingPage: true,
+                        ),
                       ),
-                    ),
-                  );
+                    );
+                  } else {
+                    Navigator.pop(context, 'Cancel');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UserSignUpPaymentPage(
+                            id: widget.id, isSeller: widget.isSeller),
+                      ),
+                    );
+                  }
                 }));
       },
     );
@@ -114,6 +134,7 @@ class _UserSignUpPaymentPageState extends State<UserSignUpPaymentPage> {
         var res =
             await sellerController.updateSellersField(user.id, "isPayed", true);
       } else {
+        //mechanic
         var res = await mechanicController.updateMechanicsField(
             user.id, "isPayed", true);
       }
@@ -124,7 +145,7 @@ class _UserSignUpPaymentPageState extends State<UserSignUpPaymentPage> {
       showAlert(context, "Payment Failed", "$error");
     }, () {
       print("Thank you for your payment");
-      showAlert(context, "Thank you for your payment", "");
+      //showAlert(context, "Thank you for your payment", "");
     });
   }
 
