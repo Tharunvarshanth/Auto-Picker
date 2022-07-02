@@ -17,6 +17,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class OtpLoginPage extends StatefulWidget {
@@ -102,7 +103,6 @@ class _OtpLoginPage extends State<OtpLoginPage> {
   }
 
   Future<bool> isNumberAlreadyHaveAccount(String number) async {
-    //  var number = TESTNUMBER; //_numberController.text ;
     var res = await userController.isNumberAlreadyHaveAccount(number);
     print("res:isNumberAlreadyHaveAccount ${res}");
     if (res) {
@@ -139,6 +139,8 @@ class _OtpLoginPage extends State<OtpLoginPage> {
           isLoading = true;
         });
         auth.signInWithCredential(credential).then((value) async {
+          // ANDROID ONLY!
+          // Sign the user in (or link) with the auto-generated credential
           if (value.user != null) {
             var user = await userController.getUser((value.user.uid));
             void setOneSignalToken() async {
@@ -289,6 +291,9 @@ class _OtpLoginPage extends State<OtpLoginPage> {
                   ),
                   SizedBox(height: 10),
                   TextFormField(
+                    autofocus: true,
+                    keyboardType: TextInputType.phone,
+                    maxLength: 10,
                     decoration: const InputDecoration(
                         prefixText: '+94',
                         prefixStyle:
@@ -327,6 +332,7 @@ class _OtpLoginPage extends State<OtpLoginPage> {
                             fillRequiredFields('Phone number invalid');
                             return;
                           } else {
+                            //validate phone number submit redirect to firebase login
                             isNumberAlreadyHaveAccount(formattedNumber);
                           }
                         },

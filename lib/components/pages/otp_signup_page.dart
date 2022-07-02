@@ -6,9 +6,7 @@ import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/atoms/single_digit_field.dart';
 import 'package:auto_picker/components/pages/google_signin_login_page.dart';
-import 'package:auto_picker/components/pages/home_page_test.dart';
 import 'package:auto_picker/components/pages/user_payment_page.dart';
-import 'package:auto_picker/models/account.dart';
 import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/models/seller.dart';
 import 'package:auto_picker/models/user_model.dart';
@@ -71,7 +69,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
   }
 
   Future<bool> isNumberAlreadyHaveAccount() async {
-    var number = TESTNUMBER; //_numberController.text ;
+    var number = widget.params["phoneNumber"];
     var res = await userController.isNumberAlreadyHaveAccount(number);
     print("res:isNumberAlreadyHaveAccount ${res}");
     if (!res) {
@@ -319,7 +317,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
       timerCount = 60;
     });
     startTimer();
-    var testingNumber = TESTNUMBER;
+    var testingNumber = widget.params["phoneNumber"];
     await auth.verifyPhoneNumber(
       phoneNumber: testingNumber,
       timeout: const Duration(seconds: 60),

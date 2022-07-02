@@ -143,6 +143,7 @@ class _LoginPageState extends State<LoginPage> {
                 margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
                 child: Image.asset(
                   "assets/images/login.png",
+                  fit: BoxFit.contain,
                   scale: 0.5,
                 ),
               ),

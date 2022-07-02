@@ -201,6 +201,9 @@ class _SignUpFormState extends State<SignUpForm> {
             ),
             SizedBox(height: size.height * 0.015),
             TextFormField(
+              autofocus: true,
+              keyboardType: TextInputType.phone,
+              maxLength: 10,
               decoration: const InputDecoration(
                   prefixText: '+94',
                   prefixStyle: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
