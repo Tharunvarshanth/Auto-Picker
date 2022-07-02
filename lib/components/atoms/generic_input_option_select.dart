@@ -58,28 +58,32 @@ class GenericInputOptionSelect extends StatelessWidget {
               border: Border.all(color: AppColors.ash, width: 1),
               borderRadius: BorderRadius.circular(5),
               boxShadow: <BoxShadow>[]),
-          child: SizedBox(
+          child: Container(
+            margin: EdgeInsets.fromLTRB(15, 0, 5, 0),
             width: width,
-            child: DropdownButton<String>(
-              onTap: () => onTap,
-              isExpanded: true,
-              menuMaxHeight: 500,
-              borderRadius: BorderRadius.circular(30),
-              value: value,
-              icon: const Icon(Icons.arrow_drop_down),
-              elevation: 16,
-              style: const TextStyle(color: AppColors.blue),
-              underline: Container(),
-              onChanged: (String newValue) {
-                onValueChange(newValue);
-              },
-              items: itemList.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  enabled: enable ?? true,
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+              child: DropdownButton<String>(
+                onTap: () => onTap,
+                isExpanded: true,
+                menuMaxHeight: 500,
+                borderRadius: BorderRadius.circular(5),
+                value: value,
+                icon: const Icon(Icons.arrow_drop_down),
+                elevation: 16,
+                style: const TextStyle(color: AppColors.black),
+                underline: Container(),
+                onChanged: (String newValue) {
+                  onValueChange(newValue);
+                },
+                items: itemList.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    enabled: enable ?? true,
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
             ),
           ),
         )

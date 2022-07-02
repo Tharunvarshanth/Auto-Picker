@@ -194,7 +194,7 @@ class _SignUpFormState extends State<SignUpForm> {
             SizedBox(height: size.height * 0.020),
             GenericInputOptionCitysSelect(
               width: size.width,
-              labelText: '  City',
+              labelText: ' City',
               value: city,
               itemList: dropDownCityList,
               onValueChange: (text) => handleCity(text),
@@ -220,7 +220,7 @@ class _SignUpFormState extends State<SignUpForm> {
             SizedBox(height: size.height * 0.030),
             GenericInputOptionSelect(
               width: size.width,
-              labelText: '  Role',
+              labelText: ' Role',
               value: role,
               itemList: roleList,
               borderColor: AppColors.ash,

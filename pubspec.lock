@@ -155,6 +155,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.8"
+  dropdown_search:
+    dependency: "direct main"
+    description:
+      name: dropdown_search
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.1"
   equatable:
     dependency: "direct main"
     description:
@@ -321,6 +328,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
+  flutter_list_view:
+    dependency: transitive
+    description:
+      name: flutter_list_view
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.18"
   flutter_local_notifications:
     dependency: "direct main"
     description:
@@ -756,6 +770,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.26.0"
+  section_view:
+    dependency: "direct main"
+    description:
+      name: section_view
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.5"
   shared_preferences:
     dependency: "direct main"
     description:

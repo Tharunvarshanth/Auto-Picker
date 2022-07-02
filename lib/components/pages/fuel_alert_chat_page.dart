@@ -15,8 +15,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:section_view/section_view.dart';
 
 import 'map_page.dart';
+
+class GroupModel {
+  String date;
+  List fuelAlert;
+
+  GroupModel(this.date, this.fuelAlert);
+
+  GroupModel.fromJson(Map<String, dynamic> json) {
+    date = json["date"];
+    fuelAlert = json["fuelAlert"];
+  }
+}
 
 class FuelAlertChatPage extends StatefulWidget {
   Map<String, dynamic> params;
@@ -41,8 +55,10 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
   double nearByDistance = 10.00;
   City city;
   List<City> dropDownCityList = [];
+  List<GroupModel> data = [];
   bool dieselMsg = false;
   bool petrolMsg = false;
+  DateFormat dateFormat = DateFormat("yyyy-MM-dd");
 
   static CameraPosition _kGooglePlex = const CameraPosition(
     target: LatLng(6.9271, 79.8612),
@@ -71,17 +87,62 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
     });
   }
 
+  getFormattedTimeStamp(String time) {
+    DateFormat tileDateFormat = DateFormat("yyyy-MM-dd HH:mm");
+    DateTime tempDateTime = tileDateFormat.parse(time);
+    return tempDateTime.toString().substring(0, 16);
+  }
+
   void setData() async {
     List<dynamic> res = await fuelController.getFuelAlerts();
     if (res != null) {
-      res.forEach((element) {
-        print("Fuel Alert chat: $element");
+      data = [];
+      List<FuelAlert> tempList = [];
+      DateTime prevTimeStampe = null;
+      int i = 0;
+      for (var element in res) {
+        print("Fuel Alert element:   $element");
         FuelAlert _fuelAlert = FuelAlert.fromJson(element);
-        setState(() {
-          fuelAlertList.add(_fuelAlert);
-        });
-      });
+
+        if (i == 0) {
+          print("Fuel Alert index:   $i");
+          prevTimeStampe = dateFormat.parse(_fuelAlert.timeStamp);
+          tempList.add(_fuelAlert);
+          if (res.length == 1) {
+            setState(() {
+              data.add(GroupModel(
+                  prevTimeStampe.toString().substring(0, 10), tempList));
+            });
+          }
+          i++;
+          continue;
+        }
+
+        DateTime tempDateTime = dateFormat.parse(_fuelAlert.timeStamp);
+        if (!tempDateTime.isAtSameMomentAs(prevTimeStampe)) {
+          setState(() {
+            data.add(GroupModel(
+                prevTimeStampe.toString().substring(0, 10), tempList));
+          });
+
+          prevTimeStampe = dateFormat.parse(_fuelAlert.timeStamp);
+          tempList = [];
+          tempList.add(_fuelAlert);
+        } else {
+          tempList.add(_fuelAlert);
+        }
+        ++i;
+
+        if (i == res.length - 1) {
+          setState(() {
+            data.add(GroupModel(
+                prevTimeStampe.toString().substring(0, 10), tempList));
+          });
+        }
+      }
     }
+
+    //set city
     var citys = await readCityJsonData();
     setState(() {
       dropDownCityList = citys;
@@ -198,7 +259,7 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
 
   void addMessage() {
     var alert = FuelAlert(
-        DateTime.now().toUtc().toString(),
+        DateTime.now().toLocal().toString(),
         messageController.text,
         '',
         widget.params["location-lat"] ?? '',
@@ -253,62 +314,33 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
       body: SafeArea(
         child: Padding(
           padding: !isShowMap
-              ? const EdgeInsets.symmetric(horizontal: 10, vertical: 20)
+              ? const EdgeInsets.fromLTRB(5, 5, 5, 80)
               : const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
           child: Stack(children: <Widget>[
             !isShowMap
-                ? fuelAlertList.length != 0
-                    ? ListView.builder(
-                        controller: _controller,
-                        itemCount: fuelAlertList.length,
-                        itemBuilder: (context, index) {
-                          return FuelAlertTile(
-                              onView: () =>
-                                  viewPetrolStationLoc(fuelAlertList[index]),
-                              timeStamp: fuelAlertList[index]?.timeStamp,
-                              message: fuelAlertList[index]?.message,
-                              senderId: fuelAlertList[index]?.senderId,
-                              fillingStationLat:
-                                  fuelAlertList[index]?.fillingStationLat,
-                              fillingStationLon:
-                                  fuelAlertList[index]?.fillingStationLon,
-                              petrol: fuelAlertList[index]?.petrol,
-                              diesel: fuelAlertList[index]?.diesel,
-                              city: fuelAlertList[index]?.city);
-                        },
-                      )
+                ? data.length != 0
+                    ? SectionView<GroupModel, FuelAlert>(
+                        source: data,
+                        onFetchListData: (header) => header.fuelAlert,
+                        headerBuilder: getDefaultHeaderBuilder((d) => d.date,
+                            bkColor: AppColors.blue,
+                            style: const TextStyle(
+                                fontSize: 18, color: Colors.white)),
+                        itemBuilder: (context, itemData, index, headerData,
+                                headerIndex) =>
+                            FuelAlertTile(
+                                onView: () => viewPetrolStationLoc(itemData),
+                                timeStamp:
+                                    getFormattedTimeStamp(itemData?.timeStamp),
+                                message: itemData?.message,
+                                senderId: itemData?.senderId,
+                                fillingStationLat: itemData?.fillingStationLat,
+                                fillingStationLon: itemData?.fillingStationLon,
+                                petrol: itemData?.petrol,
+                                diesel: itemData?.diesel,
+                                city: itemData?.city))
                     : const Text('No Messages')
-                : mapWindow(),
-            if (!isShowMap)
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: Container(
-                  padding: const EdgeInsets.only(left: 10, bottom: 10, top: 10),
-                  height: 60,
-                  width: double.infinity,
-                  color: Colors.white,
-                  child: Row(
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () => createMessage(context),
-                        child: Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                            color: Colors.lightBlue,
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: const Icon(
-                            Icons.add,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
+                : mapWindow()
           ]),
         ),
       ),
@@ -322,7 +354,14 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
               label: const Text('Close the map'),
               icon: Icon(Icons.map),
             )
-          : null,
+          : FloatingActionButton(
+              onPressed: () => createMessage(context),
+              child: const Icon(
+                Icons.edit,
+                color: Colors.white,
+              ),
+            ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
