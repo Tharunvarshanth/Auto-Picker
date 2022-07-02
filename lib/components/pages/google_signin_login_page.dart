@@ -1,8 +1,9 @@
 import 'package:auto_picker/components/atoms/generic_icon_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
+import 'package:auto_picker/components/ui/backgroud.dart';
 import 'package:auto_picker/routes.dart';
-import 'package:auto_picker/services/product_controller.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:auto_picker/services/user_controller.dart';
 import 'package:auto_picker/store/cache/sharedPreferences/user_info.dart';
 import 'package:auto_picker/themes/colors.dart';
@@ -30,6 +31,7 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
     });
   }
 
+  //first time sign up
   linkEmailGoogle() async {
     //get currently logged in user
     var existingUser = FirebaseAuth.instance.currentUser;
@@ -65,7 +67,7 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
           context: context,
           builder: (context) => ItemDialogMessage(
                 icon: 'assets/images/x-circle.svg',
-                titleText: 'Sign With Email Failed',
+                titleText: 'Linking With Email Failed',
                 bodyText: "",
                 primaryButtonText: 'Ok',
                 onPressedPrimary: () => Navigator.pop(context),
@@ -75,7 +77,11 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
 
   signInWithGoogle() async {
     // Trigger the authentication flow
-    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAccount googleUser =
+        await GoogleSignIn().signIn().catchError((onError) => print(onError));
+    ;
+// Return null to prevent further exceptions if googleSignInAccount is null
+    if (googleUser == null) return null;
 
     // Obtain the auth details from the request
     final GoogleSignInAuthentication googleAuth =
@@ -96,55 +102,124 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
     if (userCred != null) {
       navigate(context, RouteGenerator.homePage);
     } else {
-      //error popup
+      showDialog(
+          context: context,
+          builder: (context) => ItemDialogMessage(
+                icon: 'assets/images/x-circle.svg',
+                titleText: 'Sign In With Email Failed',
+                bodyText: "",
+                primaryButtonText: 'Ok',
+                onPressedPrimary: () => Navigator.pop(context),
+              ));
     }
   }
 
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
       child: Stack(children: [
         isLinkingPage
-            ? Align(
-                alignment: Alignment.center,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+            ? Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    GenericText(
-                      text: 'Email Linking',
-                      isBold: true,
+                    Text(
+                      "Hello There!",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
                     ),
-                    const SizedBox(
-                      height: 2,
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: Image.asset(
+                        'assets/images/google_patches.png',
+                        width: MediaQuery.of(context).size.width,
+                      ),
                     ),
-                    GenericText(
-                      text:
-                          'Link your google account with your mobile number incase if you have not sim in your device you can login with your google account',
+                    SizedBox(
+                      height: 30,
                     ),
-                    const SizedBox(
-                      height: 20,
+                    const Center(
+                      child: Text(
+                        "Link your google account with your mobile number incase if you have not sim in your device you can login with your google account",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                      ),
                     ),
-                    GenericIconButton(
-                      backgroundColor: AppColors.white,
-                      textColor: AppColors.black,
-                      shadowColor: AppColors.ash,
-                      text: 'Link with Google Account',
-                      onPressed: () => linkEmailGoogle(),
-                      iconLeft: 'assets/images/at-sign.svg',
-                    ),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
+                        child: Container(
+                            width: 250,
+                            height: 50,
+                            child: SignInButton(
+                              Buttons.Google,
+                              mini: true,
+                              text: "Sign up with Google",
+                              onPressed: () => linkEmailGoogle(),
+                            )),
+                      ),
+                    )
                   ],
-                ),
-              )
-            : Center(
-                child: GenericIconButton(
-                  backgroundColor: AppColors.white,
-                  textColor: AppColors.black,
-                  shadowColor: AppColors.ash,
-                  text: 'Login with Account',
-                  onPressed: () => signInWithGoogle(),
-                  iconLeft: 'assets/images/at-sign.svg',
-                ),
-              ),
+                )
+              ])
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                    IconButton(
+                      padding: EdgeInsets.fromLTRB(15, 15, 0, 0),
+                      iconSize: 40,
+                      alignment: Alignment.topLeft,
+                      icon: Image.asset(
+                        "assets/images/back-arrow.png",
+                        scale: 1.2,
+                      ),
+                      onPressed: () {
+                        navigateBack(context);
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: Image.asset(
+                        'assets/images/google_patches.png',
+                        width: MediaQuery.of(context).size.width,
+                      ),
+                    ),
+                    const Center(
+                      child: Text(
+                        "Sign In With Google Account",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
+                        child: Container(
+                          width: 250,
+                          height: 50,
+                          child: SignInButton(
+                            Buttons.Google,
+                            text: "Login with Account",
+                            onPressed: () => signInWithGoogle(),
+                          ),
+                        ),
+                      ),
+                    )
+                  ]),
       ]),
     ));
   }
