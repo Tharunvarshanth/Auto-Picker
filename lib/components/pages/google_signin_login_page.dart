@@ -1,7 +1,6 @@
-import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/generic_icon_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
-import 'package:auto_picker/models/product.dart';
+import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/routes.dart';
 import 'package:auto_picker/services/product_controller.dart';
 import 'package:auto_picker/services/user_controller.dart';
@@ -9,7 +8,6 @@ import 'package:auto_picker/store/cache/sharedPreferences/user_info.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -63,6 +61,15 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
       navigate(context, RouteGenerator.homePage);
     } else {
       //error popup
+      showDialog(
+          context: context,
+          builder: (context) => ItemDialogMessage(
+                icon: 'assets/images/x-circle.svg',
+                titleText: 'Sign With Email Failed',
+                bodyText: "",
+                primaryButtonText: 'Ok',
+                onPressedPrimary: () => Navigator.pop(context),
+              ));
     }
   }
 
