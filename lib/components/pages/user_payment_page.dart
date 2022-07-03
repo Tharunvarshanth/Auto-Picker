@@ -1,25 +1,19 @@
 import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
-import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/pages/google_signin_login_page.dart';
-import 'package:auto_picker/models/mechanic.dart';
-import 'package:auto_picker/models/product.dart';
 import 'package:auto_picker/models/user_model.dart';
 import 'package:auto_picker/routes.dart';
 import 'package:auto_picker/services/admin_controller.dart';
 import 'package:auto_picker/services/mechanic_controller.dart';
 import 'package:auto_picker/services/payhere_services.dart';
-import 'package:auto_picker/services/product_controller.dart';
 import 'package:auto_picker/services/seller_controller.dart';
-import 'package:auto_picker/services/spare_advertisement_controller.dart';
 import 'package:auto_picker/services/user_controller.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/constands.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:payhere_mobilesdk_flutter/payhere_mobilesdk_flutter.dart';
 

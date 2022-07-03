@@ -60,13 +60,35 @@ class _ProductPaymentPageState extends State<ProductPaymentPage> {
         showDialog(
             context: context,
             builder: (context) => ItemDialogMessage(
-                icon: 'assets/images/done.svg',
-                titleText: 'Success',
-                bodyText: "successfully payment done",
-                primaryButtonText: 'Ok',
-                onPressedPrimary: () {
-                  navigate(context, RouteGenerator.homePage);
-                }));
+                  icon: title == 'Payment Success!'
+                      ? 'assets/images/done.svg'
+                      : 'assets/images/x-circle.svg',
+                  titleText: title,
+                  bodyText: msg,
+                  primaryButtonText:
+                      "Payment Success!" == title ? 'Ok' : "Retry",
+                  onPressedPrimary: () {
+                    if ("Payment Success!" == title) {
+                      navigate(context, RouteGenerator.homePage);
+                      return;
+                    }
+                    Navigator.pop(context, 'Cancel');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductPaymentPage(
+                            productId: widget.productId,
+                          ),
+                        ));
+                  },
+                  secondaryButtonText:
+                      "Payment Success!" != title ? 'Go Home' : null,
+                  onPressedSecondary: () {
+                    if ("Payment Success!" != title) {
+                      navigate(context, RouteGenerator.homePage);
+                    }
+                  },
+                ));
       },
     );
 
@@ -110,10 +132,7 @@ class _ProductPaymentPageState extends State<ProductPaymentPage> {
     }, (error) {
       print("One Time Payment Failed. Error: $error");
       showAlert(context, "Payment Failed", "$error");
-    }, () {
-      print("Thank you for your payment");
-      showAlert(context, "Thank you for your payment", "");
-    });
+    }, () {});
   }
 
   Widget build(BuildContext context) {
@@ -132,7 +151,7 @@ class _ProductPaymentPageState extends State<ProductPaymentPage> {
               textAlign: TextAlign.center,
               isBold: true,
               textSize: 24,
-              text: 'Your account charge $payment',
+              text: 'Your charge is $payment',
             ),
             GenericButton(
               text: 'Pay Now',

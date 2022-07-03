@@ -1,13 +1,10 @@
 import 'package:auto_picker/components/atoms/custom_app_bar.dart';
-import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/atoms/product_tile.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:auto_picker/components/pages/product_page.dart';
 import 'package:auto_picker/models/product.dart';
 import 'package:auto_picker/services/product_controller.dart';
 import 'package:auto_picker/themes/colors.dart';
-import 'package:auto_picker/utilities/constands.dart';
-import 'package:auto_picker/utilities/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -93,11 +90,11 @@ class _MyOwnProductListingPageState extends State<MyOwnProductListingPage> {
         : SafeArea(
             child: Scaffold(
             appBar: CustomAppBar(
-              title: 'Product Listing',
+              title: 'My Product Listing',
               isLogged: isLogged,
               showBackButton: true,
             ),
-            bottomNavigationBar: Footer(),
+            bottomNavigationBar: Footer(isLogged: true),
             body: Container(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               child: ListView.builder(

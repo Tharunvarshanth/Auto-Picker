@@ -6,6 +6,7 @@ import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/atoms/popup_modal_order.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:auto_picker/components/pages/edit_existing_product_page.dart';
+import 'package:auto_picker/components/pages/product_payment_page.dart';
 import 'package:auto_picker/models/carousel_data.dart';
 import 'package:auto_picker/models/notification.dart';
 import 'package:auto_picker/models/order.dart';
@@ -200,7 +201,9 @@ class _ProductPageState extends State<ProductPage> {
         title: 'Product',
         showBackButton: true,
       ),
-      bottomNavigationBar: Footer(),
+      bottomNavigationBar: Footer(
+        isLogged: true,
+      ),
       body: isLoading
           ? const Center(
               child: CircularProgressIndicator(
@@ -208,7 +211,7 @@ class _ProductPageState extends State<ProductPage> {
               ),
             )
           : Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.fromLTRB(8.0, 8, 8, 20),
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -331,7 +334,7 @@ class _ProductPageState extends State<ProductPage> {
                                 backgroundColor: Colors.blue,
                                 borderRadius: 14,
                               ),
-                              GenericButton(
+                              /* GenericButton(
                                 text: 'CHAT',
                                 isBold: true,
                                 paddingHorizontal: 4,
@@ -342,7 +345,7 @@ class _ProductPageState extends State<ProductPage> {
                                 textColor: Colors.blue,
                                 shadowColor: Colors.transparent,
                                 borderRadius: 14,
-                              ),
+                              ),*/
                               GenericButton(
                                 text: 'ORDER',
                                 isBold: true,
@@ -390,6 +393,26 @@ class _ProductPageState extends State<ProductPage> {
                                 shadowColor: Colors.transparent,
                                 borderRadius: 14,
                               ),
+                              if (!widget.product.isPayed)
+                                GenericButton(
+                                  text: 'Pay',
+                                  isBold: true,
+                                  paddingHorizontal: 4,
+                                  paddingVertical: 2,
+                                  onPressed: () => {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProductPaymentPage(
+                                            productId: widget.product.pId,
+                                          ),
+                                        ))
+                                  },
+                                  backgroundColor: Colors.blue,
+                                  shadowColor: Colors.transparent,
+                                  borderRadius: 14,
+                                ),
                             ],
                             alignment: WrapAlignment.center,
                           )

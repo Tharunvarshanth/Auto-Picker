@@ -58,13 +58,37 @@ class _AdvertisementPaymentPageState extends State<AdvertisementPaymentPage> {
         showDialog(
             context: context,
             builder: (context) => ItemDialogMessage(
-                  icon: 'assets/images/done.svg',
-                  titleText: title,
-                  bodyText: msg,
-                  primaryButtonText: 'Ok',
-                  onPressedPrimary: () =>
-                      navigate(context, RouteGenerator.homePage),
-                ));
+                icon: title == 'Payment Success!'
+                    ? 'assets/images/done.svg'
+                    : 'assets/images/x-circle.svg',
+                titleText: "Payment Success!" == title ? 'Ok' : "Retry",
+                bodyText: msg,
+                primaryButtonText: 'Ok',
+                onPressedPrimary: () {
+                  if ("Payment Success!" == title) {
+                    navigate(context, RouteGenerator.homePage);
+                    return;
+                  }
+                  Navigator.pop(context, 'Cancel');
+                  var params = {
+                    'adId': widget.params["adId"],
+                    'item': widget.params["item"]
+                  };
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AdvertisementPaymentPage(
+                          params: params,
+                        ),
+                      ));
+                },
+                secondaryButtonText:
+                    "Payment Success!" != title ? 'Go Home' : null,
+                onPressedSecondary: () {
+                  if ("Payment Success!" != title) {
+                    navigate(context, RouteGenerator.homePage);
+                  }
+                }));
       },
     );
 

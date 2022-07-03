@@ -22,7 +22,7 @@ class _AddNewAdvertisementPageState extends State<AddNewAdvertisementPage> {
           showBackButton: true,
         ),
         body: SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(10, 75, 10, 100),
+            padding: EdgeInsets.fromLTRB(10, 25, 10, 100),
             child: ProductAdvertisementAddForm()));
   }
 }
