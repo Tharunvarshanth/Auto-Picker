@@ -1,4 +1,4 @@
-import 'package:auto_picker/components/atoms/custom_app_bar%20copy.dart';
+import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/generic_icon_button.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_select.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';

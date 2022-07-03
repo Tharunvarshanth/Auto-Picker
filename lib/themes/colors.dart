@@ -13,7 +13,7 @@ class AppColors {
   static const Color red = Color(0xFFA4150A);
   static const Color blue = Color(0xFF2F80ED);
   static const Color ashWhite = Color(0xFFE3E7EB);
-  static const Color primaryVariant = Color(0xFF2F80ED);
+  static const Color primaryVariant = Color(0xFF0D47A1); // Color(0xFF2F80ED);
   static const Color black = Color(0xFF323F4B);
   static const Color secondaryVariant = Color(0xFFF5F7F4);
   static const Color ash = Color(0xFFCBD2D9);
