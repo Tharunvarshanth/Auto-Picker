@@ -9,6 +9,7 @@ import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_picker/routes.dart';
+import 'package:flutter_svg/svg.dart';
 
 class SellerEditPage extends StatefulWidget {
   UserModel userModel;
@@ -23,18 +24,21 @@ class _SellerEditPageState extends State<SellerEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-            child: Stack(children: [
+            child: SingleChildScrollView(
+                child: Stack(children: [
       IconButton(
         padding: EdgeInsets.all(12),
         iconSize: 40,
         alignment: Alignment.topLeft,
-        icon: const Icon(Icons.arrow_back),
-        color: AppColors.black,
+        icon: Image.asset(
+          "assets/images/back-arrow.png",
+          scale: 1.2,
+        ),
         onPressed: () {
           navigateBack(context);
         },
       ),
-      SingleChildScrollView(
+      Padding(
         padding: EdgeInsets.fromLTRB(20, 75, 10, 50),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -42,15 +46,15 @@ class _SellerEditPageState extends State<SellerEditPage> {
           mainAxisSize: MainAxisSize.max,
           children: [
             GenericText(
-              textAlign: TextAlign.left,
-              text: 'Required *',
-              color: AppColors.red,
-              isBold: true,
-            ),
-            GenericText(
               text: 'Hi, Seller',
               textSize: 36,
               isBold: true,
+            ),
+            Container(
+              height: 200,
+              margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+              child:
+                  SvgPicture.asset('assets/images/online-shop-svgrepo-com.svg'),
             ),
             GenericText(
               text: 'You can edit shop related data',
@@ -63,6 +67,6 @@ class _SellerEditPageState extends State<SellerEditPage> {
           ],
         ),
       ),
-    ])));
+    ]))));
   }
 }

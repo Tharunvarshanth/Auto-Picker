@@ -107,7 +107,7 @@ class _SellerSignUpFormState extends State<SellerSignUpForm> {
             SizedBox(height: size.height * 0.015),
             TextFormField(
               keyboardType: TextInputType.phone,
-              maxLength: 10,
+              maxLength: 11,
               decoration: const InputDecoration(
                   prefixText: '+94',
                   prefixStyle: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),

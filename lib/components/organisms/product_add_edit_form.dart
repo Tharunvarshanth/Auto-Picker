@@ -165,7 +165,7 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
           context: context,
           builder: (context) => ItemDialogMessage(
                 icon: 'assets/images/done.svg',
-                titleText: 'Done ok',
+                titleText: 'Succssfully updated',
                 bodyText: "",
                 primaryButtonText: 'Ok',
                 onPressedPrimary: () =>

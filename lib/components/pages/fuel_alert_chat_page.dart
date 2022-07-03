@@ -178,9 +178,6 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
                         const SizedBox(
                           height: 10,
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
                         ListTile(
                           title: const Text('Diesel'),
                           leading: Checkbox(

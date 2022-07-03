@@ -52,6 +52,7 @@ class _MenuMoreState extends State<MenuMorePage> {
         showBackButton: true,
       ),
       bottomNavigationBar: Footer(
+        currentIndex: isLogged ? 3 : 1,
         isLogged: isLogged,
       ),
       body: Padding(

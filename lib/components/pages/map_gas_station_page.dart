@@ -42,7 +42,7 @@ class MapGasStationPageState extends State<MapGasStationPage> {
   }
 
   _getLocation() async {
-    var location = new Location();
+    var location = Location();
 
     try {
       var currentLocation = await location.getLocation();
@@ -72,7 +72,7 @@ class MapGasStationPageState extends State<MapGasStationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
@@ -81,7 +81,8 @@ class MapGasStationPageState extends State<MapGasStationPage> {
                 Expanded(
                     child: TextFormField(
                   controller: searchController,
-                  decoration: InputDecoration(hintText: 'Search gas station'),
+                  decoration:
+                      const InputDecoration(hintText: 'Search gas station'),
                   onChanged: (text) {},
                 )),
                 IconButton(
@@ -90,7 +91,7 @@ class MapGasStationPageState extends State<MapGasStationPage> {
                           .getPlace(searchController.text);
                       _goToPlaces(place);
                     },
-                    icon: Icon(Icons.search))
+                    icon: const Icon(Icons.search))
               ],
             ),
             Expanded(
