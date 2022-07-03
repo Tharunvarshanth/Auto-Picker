@@ -122,7 +122,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               height: 40,
                               child: CircularProgressIndicator(),
                             ),
-                            backgroundColor: AppColors.green,
+                            backgroundColor: AppColors.themePrimary,
                           ),
                           Container(
                             padding: EdgeInsets.all(10),

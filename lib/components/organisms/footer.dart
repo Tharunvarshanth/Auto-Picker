@@ -48,10 +48,10 @@ class Footer extends StatelessWidget {
       onTap: (value) {
         onTap == null ? onTapDefault(value, context) : onTap(value);
       },
-      buttonBackgroundColor: Colors.blue[900],
+      buttonBackgroundColor: AppColors.themePrimary,
       index: currentIndex,
       height: 60.0,
-      color: Colors.blue[900],
+      color: AppColors.themePrimary,
       animationCurve: Curves.easeInOut,
       animationDuration: const Duration(milliseconds: 600),
       backgroundColor: Colors.white,

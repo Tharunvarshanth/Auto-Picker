@@ -18,4 +18,5 @@ class AppColors {
   static const Color secondaryVariant = Color(0xFFF5F7F4);
   static const Color ash = Color(0xFFCBD2D9);
   static const Color darkBlue = Color(0xFF093269);
+  static const Color themePrimary = Color(0xFF0D47A1);
 }
