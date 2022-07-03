@@ -1,7 +1,4 @@
-// ignore_for_file: file_names
-
 import 'package:auto_picker/components/atoms/generic_text.dart';
-import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/atoms/image_tile.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/pages/mechanic_profile_page.dart';
@@ -81,6 +78,7 @@ class _MechanicsHorizontalItemScrollState
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        /*
         IconButton(
           onPressed: () {
             widget.controller.animateTo(
@@ -88,14 +86,19 @@ class _MechanicsHorizontalItemScrollState
                 duration: Duration(milliseconds: 200),
                 curve: Curves.ease);
           },
-          icon: const Icon(Icons.arrow_left),
-        ),
+          icon: const Icon(
+            Icons.arrow_left,
+            size: 36,
+          ),
+        ),*/
         Expanded(
-          flex: 5,
+          flex: 3,
           child: SizedBox(
-              height: 100,
+              height: 90,
               child: (widget.ImageTileList.length > 0)
-                  ? ListView.builder(
+                  ? ListView.separated(
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      separatorBuilder: (context, index) => SizedBox(width: 0),
                       scrollDirection: Axis.horizontal,
                       itemCount: widget.ImageTileList.length,
                       itemBuilder: (context, index) {
@@ -112,14 +115,14 @@ class _MechanicsHorizontalItemScrollState
                       text: 'No data',
                     )),
         ),
-        IconButton(
+        /*IconButton(
             onPressed: () {
               widget.controller.animateTo(
                   widget.controller.offset + widget.onPressOffsetChange,
                   duration: Duration(milliseconds: 200),
                   curve: Curves.ease);
             },
-            icon: Icon(Icons.arrow_right)),
+            icon: Icon(Icons.arrow_right)),*/
       ],
     );
   }
