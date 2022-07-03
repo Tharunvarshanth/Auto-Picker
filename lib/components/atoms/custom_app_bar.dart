@@ -21,6 +21,7 @@ class _AppBarState extends State<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      backgroundColor: AppColors.themePrimary,
       centerTitle: true,
       title: Text(widget.title),
       automaticallyImplyLeading: widget.showBackButton,
