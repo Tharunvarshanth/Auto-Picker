@@ -189,7 +189,7 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
           context: context,
           builder: (context) => ItemDialogMessage(
                 icon: 'assets/images/x-circle.svg',
-                titleText: 'Need to Signup',
+                titleText: 'Need to Signin',
                 bodyText:
                     "Auto picker terms & conditions without an account user's cann't see informations",
                 primaryButtonText: 'Ok',

@@ -17,7 +17,8 @@ class _SellerSignUpPageState extends State<SellerSignUpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-            child: Stack(children: [
+            child: SingleChildScrollView(
+                child: Stack(children: [
       IconButton(
         padding: EdgeInsets.all(12),
         iconSize: 40,
@@ -30,7 +31,7 @@ class _SellerSignUpPageState extends State<SellerSignUpPage> {
           navigateBack(context);
         },
       ),
-      SingleChildScrollView(
+      Padding(
         padding: EdgeInsets.fromLTRB(20, 75, 10, 50),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -66,6 +67,6 @@ class _SellerSignUpPageState extends State<SellerSignUpPage> {
           ],
         ),
       ),
-    ])));
+    ]))));
   }
 }

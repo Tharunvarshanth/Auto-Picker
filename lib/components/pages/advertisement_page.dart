@@ -44,6 +44,9 @@ class _AdvertisementPageState extends State<AdvertisementPage> {
   void initState() {
     super.initState();
 // Check for phone call support.
+    setState(() {
+      isLogged = _auth.currentUser != null;
+    });
     canLaunch('tel:123').then((bool result) {
       setState(() {
         _hasCallSupport = result;
@@ -127,11 +130,14 @@ class _AdvertisementPageState extends State<AdvertisementPage> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
         title: 'Advertisement',
         showBackButton: true,
+        isLogged: isLogged,
       ),
-      bottomNavigationBar: Footer(),
+      bottomNavigationBar: Footer(
+        isLogged: isLogged,
+      ),
       body: isLoading
           ? const Center(
               child: CircularProgressIndicator(
@@ -170,10 +176,6 @@ class _AdvertisementPageState extends State<AdvertisementPage> {
                                 !widget.advertisement.isPaymentDone)
                               GenericText(
                                   text: 'Payment not done', textSize: 18),
-                            GenericTextButton(
-                              text: 'Click here for payment',
-                              onPressed: () => paymentPage(),
-                            )
                           ],
                         ),
                       ),
@@ -185,7 +187,7 @@ class _AdvertisementPageState extends State<AdvertisementPage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             GenericText(
-                                text: "Price  :",
+                                text: "Price  : ",
                                 textAlign: TextAlign.left,
                                 textSize: 18),
                             GenericText(
@@ -205,13 +207,13 @@ class _AdvertisementPageState extends State<AdvertisementPage> {
                               text: "Description  : ",
                               textAlign: TextAlign.left,
                               textSize: 18,
-                              maxLines: 2,
                             ),
-                            GenericText(
-                              text: "${widget.advertisement.description}",
-                              textAlign: TextAlign.left,
-                              textSize: 18,
-                            ),
+                            Flexible(
+                                child: GenericText(
+                                    text: "${widget.advertisement.description}",
+                                    textAlign: TextAlign.left,
+                                    textSize: 18,
+                                    maxLines: 3)),
                           ],
                         ),
                         Divider(
@@ -274,7 +276,7 @@ class _AdvertisementPageState extends State<AdvertisementPage> {
                                 backgroundColor: Colors.blue,
                                 borderRadius: 14,
                               ),
-                              GenericButton(
+                              /* GenericButton(
                                 text: 'CHAT',
                                 isBold: true,
                                 paddingHorizontal: 4,
@@ -285,7 +287,7 @@ class _AdvertisementPageState extends State<AdvertisementPage> {
                                 textColor: Colors.blue,
                                 shadowColor: Colors.transparent,
                                 borderRadius: 14,
-                              ),
+                              ),*/
                             ],
                             alignment: WrapAlignment.center,
                           )
@@ -324,6 +326,30 @@ class _AdvertisementPageState extends State<AdvertisementPage> {
                                 shadowColor: Colors.transparent,
                                 borderRadius: 14,
                               ),
+                              if (!widget.advertisement.isPaymentDone)
+                                GenericButton(
+                                  text: 'Pay',
+                                  isBold: true,
+                                  paddingHorizontal: 4,
+                                  paddingVertical: 2,
+                                  onPressed: () {
+                                    var params = {
+                                      'adId': widget.advertisement.aId,
+                                      'item': widget.advertisement.title
+                                    };
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              AdvertisementPaymentPage(
+                                            params: params,
+                                          ),
+                                        ));
+                                  },
+                                  backgroundColor: Colors.blue,
+                                  shadowColor: Colors.transparent,
+                                  borderRadius: 14,
+                                ),
                             ],
                             alignment: WrapAlignment.center,
                           )

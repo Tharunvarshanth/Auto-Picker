@@ -25,7 +25,8 @@ class _MechanicsSignUpPageState extends State<MechanicsSignUpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-            child: Stack(children: [
+            child: SingleChildScrollView(
+                child: Stack(children: [
       IconButton(
         padding: EdgeInsets.all(12),
         iconSize: 40,
@@ -38,7 +39,7 @@ class _MechanicsSignUpPageState extends State<MechanicsSignUpPage> {
           navigateBack(context);
         },
       ),
-      SingleChildScrollView(
+      Padding(
         padding: EdgeInsets.fromLTRB(20, 75, 10, 50),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -65,6 +66,6 @@ class _MechanicsSignUpPageState extends State<MechanicsSignUpPage> {
           ],
         ),
       ),
-    ])));
+    ]))));
   }
 }

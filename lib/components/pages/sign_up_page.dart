@@ -34,9 +34,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         scale: 0.5,
                       ),
                     ),
-                    // SizedBox(
-                    //   height: size.height * 0.015,
-                    // ),
                     Text(
                       "Sign up",
                       style: TextStyle(

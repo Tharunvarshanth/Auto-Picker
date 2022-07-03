@@ -26,6 +26,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import '../../routes.dart';
+import 'advertisement_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage();
@@ -138,11 +139,11 @@ class _HomePageState extends State<HomePage> {
     QuerySnapshot res = await advertisementController.getAdvertisments();
     await asyncForEach(res, (SpareAdvertisement list) async {
       if (list != null) {
-        print("HomePagesortDate: ${list.aId}");
+        print("HomePage Add ${list.aId}");
 
         if (list.isPaymentDone) {
           if (DateTime.parse(list.endDate).isAfter(DateTime.now())) {
-            print("HomePagesortDate: ${list}");
+            // print("HomePagesortDate: ${list}");
             setState(() {
               advertisementList.add(list);
             });
@@ -197,20 +198,21 @@ class _HomePageState extends State<HomePage> {
   }
 
   void navigateToProductPage(int index) {
+    var isOwner =
+        productList[index].uid == _auth.currentUser.uid ? true : false;
     if (isLogged) {
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ProductPage(
-              product: productList[index],
-            ),
+            builder: (context) =>
+                ProductPage(product: productList[index], isOwner: isOwner),
           ));
     } else {
       showDialog(
           context: context,
           builder: (context) => ItemDialogMessage(
                 icon: 'assets/images/x-circle.svg',
-                titleText: 'Need to Signup',
+                titleText: 'Need to Signin',
                 bodyText:
                     "Auto picker terms & conditions without an account user's cann't see detail view",
                 primaryButtonText: 'Ok',
@@ -255,6 +257,33 @@ class _HomePageState extends State<HomePage> {
     //redirect
     userInfo.clearValue();
     _auth.signOut().then((value) => navigate(context, RouteGenerator.homePage));
+  }
+
+  void navigateToAdvertisementPage(int index) {
+    var isOwner =
+        advertisementList[index].uid == _auth.currentUser.uid ? true : false;
+    print("advert");
+    if (isLogged) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AdvertisementPage(
+              advertisement: advertisementList[index],
+              isOwner: isOwner,
+            ),
+          ));
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) => ItemDialogMessage(
+                icon: 'assets/images/x-circle.svg',
+                titleText: 'Need to Signin',
+                bodyText:
+                    "Auto picker terms & conditions without an account user's cann't see detail view",
+                primaryButtonText: 'Ok',
+                onPressedPrimary: () => Navigator.pop(context, 'Cancel'),
+              ));
+    }
   }
 
   @override
@@ -302,7 +331,7 @@ class _HomePageState extends State<HomePage> {
                                       context: context,
                                       builder: (context) => ItemDialogMessage(
                                             icon: 'assets/images/x-circle.svg',
-                                            titleText: 'Need to Signup',
+                                            titleText: 'Need to Signin',
                                             bodyText:
                                                 "Auto picker terms & conditions without an account user's cann't see detail view",
                                             primaryButtonText: 'Ok',
@@ -325,7 +354,7 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(
                         height: 20,
                       ),
-                      if (advertisementList.length > 0)
+                      if (advertisementList.isNotEmpty)
                         Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -335,7 +364,8 @@ class _HomePageState extends State<HomePage> {
                                 textSize: 24,
                               ),
                               GenericTextButton(
-                                color: AppColors.Blue,
+                                isBold: true,
+                                color: AppColors.darkBlue,
                                 text: 'See All',
                                 onPressed: () {
                                   navigate(context,
@@ -346,8 +376,12 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(
                         height: 10,
                       ),
-                      if (advertisementList.length > 0)
-                        CustomCarouselAdvertisement(items: advertisementList),
+                      if (advertisementList.isNotEmpty)
+                        CustomCarouselAdvertisement(
+                          items: advertisementList,
+                          onPressedAd: (index) =>
+                              navigateToAdvertisementPage(index),
+                        ),
                       const SizedBox(
                         height: 20,
                       ),
@@ -360,8 +394,9 @@ class _HomePageState extends State<HomePage> {
                               textSize: 24,
                             ),
                             GenericTextButton(
-                              color: AppColors.Blue,
-                              text: 'See All',
+                              text: "See All",
+                              isBold: true,
+                              color: AppColors.darkBlue,
                               onPressed: () {
                                 navigate(context,
                                     RouteGenerator.productsListingPage);

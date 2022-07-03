@@ -87,9 +87,7 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
     if (res != null) {
       var pRes = await productController.updateProduct(
           existingUser.currentUser.uid, res, 'pId', res);
-      print("recent $res");
       List<String> imageList = await uploadFiles(images, res);
-      print("imageList ${imageList}");
       if (await productController.updateProduct(
           existingUser.currentUser.uid, res, 'imagesList', imageList)) {
         showDialog(
@@ -140,7 +138,7 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
         context: context,
         builder: (context) => ItemDialogMessage(
               icon: 'assets/images/x-circle.svg',
-              titleText: 'Fill All Required Fields',
+              titleText: 'Fill Required Fields',
               bodyText: "",
               primaryButtonText: 'Ok',
               onPressedPrimary: () => Navigator.pop(context),
@@ -256,9 +254,6 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
       error = e.toString();
     }
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
     if (!mounted) return;
     setState(() {
       images = resultList;
@@ -301,30 +296,77 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
         key: _formKey,
         child: Column(
           children: <Widget>[
+            Container(
+              height: 200,
+              margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+              child: Image.asset(
+                "assets/images/customer-service.png",
+                scale: 0.5,
+              ),
+            ),
+            SizedBox(height: size.height * 0.020),
+            const Text(
+              "Add Product",
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+              ),
+            ),
+            SizedBox(
+              height: size.height * 0.015,
+            ),
             GenericText(
               textAlign: TextAlign.left,
               text: 'Required *',
               color: AppColors.red,
               isBold: true,
             ),
-            GenericTextField(
+            TextFormField(
               controller: productTitleController,
-              labelText: 'Product Title *',
-              hintText: "Front Bumper",
-              borderColor: AppColors.ash,
+              decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'Product Title *',
+                  hintText: "Front Bumper",
+                  labelStyle: TextStyle(fontSize: 15)),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter Your Address';
+                }
+                return null;
+              },
             ),
             SizedBox(height: size.height * 0.015),
-            GenericTextField(
+            TextFormField(
               controller: descriptionController,
-              labelText: 'Description *',
-              hintText: "Panel -40000, Shell -25000 ,Lower Mesh -20000",
-              borderColor: AppColors.ash,
+              decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'Description *',
+                  hintText: "Panel -40000, Shell -25000 ,Lower Mesh -20000",
+                  labelStyle: TextStyle(fontSize: 15)),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter Your Address';
+                }
+                return null;
+              },
             ),
-            GenericTextField(
+            TextFormField(
               controller: priceController,
-              labelText: 'Price(rs) *',
-              hintText: "400.00 Rs",
-              borderColor: AppColors.ash,
+              decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'Price(rs) *',
+                  hintText: "400.00 Rs",
+                  labelStyle: TextStyle(fontSize: 15)),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter Your Address';
+                }
+                return null;
+              },
+            ),
+            SizedBox(
+              height: size.height * 0.025,
             ),
             GenericInputOptionSelect(
               width: size.width,
@@ -380,8 +422,7 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
                       if (productTitleController.text.isEmpty ||
                           descriptionController.text.isEmpty ||
                           priceController.text.isEmpty ||
-                          condition.toString().isEmpty ||
-                          images.length == 0) {
+                          condition.toString().isEmpty) {
                         fillRequiredFields();
                         return;
                       }

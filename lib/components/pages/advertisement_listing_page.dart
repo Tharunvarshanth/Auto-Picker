@@ -49,24 +49,46 @@ class _AdvertisementListingPageState extends State<AdvertisementListingPage> {
   }
 
   getAdvertisementList() async {
-    //List<Product> prodList = [];
+    List<SpareAdvertisement> advertisementTempList = [];
     QuerySnapshot res = await advertisementController.getAdvertisments();
-    res.docs.forEach((element) async {
-      QuerySnapshot res2 = await element.reference
-          .collection(FirebaseCollections.AdvertisementList)
-          .get();
-      if (res2 != null) {
-        print(res2);
-        res2.docs.forEach((element) {
-          print("AdvertisementListingPage ${element}");
-          setState(() {
-            advertisementList.add(SpareAdvertisement.fromJson(element.data()));
-          });
-        });
+    await asyncForEach(res, (SpareAdvertisement list) async {
+      if (list != null) {
+        print("HomePagesortDate: ${list.aId}");
+
+        if (list.isPaymentDone) {
+          if (DateTime.parse(list.endDate).isAfter(DateTime.now())) {
+            print("HomePagesortDate: ${list}");
+            setState(() {
+              advertisementList.add(list);
+            });
+            //advertisementList.sort((a, b) => DateTime.parse(a.createdDate)
+            //  .compareTo(DateTime.parse(b.createdDate)));
+            print("final list ${advertisementList[0].createdDate}");
+          } else {
+            //remove add
+            var res = await advertisementController.removeAdvertisement(
+                list.uid, list.aId);
+          }
+        } else {}
       }
     });
     setState(() {
       isLoading = false;
+    });
+  }
+
+  asyncForEach(QuerySnapshot<Object> listQuery, callback) async {
+    List<SpareAdvertisement> advertisementTempList = [];
+    listQuery.docs.forEach((element) async {
+      QuerySnapshot res2 = await element.reference
+          .collection(FirebaseCollections.AdvertisementList)
+          .get();
+      print("res 2: ${res2.docs}");
+      if (res2 != null) {
+        res2.docs.forEach((element) async {
+          await callback(SpareAdvertisement.fromJson(element.data()));
+        });
+      }
     });
   }
 
@@ -84,7 +106,7 @@ class _AdvertisementListingPageState extends State<AdvertisementListingPage> {
           context: context,
           builder: (context) => ItemDialogMessage(
                 icon: 'assets/images/x-circle.svg',
-                titleText: 'Need to Signup',
+                titleText: 'Need to Signin',
                 bodyText:
                     "Auto picker terms & conditions without an account user's cann't see detail view",
                 primaryButtonText: 'Ok',
@@ -115,7 +137,9 @@ class _AdvertisementListingPageState extends State<AdvertisementListingPage> {
               isLogged: isLogged,
               showBackButton: true,
             ),
-            bottomNavigationBar: Footer(),
+            bottomNavigationBar: Footer(
+              isLogged: true,
+            ),
             body: Container(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               child: ListView.builder(
