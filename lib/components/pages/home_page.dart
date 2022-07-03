@@ -122,6 +122,14 @@ class _HomePageState extends State<HomePage> {
           });
         }
       });
+      res.forEach((element) {
+        var tM = Mechanic.fromJson(element);
+        if (tM.isPayed) {
+          setState(() {
+            mechanicList.add(tM);
+          });
+        }
+      });
     }
   }
 
@@ -282,7 +290,8 @@ class _HomePageState extends State<HomePage> {
                             GenericText(
                                 text: 'Mechanics', isBold: true, textSize: 24),
                             GenericTextButton(
-                              color: AppColors.Blue,
+                              isBold: true,
+                              color: AppColors.darkBlue,
                               text: 'See All',
                               onPressed: () {
                                 if (isLogged) {
@@ -306,7 +315,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ]),
                       const SizedBox(
-                        height: 10,
+                        height: 0,
                       ),
                       MechanicsHorizontalItemScroll(
                           ImageTileList: mechanicList,

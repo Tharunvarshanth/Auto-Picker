@@ -21,7 +21,7 @@ class ImageTile extends StatefulWidget {
       this.subtextSize = 16,
       this.text,
       this.textSize = 20,
-      this.margin = 20,
+      this.margin = 5,
       this.subText = 'no sub',
       this.textPadding = 5,
       this.borderRadius = 20,
@@ -63,34 +63,46 @@ class _ImageTileState extends State<ImageTile> {
                   },
                 ),
               ),*/
-            Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(widget.textPadding),
-                    child: Text(
-                      widget.text,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: widget.textColor,
-                        fontSize: widget.textSize,
+            Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    border: Border.all(color: Colors.blue[300], width: 3),
+                    /*boxShadow: [
+                      BoxShadow(offset: Offset(40, 40), color: Colors.pink),
+                      BoxShadow(offset: Offset(20, 20), color: Colors.yellow),
+                    ],*/
+                    gradient: RadialGradient(
+                        colors: [Colors.blue[100], Colors.blue[200]])),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(widget.textPadding),
+                        child: Text(
+                          widget.text,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: widget.textColor,
+                            fontSize: widget.textSize,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(widget.textPadding),
-                    child: Text(
-                      widget.subText,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: widget.subTextColor,
-                        fontSize: widget.subtextSize,
+                      Padding(
+                        padding: EdgeInsets.all(widget.textPadding),
+                        child: Text(
+                          widget.subText,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: widget.subTextColor,
+                            fontSize: widget.subtextSize,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ]),
+                    ])),
           ],
         ),
       ),
