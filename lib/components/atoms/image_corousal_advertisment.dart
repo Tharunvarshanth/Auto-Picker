@@ -17,6 +17,7 @@ class CustomCarouselAdvertisement extends StatefulWidget {
   double titleTextSize;
   double subtitleTextSize;
   double arrowSize;
+  void Function(int index) onPressedAd;
   CustomCarouselAdvertisement(
       {Key key,
       this.items = const [],
@@ -27,7 +28,8 @@ class CustomCarouselAdvertisement extends StatefulWidget {
       this.subTitleColor = Colors.white,
       this.subtitleTextSize = 16,
       this.titleColor = Colors.white,
-      this.titleTextSize = 20})
+      this.titleTextSize = 20,
+      this.onPressedAd})
       : super(key: key);
 
   @override
@@ -62,7 +64,7 @@ class _CustomCarouselAdvertisementState
           context: context,
           builder: (context) => ItemDialogMessage(
                 icon: 'assets/images/x-circle.svg',
-                titleText: 'Need to Signup',
+                titleText: 'Need to Signin',
                 bodyText:
                     "Auto picker terms & conditions without an account user's cann't see detail view",
                 primaryButtonText: 'Ok',
@@ -76,7 +78,7 @@ class _CustomCarouselAdvertisementState
     return LayoutBuilder(
       builder: (context, constraints) {
         return GestureDetector(
-          onTap: () => navigateToAdvertisementPage(counter),
+          onTap: () => widget.onPressedAd(counter),
           child: Stack(
             children: [
               CarouselSlider(
@@ -85,7 +87,7 @@ class _CustomCarouselAdvertisementState
                     .map(
                       (e) => Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8.0),
+                          borderRadius: BorderRadius.circular(10.0),
                           image: DecorationImage(
                             image: NetworkImage(
                               e.imageList[0],
