@@ -1,22 +1,15 @@
-import 'dart:async';
-import 'dart:convert';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_citys_select.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_select.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
-import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/atoms/generic_time_picker.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/pages/map_page.dart';
-import 'package:auto_picker/components/pages/mechanics_signup_page.dart';
 import 'package:auto_picker/components/pages/otp_signup_page.dart';
-import 'package:auto_picker/components/pages/seller_signup_page.dart';
 import 'package:auto_picker/models/city.dart';
-import 'package:auto_picker/routes.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/constands.dart';
 import 'package:auto_picker/utilities/utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

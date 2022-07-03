@@ -2,13 +2,11 @@ import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/text_description.dart';
-import 'package:auto_picker/components/atoms/text_description_with_button.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:auto_picker/components/organisms/mechanic_profile.dart';
 import 'package:auto_picker/components/organisms/seller_profile.dart';
 import 'package:auto_picker/components/pages/profile_user_edit_page.dart';
 import 'package:auto_picker/models/mechanic.dart';
-import 'package:auto_picker/models/product.dart';
 import 'package:auto_picker/models/seller.dart';
 import 'package:auto_picker/models/user_model.dart';
 import 'package:auto_picker/services/mechanic_controller.dart';
@@ -41,6 +39,8 @@ class _ProfilePageState extends State<ProfilePage> {
   var mechanicsController = MechanicController();
   var sellerController = SellerController();
   var userInfo = UserInfoCache();
+
+  @override
   void initState() {
     super.initState();
     existingUser = FirebaseAuth.instance;
@@ -80,6 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
     print("user ${userModel.role}");
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: const CustomAppBar(
@@ -110,7 +111,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           CircularProfileAvatar(
                             profileUrl ?? '',
                             initialsText: Text(
-                              userModel.fullName,
+                              userModel.fullName[0],
                               style:
                                   TextStyle(fontSize: 24, color: Colors.white),
                             ),
@@ -157,13 +158,18 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
                       TextDescription(
+                        title: userModel.role,
+                        description: 'User Type',
+                      ),
+                      TextDescription(
                         title: userModel.phoneNumber,
                         description: 'Phone Number',
                       ),
-                      TextDescription(
-                        title: userModel.email,
-                        description: 'email',
-                      ),
+                      if (userModel.email != '')
+                        TextDescription(
+                          title: userModel.email,
+                          description: 'email',
+                        ),
                       TextDescription(
                         title: userModel.city,
                         description: 'City',

@@ -79,7 +79,7 @@ class _SellerEditFormState extends State<SellerEditForm> {
         showDialog(
             context: context,
             builder: (context) => ItemDialogMessage(
-                  icon: 'assets/images/plus-circle.svg',
+                  icon: 'assets/images/done.svg',
                   titleText: 'Done ok',
                   bodyText: "",
                   primaryButtonText: 'Ok',

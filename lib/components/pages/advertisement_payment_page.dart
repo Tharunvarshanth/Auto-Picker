@@ -58,7 +58,7 @@ class _AdvertisementPaymentPageState extends State<AdvertisementPaymentPage> {
         showDialog(
             context: context,
             builder: (context) => ItemDialogMessage(
-                  icon: 'assets/images/plus-circle.svg',
+                  icon: 'assets/images/done.svg',
                   titleText: title,
                   bodyText: msg,
                   primaryButtonText: 'Ok',

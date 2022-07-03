@@ -95,7 +95,7 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
         showDialog(
             context: context,
             builder: (context) => ItemDialogMessage(
-                icon: 'assets/images/plus-circle.svg',
+                icon: 'assets/images/done.svg',
                 titleText: 'Success',
                 bodyText:
                     "Prdouct successfully added Please Pay amount then your product go will go live",
@@ -164,7 +164,7 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
       showDialog(
           context: context,
           builder: (context) => ItemDialogMessage(
-                icon: 'assets/images/plus-circle.svg',
+                icon: 'assets/images/done.svg',
                 titleText: 'Done ok',
                 bodyText: "",
                 primaryButtonText: 'Ok',
