@@ -1,4 +1,4 @@
-import 'package:auto_picker/components/atoms/custom_app_bar%20copy.dart';
+import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/atoms/product_tile.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
@@ -62,7 +62,6 @@ class _MyOwnProductListingPageState extends State<MyOwnProductListingPage> {
     setState(() {
       isLoading = false;
     });
-    print("Tharun ${productList[0].imagesList[0]}");
   }
 
   void navigateToProductPage(int index) {

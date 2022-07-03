@@ -110,6 +110,10 @@ class _MyAppBootState extends State<MyAppBoot> {
       supportedLocales: [Locale('en', 'LK')],
       title: 'Auto Picker',
       theme: ThemeData(
+          highlightColor: Colors.white.withOpacity(0.25),
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+            backgroundColor: AppColors.themePrimary.withOpacity(0.8),
+          ),
           textTheme: const TextTheme(
             headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
             headline6: TextStyle(fontWeight: FontWeight.w500),
@@ -117,7 +121,7 @@ class _MyAppBootState extends State<MyAppBoot> {
               fontWeight: FontWeight.w400,
             ),
           ),
-          primaryColor: AppColors.primaryVariant),
+          primaryColor: AppColors.themePrimary),
       home: SplashScreen(),
     );
   }

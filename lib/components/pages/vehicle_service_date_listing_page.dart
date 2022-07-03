@@ -1,23 +1,13 @@
-import 'package:auto_picker/components/atoms/custom_app_bar%20copy.dart';
-import 'package:auto_picker/components/atoms/popup_modal_message.dart';
-import 'package:auto_picker/components/atoms/product_tile.dart';
+import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/vehicle_service_record.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
-import 'package:auto_picker/components/pages/advertisement_page.dart';
-import 'package:auto_picker/components/pages/product_page.dart';
-import 'package:auto_picker/models/product.dart';
-import 'package:auto_picker/models/spare_advertisement.dart';
 import 'package:auto_picker/models/vehicle_service_record.dart';
-import 'package:auto_picker/services/product_controller.dart';
-import 'package:auto_picker/services/spare_advertisement_controller.dart';
 import 'package:auto_picker/services/vehicle_service_record_controller.dart';
 import 'package:auto_picker/themes/colors.dart';
-import 'package:auto_picker/utilities/constands.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../../routes.dart';
 
 class VehicleServiceDateListingPage extends StatefulWidget {

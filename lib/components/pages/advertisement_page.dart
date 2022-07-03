@@ -1,4 +1,4 @@
-import 'package:auto_picker/components/atoms/custom_app_bar%20copy.dart';
+import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
@@ -7,12 +7,9 @@ import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:auto_picker/components/pages/advertisement_payment_page.dart';
 import 'package:auto_picker/components/pages/edit_existing_advertisement.dart';
-import 'package:auto_picker/components/pages/edit_existing_product_page.dart';
 import 'package:auto_picker/models/carousel_data.dart';
-import 'package:auto_picker/models/product.dart';
 import 'package:auto_picker/models/seller.dart';
 import 'package:auto_picker/models/spare_advertisement.dart';
-import 'package:auto_picker/services/product_controller.dart';
 import 'package:auto_picker/services/seller_controller.dart';
 import 'package:auto_picker/services/spare_advertisement_controller.dart';
 import 'package:auto_picker/themes/colors.dart';
@@ -21,7 +18,6 @@ import 'package:auto_picker/utilities/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../routes.dart';
 
 class AdvertisementPage extends StatefulWidget {
