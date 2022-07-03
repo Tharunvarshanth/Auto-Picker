@@ -1,5 +1,6 @@
 import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
+import 'package:auto_picker/components/pages/user_payment_page.dart';
 import 'package:auto_picker/store/cache/sharedPreferences/user_info.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/utils.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import '../../routes.dart';
+import 'google_signin_login_page.dart';
 
 class MenuMorePage extends StatefulWidget {
   const MenuMorePage({Key key}) : super(key: key);
@@ -71,6 +73,16 @@ class _MenuMoreState extends State<MenuMorePage> {
               }),
               getTile("Products", () {
                 navigate(context, RouteGenerator.productsListingPage);
+              }),
+              getTile("Link Google Account", () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const GoogleLinkingPage(
+                      isLinkingPage: true,
+                    ),
+                  ),
+                );
               }),
             ],
             /*  getTile("Mileage Calculator", () {}),*/

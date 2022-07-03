@@ -1,9 +1,8 @@
-import 'package:auto_picker/components/atoms/generic_icon_button.dart';
-import 'package:auto_picker/components/atoms/generic_text.dart';
+import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
-import 'package:auto_picker/components/ui/backgroud.dart';
 import 'package:auto_picker/routes.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:auto_picker/services/user_controller.dart';
 import 'package:auto_picker/store/cache/sharedPreferences/user_info.dart';
@@ -25,17 +24,20 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
   bool isLinkingPage = false;
   var userInfo = UserInfoCache();
   var userController = UserController();
+  bool isAlreadyLinked = false;
+  var existingUser = FirebaseAuth.instance.currentUser;
+  @override
   void initState() {
     super.initState();
     setState(() {
       isLinkingPage = widget.isLinkingPage;
+      isAlreadyLinked = existingUser?.email != null ? true : false;
     });
   }
 
   //first time sign up
   linkEmailGoogle() async {
     //get currently logged in user
-    var existingUser = FirebaseAuth.instance.currentUser;
 
     //get the credentials of the new linking account
     final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -50,7 +52,9 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
       idToken: googleAuth.idToken,
     );
     //now link these credentials with the existing user
-    var linkauthresult = await existingUser.linkWithCredential(gcredential);
+    var linkauthresult;
+
+    linkauthresult = await existingUser.linkWithCredential(gcredential);
 
     if (linkauthresult != null) {
       var existing = FirebaseAuth.instance.currentUser;
@@ -80,7 +84,7 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
     // Trigger the authentication flow
     final GoogleSignInAccount googleUser =
         await GoogleSignIn().signIn().catchError((onError) => print(onError));
-    ;
+
 // Return null to prevent further exceptions if googleSignInAccount is null
     if (googleUser == null) return null;
 
@@ -123,6 +127,7 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
     navigate(context, RouteGenerator.homePage);
   }
 
+  @override
   void dispose() {
     super.dispose();
   }
@@ -131,15 +136,20 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
+            child: SingleChildScrollView(
       child: Stack(children: [
         isLinkingPage
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Hello There!",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      "Hello There!",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -148,43 +158,76 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
                       width: MediaQuery.of(context).size.width,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
-                  const Center(
-                    child: Text(
-                      "Link your google account with your mobile number incase if you have not sim in your device you can login with your google account",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.ash,
-                      ),
-                    ),
-                  ),
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
-                      child: Container(
-                          width: 250,
-                          height: 50,
-                          child: SignInButton(
-                            Buttons.Google,
-                            text: "Sign up with Google",
-                            onPressed: () => linkEmailGoogle(),
+                  !isAlreadyLinked
+                      ? const Center(
+                          child: Text(
+                            "Link your google account with your mobile number incase if you have not sim in your device you can login with your google account",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        )
+                      : Center(
+                          child: Text(
+                            "Aleady you linked with ${existingUser?.email}",
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                  !isAlreadyLinked
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
+                            child: SizedBox(
+                                width: 250,
+                                height: 50,
+                                child: SignInButton(
+                                  Buttons.Google,
+                                  text: "Sign up with Google",
+                                  onPressed: () => linkEmailGoogle(),
+                                )),
+                          ),
+                        )
+                      : Center(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
+                            child: SizedBox(
+                                width: 250,
+                                height: 50,
+                                child: GenericButton(
+                                  textColor: AppColors.white,
+                                  backgroundColor: AppColors.Blue,
+                                  paddingVertical: 10,
+                                  paddingHorizontal: 80,
+                                  text: 'Back',
+                                  onPressed: () {
+                                    navigateBack(context);
+                                  },
+                                  isBold: true,
+                                )),
+                          ),
+                        ),
+                  if (!isAlreadyLinked)
+                    Center(
+                      child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
+                          child: GenericTextButton(
+                            text: ' Skip',
+                            color: Colors.grey[300],
+                            isBold: true,
+                            onPressed: () => emailSkipAction(),
                           )),
                     ),
-                  ),
-                  Center(
-                    child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
-                        child: GenericTextButton(
-                          text: ' Skip',
-                          color: Colors.grey[300],
-                          isBold: true,
-                          onPressed: () => emailSkipAction(),
-                        )),
-                  ),
                 ],
               )
             : Column(
@@ -192,7 +235,7 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                     IconButton(
-                      padding: EdgeInsets.fromLTRB(15, 15, 0, 0),
+                      padding: const EdgeInsets.fromLTRB(15, 15, 0, 0),
                       iconSize: 40,
                       alignment: Alignment.topLeft,
                       icon: Image.asset(
@@ -224,7 +267,7 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
-                        child: Container(
+                        child: SizedBox(
                           width: 250,
                           height: 50,
                           child: SignInButton(
@@ -237,6 +280,6 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
                     )
                   ]),
       ]),
-    ));
+    )));
   }
 }
