@@ -60,7 +60,7 @@ class _ProductPaymentPageState extends State<ProductPaymentPage> {
         showDialog(
             context: context,
             builder: (context) => ItemDialogMessage(
-                icon: 'assets/images/plus-circle.svg',
+                icon: 'assets/images/done.svg',
                 titleText: 'Success',
                 bodyText: "successfully payment done",
                 primaryButtonText: 'Ok',

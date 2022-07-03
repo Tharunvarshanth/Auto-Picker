@@ -89,7 +89,7 @@ class _AdvertisementPageState extends State<AdvertisementPage> {
       showDialog(
           context: context,
           builder: (context) => ItemDialogMessage(
-                icon: 'assets/images/plus-circle.svg',
+                icon: 'assets/images/done.svg',
                 titleText: 'Deleted',
                 bodyText: "",
                 primaryButtonText: 'Ok',

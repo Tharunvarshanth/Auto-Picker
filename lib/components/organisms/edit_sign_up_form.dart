@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:auto_picker/components/atoms/generic_button.dart';
+import 'package:auto_picker/components/atoms/generic_input_option_citys_select.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_select.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
@@ -10,6 +11,7 @@ import 'package:auto_picker/components/pages/mechanics_signup_page.dart';
 import 'package:auto_picker/components/pages/otp_signup_page.dart';
 import 'package:auto_picker/components/pages/seller_edit_page.dart';
 import 'package:auto_picker/components/pages/seller_signup_page.dart';
+import 'package:auto_picker/models/city.dart';
 import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/models/seller.dart';
 import 'package:auto_picker/models/user_model.dart';
@@ -34,15 +36,24 @@ class _EditSignUpFormState extends State<EditSignUpForm> {
   final nameController = TextEditingController();
   final addressController = TextEditingController();
   var userController = UserController();
-  String city;
+  City city;
   String role;
   bool isvalidUser = false;
+  List<City> dropDownCityList = [];
 
   void initState() {
     nameController.text = widget.userModel.fullName;
     addressController.text = widget.userModel.address;
-    city = widget.userModel.city;
+    city = City(city: widget.userModel.city, code: ''); //widget.userModel.city;
     role = widget.userModel.role;
+    setData();
+  }
+
+  void setData() async {
+    var citys = await readCityJsonData();
+    setState(() {
+      dropDownCityList = citys;
+    });
   }
 
   void handleCity(cityName) {
@@ -54,7 +65,7 @@ class _EditSignUpFormState extends State<EditSignUpForm> {
   void handleNext() {
     widget.userModel.fullName = nameController.text;
     widget.userModel.address = addressController.text;
-    widget.userModel.city = city;
+    widget.userModel.city = city.city;
 
     switch (role) {
       case Users.Mechanic:
@@ -78,6 +89,17 @@ class _EditSignUpFormState extends State<EditSignUpForm> {
         );
         break;
       case Users.NormalUser:
+        userController.updateUser(widget.userModel);
+        showDialog(
+            context: context,
+            builder: (context) => ItemDialogMessage(
+                  icon: 'assets/images/done.svg',
+                  titleText: 'Successfully Updated',
+                  bodyText: "",
+                  primaryButtonText: 'Ok',
+                  onPressedPrimary: () =>
+                      navigate(context, RouteGenerator.profilePage),
+                ));
         break;
       default:
         break;
@@ -109,41 +131,30 @@ class _EditSignUpFormState extends State<EditSignUpForm> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     List<String> roleList = [Users.Mechanic, Users.NormalUser, Users.Seller];
-    List<String> cityList = [
-      Users.Admin,
-      Users.Mechanic,
-      Users.NormalUser,
-      Users.Seller
-    ];
+
     return Form(
         key: _formKey,
         child: Column(
           children: <Widget>[
-            GenericText(
-              textAlign: TextAlign.left,
-              text: 'Required *',
-              color: AppColors.red,
-              isBold: true,
-            ),
             GenericTextField(
               controller: nameController,
-              labelText: 'Name *',
+              labelText: 'Name',
               hintText: "Kamal",
               borderColor: AppColors.ash,
             ),
             SizedBox(height: size.height * 0.015),
             GenericTextField(
               controller: addressController,
-              labelText: 'Address *',
+              labelText: 'Address',
               hintText: 'No 16,Galle Road',
               borderColor: AppColors.ash,
             ),
             SizedBox(height: size.height * 0.015),
-            GenericInputOptionSelect(
+            GenericInputOptionCitysSelect(
               width: size.width,
-              labelText: 'City *',
+              labelText: 'City',
               value: city,
-              itemList: cityList,
+              itemList: dropDownCityList,
               onValueChange: (text) => handleCity(text),
             ),
             SizedBox(height: size.height * 0.035),
