@@ -1,8 +1,5 @@
 import 'dart:async';
-
-import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/pages/mechanics_form_edit_page.dart';
-import 'package:auto_picker/components/pages/mechanics_signup_page.dart';
 import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/models/user_model.dart';
 import 'package:auto_picker/services/location_services.dart';
@@ -26,7 +23,7 @@ class MapLatLonEditPageState extends State<MapLatLonEditPage> {
   LatLng userLocation;
   LatLng myCurrentLocation;
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
+  static CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
@@ -37,6 +34,7 @@ class MapLatLonEditPageState extends State<MapLatLonEditPage> {
   }
 
   void _setMarker(LatLng point) {
+    print("Map Edit Page ${point.latitude}");
     setState(() {
       _markers.add(Marker(markerId: MarkerId('marker'), position: point));
       userLocation = point;
@@ -44,21 +42,16 @@ class MapLatLonEditPageState extends State<MapLatLonEditPage> {
   }
 
   _getLocation() async {
-    var location = new Location();
+    setState(() {
+      _kGooglePlex = CameraPosition(
+        target: LatLng(double.parse(widget.mechanic.location_lat),
+            double.parse(widget.mechanic.location_lon)),
+        zoom: 14.4746,
+      );
+    });
 
-    try {
-      var currentLocation = await location.getLocation();
-      setState(() {
-        myCurrentLocation =
-            LatLng(currentLocation.latitude, currentLocation.longitude);
-      });
-    } on Exception {
-      myCurrentLocation = null;
-    }
-
-    myCurrentLocation != null
-        ? _setMarker(myCurrentLocation)
-        : _setMarker(LatLng(37.42796133580664, -122.085749655962));
+    _setMarker(LatLng(double.parse(widget.mechanic.location_lat),
+        double.parse(widget.mechanic.location_lon)));
   }
 
   void fixMyLocation() {
@@ -77,7 +70,7 @@ class MapLatLonEditPageState extends State<MapLatLonEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
@@ -86,7 +79,8 @@ class MapLatLonEditPageState extends State<MapLatLonEditPage> {
                 Expanded(
                     child: TextFormField(
                   controller: searchController,
-                  decoration: InputDecoration(hintText: 'Enter the place'),
+                  decoration:
+                      const InputDecoration(hintText: 'Enter the place'),
                   onChanged: (text) {},
                 )),
                 IconButton(
@@ -117,8 +111,8 @@ class MapLatLonEditPageState extends State<MapLatLonEditPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: fixMyLocation,
-        label: Text('Get my location marker'),
-        icon: Icon(Icons.done),
+        label: const Text('Get my location marker'),
+        icon: const Icon(Icons.done),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );

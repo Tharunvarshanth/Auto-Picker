@@ -74,6 +74,7 @@ dependencies:
   section_view: ^2.0.5
   dropdown_search: ^3.0.1
   flutter_signin_button: ^2.0.0
+  curved_navigation_bar: ^1.0.3
 
 dev_dependencies:
   flutter_test:

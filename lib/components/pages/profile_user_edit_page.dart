@@ -28,28 +28,42 @@ class _ProfileUserEditPageState extends State<ProfileUserEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-            child: Stack(children: [
+            child: SingleChildScrollView(
+                child: Stack(children: [
       IconButton(
         padding: EdgeInsets.all(12),
-        iconSize: 36,
+        iconSize: 40,
         alignment: Alignment.topLeft,
-        icon: const Icon(Icons.arrow_back),
-        color: AppColors.black,
+        icon: Image.asset(
+          "assets/images/back-arrow.png",
+          scale: 1.2,
+        ),
         onPressed: () {
           navigateBack(context);
         },
       ),
-      SingleChildScrollView(
+      Padding(
         padding: EdgeInsets.fromLTRB(20, 75, 10, 50),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: [
-            GenericText(
-              text: 'User Edit',
-              textSize: 36,
-              isBold: true,
+            Container(
+              height: 150,
+              margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+              child: Image.asset(
+                "assets/images/user-edit.png",
+                scale: 0.5,
+              ),
+            ),
+            Text(
+              "User Edit",
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+              ),
             ),
             EditSignUpForm(
                 userModel: widget.userModel,
@@ -58,6 +72,6 @@ class _ProfileUserEditPageState extends State<ProfileUserEditPage> {
           ],
         ),
       ),
-    ])));
+    ]))));
   }
 }

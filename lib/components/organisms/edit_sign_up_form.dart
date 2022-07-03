@@ -136,18 +136,34 @@ class _EditSignUpFormState extends State<EditSignUpForm> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            GenericTextField(
+            TextFormField(
               controller: nameController,
-              labelText: 'Name',
-              hintText: "Kamal",
-              borderColor: AppColors.ash,
+              decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'Name',
+                  hintText: "Kamal",
+                  labelStyle: TextStyle(fontSize: 15)),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter Your Name';
+                }
+                return null;
+              },
             ),
             SizedBox(height: size.height * 0.015),
-            GenericTextField(
+            TextFormField(
               controller: addressController,
-              labelText: 'Address',
-              hintText: 'No 16,Galle Road',
-              borderColor: AppColors.ash,
+              decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'Address',
+                  hintText: 'No 16,Galle Road',
+                  labelStyle: TextStyle(fontSize: 15)),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter Your Name';
+                }
+                return null;
+              },
             ),
             SizedBox(height: size.height * 0.015),
             GenericInputOptionCitysSelect(

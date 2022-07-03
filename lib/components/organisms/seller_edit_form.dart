@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:auto_picker/components/atoms/generic_button.dart';
+import 'package:auto_picker/components/atoms/generic_input_option_citys_select.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_select.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/pages/mechanics_signup_page.dart';
 import 'package:auto_picker/components/pages/otp_signup_page.dart';
 import 'package:auto_picker/components/pages/seller_signup_page.dart';
+import 'package:auto_picker/models/city.dart';
 import 'package:auto_picker/models/seller.dart';
 import 'package:auto_picker/models/user_model.dart';
 import 'package:auto_picker/routes.dart';
@@ -32,21 +34,29 @@ class _SellerEditFormState extends State<SellerEditForm> {
   final shopAddressController = TextEditingController();
   var userController = UserController();
   var sellerController = SellerController();
-
-  String city;
+  List<City> dropDownCityList = [];
+  City city;
 
   void initState() {
+    setData();
     shopNameController.text = widget.seller.shopName;
     shopAddressController.text = widget.seller.address;
     shopNumberController.text = widget.seller.contactDetails;
     setState(() {
-      city = widget.seller.city;
+      city = City(city: widget.seller.city, code: '');
     });
   }
 
   void handleCity(cityName) {
     setState(() {
       city = cityName;
+    });
+  }
+
+  void setData() async {
+    var citys = await readCityJsonData();
+    setState(() {
+      dropDownCityList = citys;
     });
   }
 
@@ -66,7 +76,7 @@ class _SellerEditFormState extends State<SellerEditForm> {
     widget.seller.shopName = shopNameController.text;
     widget.seller.address = shopAddressController.text;
     widget.seller.contactDetails = shopNumberController.text;
-    widget.seller.city = city;
+    widget.seller.city = city.city;
 
     //update db
     Future.wait([
@@ -80,7 +90,7 @@ class _SellerEditFormState extends State<SellerEditForm> {
             context: context,
             builder: (context) => ItemDialogMessage(
                   icon: 'assets/images/done.svg',
-                  titleText: 'Done ok',
+                  titleText: 'Succssfully updated',
                   bodyText: "",
                   primaryButtonText: 'Ok',
                   onPressedPrimary: () =>
@@ -113,42 +123,71 @@ class _SellerEditFormState extends State<SellerEditForm> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    List<String> cityList = [
-      Users.Admin,
-      Users.Mechanic,
-      Users.NormalUser,
-      Users.Seller
-    ];
+
     return Form(
         key: _formKey,
         child: Column(
           children: <Widget>[
-            GenericTextField(
+            TextFormField(
               controller: shopNameController,
-              labelText: 'Shop Name *',
-              hintText: "TM Motors",
-              borderColor: AppColors.ash,
+              decoration: const InputDecoration(
+                  hintStyle:
+                      TextStyle(color: Color.fromARGB(255, 145, 145, 145)),
+                  border: UnderlineInputBorder(),
+                  labelText: 'Shop Name',
+                  hintText: "TM Motors",
+                  labelStyle: TextStyle(fontSize: 14)),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter Your Address';
+                }
+                return null;
+              },
             ),
             SizedBox(height: size.height * 0.015),
-            GenericTextField(
+            TextFormField(
+              keyboardType: TextInputType.phone,
+              maxLength: 11,
               controller: shopNumberController,
-              labelText: 'Shop Phone Number *',
-              hintText: '011 - 1234567',
-              borderColor: AppColors.ash,
+              decoration: const InputDecoration(
+                  prefixText: '+94',
+                  hintStyle:
+                      TextStyle(color: Color.fromARGB(255, 145, 145, 145)),
+                  border: UnderlineInputBorder(),
+                  labelText: 'Shop Phone Number',
+                  hintText: '011 - 1234567',
+                  labelStyle: TextStyle(fontSize: 14)),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter Your Address';
+                }
+                return null;
+              },
             ),
-            GenericInputOptionSelect(
+            SizedBox(height: size.height * 0.015),
+            GenericInputOptionCitysSelect(
               width: size.width,
-              labelText: 'City *',
+              labelText: 'Working City',
               value: city,
-              itemList: cityList,
+              itemList: dropDownCityList,
               onValueChange: (text) => handleCity(text),
             ),
             SizedBox(height: size.height * 0.035),
-            GenericTextField(
+            TextFormField(
               controller: shopAddressController,
-              labelText: 'Shop Address *',
-              hintText: 'NO 16, Galle Road',
-              borderColor: AppColors.ash,
+              decoration: const InputDecoration(
+                  hintStyle:
+                      TextStyle(color: Color.fromARGB(255, 145, 145, 145)),
+                  border: UnderlineInputBorder(),
+                  labelText: 'Shop Address',
+                  hintText: 'NO 16, Galle Road',
+                  labelStyle: TextStyle(fontSize: 14)),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter Your Address';
+                }
+                return null;
+              },
             ),
             SizedBox(height: size.height * 0.015),
             GenericButton(
@@ -161,7 +200,8 @@ class _SellerEditFormState extends State<SellerEditForm> {
                 if (shopNameController.text.isEmpty ||
                     shopNumberController.text.isEmpty ||
                     shopAddressController.text.isEmpty ||
-                    city.toString().isEmpty) {
+                    city?.city == '' ||
+                    city == null) {
                   fillRequiredFields();
                   return;
                 }

@@ -59,9 +59,10 @@ class _MechanicsSignUpEditFormState extends State<MechanicsSignUpEditForm> {
       _valueToValidateStart = widget.mechanic.workingTime_To;
       _valueChangedFinish = widget.mechanic.workingTime_From;
       _valueToValidateFinish = widget.mechanic.workingTime_From;
-      city.city = widget.mechanic.workingCity;
+      city = City(city: widget.mechanic.workingCity, code: '');
       specialist = widget.mechanic.specialist;
     });
+    setData();
   }
 
   void handleCity(cityName) {
@@ -73,6 +74,13 @@ class _MechanicsSignUpEditFormState extends State<MechanicsSignUpEditForm> {
   void handleMechanicsSpecialist(skill) {
     setState(() {
       specialist = skill;
+    });
+  }
+
+  void setData() async {
+    var citys = await readCityJsonData();
+    setState(() {
+      dropDownCityList = citys;
     });
   }
 
@@ -95,7 +103,7 @@ class _MechanicsSignUpEditFormState extends State<MechanicsSignUpEditForm> {
             context: context,
             builder: (context) => ItemDialogMessage(
                   icon: 'assets/images/done.svg',
-                  titleText: 'Done ok',
+                  titleText: 'Succssfully updated',
                   bodyText: "",
                   primaryButtonText: 'Ok',
                   onPressedPrimary: () =>
@@ -145,7 +153,7 @@ class _MechanicsSignUpEditFormState extends State<MechanicsSignUpEditForm> {
           children: <Widget>[
             GenericInputOptionSelect(
               width: size.width,
-              labelText: 'Specialist *',
+              labelText: 'Specialist',
               value: specialist,
               itemList: MechanicSpecialistSkills,
               onValueChange: (text) => handleMechanicsSpecialist(text),
@@ -153,17 +161,25 @@ class _MechanicsSignUpEditFormState extends State<MechanicsSignUpEditForm> {
             SizedBox(height: size.height * 0.015),
             GenericInputOptionCitysSelect(
               width: size.width,
-              labelText: 'Working City *',
+              labelText: 'Working City',
               value: city,
               itemList: dropDownCityList,
               onValueChange: (text) => handleCity(text),
             ),
             SizedBox(height: size.height * 0.015),
-            GenericTextField(
+            TextFormField(
               controller: addressController,
-              labelText: 'Address *',
-              hintText: "No 16 , Galle Road",
-              borderColor: AppColors.ash,
+              decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'Address',
+                  hintText: "No 16 , Galle Road",
+                  labelStyle: TextStyle(fontSize: 15)),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter Your Name';
+                }
+                return null;
+              },
             ),
             SizedBox(height: size.height * 0.015),
             Row(
@@ -173,7 +189,7 @@ class _MechanicsSignUpEditFormState extends State<MechanicsSignUpEditForm> {
                   width: 150,
                   child: GenericTimePicker(
                       controller: timePickerToController,
-                      labelText: 'Start *',
+                      labelText: 'Start',
                       onChanged: (value) => {
                             print("time ${value}"),
                             setState(() {
@@ -190,7 +206,7 @@ class _MechanicsSignUpEditFormState extends State<MechanicsSignUpEditForm> {
                   width: 150,
                   child: GenericTimePicker(
                       controller: timePickerFromController,
-                      labelText: 'Finish *',
+                      labelText: 'Finish',
                       onChanged: (value) => {
                             print("time ${value}"),
                             setState(() {

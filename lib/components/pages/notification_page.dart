@@ -80,6 +80,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
       ),
       bottomNavigationBar: Footer(
         isLogged: true,
+        currentIndex: 1,
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())

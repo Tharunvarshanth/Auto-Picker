@@ -1,12 +1,9 @@
 import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:flutter/material.dart';
-
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_svg/parser.dart';
-
 import '../../routes.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 class Footer extends StatelessWidget {
   Color backgroundColor;
@@ -18,7 +15,7 @@ class Footer extends StatelessWidget {
   double iconSize;
   Color selectedItemColor;
   Color unselectedItemColor;
-
+  final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
   Footer(
       {Key key,
       this.backgroundColor = Colors.white,
@@ -34,39 +31,31 @@ class Footer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
+    return CurvedNavigationBar(
       items: [
-        BottomNavigationBarItem(
-          icon: SvgPicture.asset('assets/images/home.svg'),
-          label: 'Home',
-          activeIcon: SvgPicture.asset('assets/images/home-active.svg'),
-        ),
+        const Icon(Icons.home, size: 30, color: AppColors.white),
         if (isLogged)
-          BottomNavigationBarItem(
-              icon: SvgPicture.asset('assets/images/bell.svg'),
-              label: 'Notifications',
-              activeIcon: SvgPicture.asset('assets/images/bell-active.svg')),
-        if (isLogged)
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset('assets/images/user.svg'),
-            activeIcon: SvgPicture.asset('assets/images/user-active.svg'),
-            label: 'Profile',
+          const Icon(
+            Icons.notifications_active_outlined,
+            size: 30,
+            color: AppColors.white,
           ),
-        BottomNavigationBarItem(
-          icon: SvgPicture.asset('assets/images/menu.svg'),
-          activeIcon: SvgPicture.asset('assets/images/menu-active.svg'),
-          label: 'Menu',
-        ),
+        if (isLogged)
+          const Icon(Icons.supervised_user_circle_outlined,
+              size: 30, color: AppColors.white),
+        const Icon(Icons.menu_rounded, size: 30, color: AppColors.white),
       ],
-      onTap: (value) => {
-        onTap == null ? onTapDefault(value, context) : onTap(value),
+      onTap: (value) {
+        onTap == null ? onTapDefault(value, context) : onTap(value);
       },
-      currentIndex: currentIndex,
-      backgroundColor: backgroundColor,
-      elevation: elevation,
-      iconSize: iconSize,
-      selectedItemColor: selectedItemColor,
-      unselectedItemColor: unselectedItemColor,
+      buttonBackgroundColor: Colors.blue[900],
+      index: currentIndex,
+      height: 60.0,
+      color: Colors.blue[900],
+      animationCurve: Curves.easeInOut,
+      animationDuration: const Duration(milliseconds: 600),
+      backgroundColor: Colors.white,
+      letIndexChange: (index) => true,
     );
   }
 
