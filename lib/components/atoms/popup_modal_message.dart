@@ -63,6 +63,7 @@ class ItemDialogMessage extends StatelessWidget {
                         maxLength: 5,
                         textAlign: TextAlign.center,
                         decoration: InputDecoration(
+                          counterText: "",
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20)),
                         ),

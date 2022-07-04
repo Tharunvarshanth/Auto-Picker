@@ -96,7 +96,7 @@ class _MyOwnProductListingPageState extends State<MyOwnProductListingPage> {
             ),
             bottomNavigationBar: Footer(isLogged: true),
             body: Container(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
               child: ListView.builder(
                 controller: _controller,
                 itemCount: productList.length,

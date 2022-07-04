@@ -105,7 +105,7 @@ class _MechanicsHorizontalItemScrollState
                         return GestureDetector(
                           onTap: () => navigateToMechanicProfilePage(index),
                           child: ImageTile(
-                            text: widget.ImageTileList[index].specialist ?? '',
+                            text: widget.ImageTileList[index].name ?? '',
                             subText:
                                 widget.ImageTileList[index].workingCity ?? '',
                           ),

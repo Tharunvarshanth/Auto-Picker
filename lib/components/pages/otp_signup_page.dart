@@ -119,7 +119,8 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
               false,
               widget.params["location-lat"],
               widget.params["location-lon"],
-              false);
+              false,
+              widget.params["name"]);
           resOther = await mechanicController.addMechanic(mechanic);
         }
         break;

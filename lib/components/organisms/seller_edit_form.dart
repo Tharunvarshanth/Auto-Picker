@@ -150,6 +150,7 @@ class _SellerEditFormState extends State<SellerEditForm> {
               maxLength: 11,
               controller: shopNumberController,
               decoration: const InputDecoration(
+                  counterText: "",
                   prefixText: '+94',
                   hintStyle:
                       TextStyle(color: Color.fromARGB(255, 145, 145, 145)),

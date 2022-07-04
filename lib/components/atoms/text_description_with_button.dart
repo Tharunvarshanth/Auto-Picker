@@ -27,7 +27,7 @@ class TextDescriptionWithButton extends StatelessWidget {
       this.titleColor = Colors.black,
       this.titleTextSize,
       this.icon = Icons.arrow_right,
-      this.padding = 20,
+      this.padding = 10,
       this.onPress,
       this.url = "assets/images/chevron-right-blue.svg",
       this.borderColor = Colors.black})
@@ -70,7 +70,7 @@ class TextDescriptionWithButton extends StatelessWidget {
                 onPressed: onPress,
                 icon: SvgPicture.asset(url),
                 color: AppColors.blue,
-                iconSize: 96,
+                iconSize: 36,
               ),
               flex: 1,
             )

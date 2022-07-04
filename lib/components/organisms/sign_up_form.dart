@@ -205,6 +205,7 @@ class _SignUpFormState extends State<SignUpForm> {
               maxLength: 10,
               decoration: const InputDecoration(
                   prefixText: '+94',
+                  counterText: "",
                   prefixStyle: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                   border: UnderlineInputBorder(),
                   labelText: 'Enter your Phone number here',

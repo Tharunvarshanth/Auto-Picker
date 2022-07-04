@@ -96,8 +96,8 @@ class _CustomCarouselAdvertisementState
                 child: Column(
                   children: [
                     Container(
-                        decoration: const BoxDecoration(
-                            color: AppColors.primaryVariant,
+                        decoration: BoxDecoration(
+                            color: Colors.blue[700],
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(10),
                                 bottomLeft: Radius.circular(0),
@@ -122,8 +122,8 @@ class _CustomCarouselAdvertisementState
                 child: Column(
                   children: [
                     Container(
-                        decoration: const BoxDecoration(
-                            color: AppColors.primaryVariant,
+                        decoration: BoxDecoration(
+                            color: Colors.blue[700],
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(30),
                                 bottomLeft: Radius.circular(30),

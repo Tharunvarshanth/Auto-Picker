@@ -33,9 +33,12 @@ class _SellerProfileState extends State<SellerProfile> {
           height: 5,
         ),
         GenericText(
-          text: 'Shop Controll',
+          text: 'Shop Controller',
           textSize: 30,
           isBold: true,
+        ),
+        const SizedBox(
+          height: 20,
         ),
         TextDescriptionWithButton(
           title: 'Add New Product',
