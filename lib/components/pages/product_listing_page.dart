@@ -117,7 +117,10 @@ class _ProductListingPageState extends State<ProductListingPage> {
               isLogged: isLogged,
               showBackButton: true,
             ),
-            bottomNavigationBar: Footer(),
+            bottomNavigationBar: Footer(
+              isLogged: true,
+              currentIndex: 0,
+            ),
             body: Container(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               child: ListView.builder(

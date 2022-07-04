@@ -123,14 +123,6 @@ class _HomePageState extends State<HomePage> {
           });
         }
       });
-      res.forEach((element) {
-        var tM = Mechanic.fromJson(element);
-        if (tM.isPayed) {
-          setState(() {
-            mechanicList.add(tM);
-          });
-        }
-      });
     }
   }
 
@@ -313,6 +305,37 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      if (advertisementList.isNotEmpty)
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GenericText(
+                                text: 'Advertisements',
+                                isBold: true,
+                                textSize: 24,
+                              ),
+                              GenericTextButton(
+                                isBold: true,
+                                color: AppColors.darkBlue,
+                                text: 'See All',
+                                onPressed: () {
+                                  navigate(context,
+                                      RouteGenerator.advertisementListingPage);
+                                },
+                              ),
+                            ]),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      if (advertisementList.isNotEmpty)
+                        CustomCarouselAdvertisement(
+                          items: advertisementList,
+                          onPressedAd: (index) =>
+                              navigateToAdvertisementPage(index),
+                        ),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -354,37 +377,6 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(
                         height: 20,
                       ),
-                      if (advertisementList.isNotEmpty)
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              GenericText(
-                                text: 'Advertisements',
-                                isBold: true,
-                                textSize: 24,
-                              ),
-                              GenericTextButton(
-                                isBold: true,
-                                color: AppColors.darkBlue,
-                                text: 'See All',
-                                onPressed: () {
-                                  navigate(context,
-                                      RouteGenerator.advertisementListingPage);
-                                },
-                              ),
-                            ]),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      if (advertisementList.isNotEmpty)
-                        CustomCarouselAdvertisement(
-                          items: advertisementList,
-                          onPressedAd: (index) =>
-                              navigateToAdvertisementPage(index),
-                        ),
-                      const SizedBox(
-                        height: 20,
-                      ),
                       Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -406,7 +398,7 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         margin:
                             EdgeInsets.symmetric(vertical: 20, horizontal: 5),
-                        height: productList.length < 3 ? 150 : 400,
+                        height: productList.length < 4 ? 250 : 400,
                         child: ListView.builder(
                           controller: controller,
                           itemCount: productList.length ?? 0,

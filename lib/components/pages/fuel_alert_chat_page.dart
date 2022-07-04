@@ -3,6 +3,7 @@ import 'package:auto_picker/components/atoms/fuel_alert_tile.dart';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_citys_select.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
+import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:auto_picker/components/pages/map_gas_station_page.dart';
 import 'package:auto_picker/models/city.dart';
 import 'package:auto_picker/models/fuel_alert.dart';
@@ -307,6 +308,10 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
         title: 'Fuel Alert',
         isLogged: true,
         showBackButton: true,
+      ),
+      bottomNavigationBar: Footer(
+        isLogged: true,
+        currentIndex: 0,
       ),
       body: SafeArea(
         child: Padding(

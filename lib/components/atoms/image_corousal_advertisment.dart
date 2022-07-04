@@ -27,7 +27,7 @@ class CustomCarouselAdvertisement extends StatefulWidget {
       this.arrowColor = Colors.white,
       this.arrowSize = 48,
       this.subTitleColor = Colors.white,
-      this.subtitleTextSize = 16,
+      this.subtitleTextSize = 18,
       this.titleColor = Colors.white,
       this.titleTextSize = 20,
       this.onPressedAd})
@@ -87,43 +87,59 @@ class _CustomCarouselAdvertisementState
                     enableInfiniteScroll: true,
                     autoPlayAnimationDuration: Duration(milliseconds: 100),
                     viewportFraction: 1.0,
-                    onScrolled: (value) {
-                      print("OnScolled ${value.toInt()}");
-                      print("OnScolled ");
-                      //setState(() {
-                      // counter =  itemIndex// widget.items.length;
-
-                      print("OnScolled counter ${counter}");
-                      //});
-                    },
+                    onScrolled: (value) {},
                     pageSnapping: true),
               ),
               Container(
                 color: Colors.transparent,
+                alignment: Alignment.topLeft,
                 child: Column(
                   children: [
-                    Text(
-                      widget.items[counter] != null
-                          ? widget.items[counter].title
-                          : '',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          backgroundColor: AppColors.primaryVariant,
-                          color: widget.titleColor,
-                          fontSize: widget.titleTextSize),
-                    ),
-                    Text(
-                      widget.items[counter] != null
-                          ? widget.items[counter].subtitle
-                          : '',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          backgroundColor: AppColors.primaryVariant,
-                          color: widget.subTitleColor,
-                          fontSize: widget.subtitleTextSize),
-                    ),
+                    Container(
+                        decoration: const BoxDecoration(
+                            color: AppColors.primaryVariant,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                bottomLeft: Radius.circular(0),
+                                topRight: Radius.circular(30),
+                                bottomRight: Radius.circular(30))),
+                        child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              widget.items[counter]?.title,
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: widget.titleColor,
+                                  fontSize: widget.titleTextSize),
+                            ))),
                   ],
-                  mainAxisSize: MainAxisSize.min,
+                ),
+              ),
+              Container(
+                color: Colors.transparent,
+                alignment: Alignment.topRight,
+                child: Column(
+                  children: [
+                    Container(
+                        decoration: const BoxDecoration(
+                            color: AppColors.primaryVariant,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                bottomLeft: Radius.circular(30),
+                                topRight: Radius.circular(10),
+                                bottomRight: Radius.circular(0))),
+                        child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              widget.items[counter]?.subtitle,
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: widget.titleColor,
+                                  fontSize: widget.titleTextSize),
+                            ))),
+                  ],
                 ),
               ),
               LayoutBuilder(

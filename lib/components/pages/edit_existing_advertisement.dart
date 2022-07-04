@@ -1,10 +1,6 @@
 import 'package:auto_picker/components/atoms/custom_app_bar.dart';
-import 'package:auto_picker/components/organisms/product_add_edit_form.dart';
 import 'package:auto_picker/components/organisms/product_advertisment_add_edit_form.dart';
-import 'package:auto_picker/models/product.dart';
 import 'package:auto_picker/models/spare_advertisement.dart';
-import 'package:auto_picker/services/product_controller.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class EditExistingAdvertisementPage extends StatefulWidget {

@@ -5,6 +5,7 @@ import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/atoms/service_card_nearby_mechanic.dart';
+import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:auto_picker/components/pages/mechanic_profile_page.dart';
 import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/models/product.dart';
@@ -221,6 +222,10 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
         title: 'Find Nearby',
         isLogged: true,
         showBackButton: true,
+      ),
+      bottomNavigationBar: Footer(
+        isLogged: true,
+        currentIndex: 0,
       ),
       resizeToAvoidBottomInset: false,
       body: isLoading
