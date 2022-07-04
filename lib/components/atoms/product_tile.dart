@@ -28,7 +28,7 @@ class ProductTile extends StatelessWidget {
       this.titleColor = Colors.black,
       this.titleTextSize = 16,
       this.priceTextSize = 14,
-      this.imgBorderRadius = 8})
+      this.imgBorderRadius = 12})
       : super(key: key);
 
   @override
@@ -41,9 +41,10 @@ class ProductTile extends StatelessWidget {
               width: 150,
               height: 75,
               decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(imgBorderRadius),
                   color: AppColors.black,
                   border: Border.all(
-                    color: AppColors.black,
+                    color: AppColors.primaryVariant,
                     width: 1,
                   )),
               child: ClipRRect(

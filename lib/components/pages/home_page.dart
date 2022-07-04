@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
         {
           var _s = await sellerController.getSeller((_auth.currentUser.uid));
           var sellerModel = Seller.fromJson(_s);
-          if (!sellerModel.isPayed) showAlert(context);
+          if (!sellerModel?.isPayed) showAlert(context);
         }
         break;
     }
@@ -406,7 +406,7 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         margin:
                             EdgeInsets.symmetric(vertical: 20, horizontal: 5),
-                        height: 400,
+                        height: productList.length < 3 ? 150 : 400,
                         child: ListView.builder(
                           controller: controller,
                           itemCount: productList.length ?? 0,
