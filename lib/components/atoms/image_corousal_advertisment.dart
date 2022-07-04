@@ -2,6 +2,7 @@ import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/pages/advertisement_page.dart';
 import 'package:auto_picker/models/carousel_data.dart';
 import 'package:auto_picker/models/spare_advertisement.dart';
+import 'package:auto_picker/themes/colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class CustomCarouselAdvertisement extends StatefulWidget {
       this.arrowColor = Colors.white,
       this.arrowSize = 48,
       this.subTitleColor = Colors.white,
-      this.subtitleTextSize = 16,
+      this.subtitleTextSize = 18,
       this.titleColor = Colors.white,
       this.titleTextSize = 20,
       this.onPressedAd})
@@ -49,30 +50,6 @@ class _CustomCarouselAdvertisementState
     });
   }
 
-  void navigateToAdvertisementPage(int index) {
-    print("advert");
-    if (isLogged) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AdvertisementPage(
-              advertisement: widget.items[index],
-            ),
-          ));
-    } else {
-      showDialog(
-          context: context,
-          builder: (context) => ItemDialogMessage(
-                icon: 'assets/images/x-circle.svg',
-                titleText: 'Need to Signin',
-                bodyText:
-                    "Auto picker terms & conditions without an account user's cann't see detail view",
-                primaryButtonText: 'Ok',
-                onPressedPrimary: () => Navigator.pop(context, 'Cancel'),
-              ));
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -81,24 +58,26 @@ class _CustomCarouselAdvertisementState
           onTap: () => widget.onPressedAd(counter),
           child: Stack(
             children: [
-              CarouselSlider(
+              CarouselSlider.builder(
+                itemCount: widget.items.length,
                 carouselController: controller,
-                items: widget.items
-                    .map(
-                      (e) => Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          image: DecorationImage(
-                            image: NetworkImage(
-                              e.imageList[0],
-                            ),
-                            fit: BoxFit.cover,
-                          ),
+                itemBuilder:
+                    (BuildContext context, int itemIndex, int pageViewIndex) {
+                  counter = itemIndex;
+                  return Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      image: DecorationImage(
+                        image: NetworkImage(
+                          widget.items[itemIndex].imageList[0],
                         ),
+                        fit: BoxFit.cover,
                       ),
-                    )
-                    .toList(),
+                    ),
+                  );
+                },
                 options: CarouselOptions(
+                    initialPage: 0,
                     height: MediaQuery.of(context).size.height *
                         widget.heightPercentage,
                     enlargeCenterPage: true,
@@ -106,41 +85,61 @@ class _CustomCarouselAdvertisementState
                     aspectRatio: 16 / 9,
                     autoPlayCurve: Curves.fastOutSlowIn,
                     enableInfiniteScroll: true,
-                    autoPlayAnimationDuration: Duration(milliseconds: 800),
+                    autoPlayAnimationDuration: Duration(milliseconds: 100),
                     viewportFraction: 1.0,
-                    onScrolled: (value) {
-                      setState(() {
-                        counter = value != null
-                            ? value.toInt() % widget.items.length
-                            : 0;
-                      });
-                    },
+                    onScrolled: (value) {},
                     pageSnapping: true),
               ),
               Container(
                 color: Colors.transparent,
+                alignment: Alignment.topLeft,
                 child: Column(
                   children: [
-                    Text(
-                      widget.items[counter] != null
-                          ? widget.items[counter].title
-                          : '',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          color: widget.titleColor,
-                          fontSize: widget.titleTextSize),
-                    ),
-                    Text(
-                      widget.items[counter] != null
-                          ? widget.items[counter].subtitle
-                          : '',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          color: widget.subTitleColor,
-                          fontSize: widget.subtitleTextSize),
-                    ),
+                    Container(
+                        decoration: BoxDecoration(
+                            color: Colors.blue[700],
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                bottomLeft: Radius.circular(0),
+                                topRight: Radius.circular(30),
+                                bottomRight: Radius.circular(30))),
+                        child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              widget.items[counter]?.title,
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: widget.titleColor,
+                                  fontSize: widget.titleTextSize),
+                            ))),
                   ],
-                  mainAxisSize: MainAxisSize.min,
+                ),
+              ),
+              Container(
+                color: Colors.transparent,
+                alignment: Alignment.topRight,
+                child: Column(
+                  children: [
+                    Container(
+                        decoration: BoxDecoration(
+                            color: Colors.blue[700],
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                bottomLeft: Radius.circular(30),
+                                topRight: Radius.circular(10),
+                                bottomRight: Radius.circular(0))),
+                        child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              widget.items[counter]?.subtitle,
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: widget.titleColor,
+                                  fontSize: widget.titleTextSize),
+                            ))),
+                  ],
                 ),
               ),
               LayoutBuilder(

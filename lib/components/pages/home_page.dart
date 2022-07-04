@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
         {
           var _s = await sellerController.getSeller((_auth.currentUser.uid));
           var sellerModel = Seller.fromJson(_s);
-          if (!sellerModel.isPayed) showAlert(context);
+          if (!sellerModel?.isPayed) showAlert(context);
         }
         break;
     }
@@ -115,14 +115,6 @@ class _HomePageState extends State<HomePage> {
   getMechanicsList() async {
     List<dynamic> res = await mechanicsController.getMechanics();
     if (res != null) {
-      res.forEach((element) {
-        var tM = Mechanic.fromJson(element);
-        if (tM.isPayed) {
-          setState(() {
-            mechanicList.add(tM);
-          });
-        }
-      });
       res.forEach((element) {
         var tM = Mechanic.fromJson(element);
         if (tM.isPayed) {
@@ -313,6 +305,37 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      if (advertisementList.isNotEmpty)
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GenericText(
+                                text: 'Advertisements',
+                                isBold: true,
+                                textSize: 24,
+                              ),
+                              GenericTextButton(
+                                isBold: true,
+                                color: AppColors.darkBlue,
+                                text: 'See All',
+                                onPressed: () {
+                                  navigate(context,
+                                      RouteGenerator.advertisementListingPage);
+                                },
+                              ),
+                            ]),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      if (advertisementList.isNotEmpty)
+                        CustomCarouselAdvertisement(
+                          items: advertisementList,
+                          onPressedAd: (index) =>
+                              navigateToAdvertisementPage(index),
+                        ),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -354,37 +377,6 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(
                         height: 20,
                       ),
-                      if (advertisementList.isNotEmpty)
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              GenericText(
-                                text: 'Advertisements',
-                                isBold: true,
-                                textSize: 24,
-                              ),
-                              GenericTextButton(
-                                isBold: true,
-                                color: AppColors.darkBlue,
-                                text: 'See All',
-                                onPressed: () {
-                                  navigate(context,
-                                      RouteGenerator.advertisementListingPage);
-                                },
-                              ),
-                            ]),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      if (advertisementList.isNotEmpty)
-                        CustomCarouselAdvertisement(
-                          items: advertisementList,
-                          onPressedAd: (index) =>
-                              navigateToAdvertisementPage(index),
-                        ),
-                      const SizedBox(
-                        height: 20,
-                      ),
                       Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -406,7 +398,7 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         margin:
                             EdgeInsets.symmetric(vertical: 20, horizontal: 5),
-                        height: 400,
+                        height: productList.length < 4 ? 250 : 400,
                         child: ListView.builder(
                           controller: controller,
                           itemCount: productList.length ?? 0,

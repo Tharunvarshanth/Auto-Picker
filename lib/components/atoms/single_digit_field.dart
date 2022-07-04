@@ -23,6 +23,7 @@ class SingleDigitField extends StatelessWidget {
         maxLength: 1,
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
+            counterText: "",
             fillColor: Colors.grey[300],
             border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(10))),

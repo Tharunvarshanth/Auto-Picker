@@ -194,7 +194,7 @@ class _ProductAdvertisementAddFormState
 
     try {
       resultList = await MultiImagePicker.pickImages(
-        maxImages: 1,
+        maxImages: 3,
         enableCamera: true,
         selectedAssets: images,
         cupertinoOptions: const CupertinoOptions(
@@ -225,10 +225,13 @@ class _ProductAdvertisementAddFormState
       crossAxisCount: 3,
       children: List.generate(images.length, (index) {
         Asset asset = images[index];
-        return AssetThumb(
-          asset: asset,
-          width: 100,
-          height: 100,
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: AssetThumb(
+            asset: asset,
+            width: 75,
+            height: 75,
+          ),
         );
       }),
     );
@@ -267,6 +270,7 @@ class _ProductAdvertisementAddFormState
             ),
             TextFormField(
               controller: productTitleController,
+              maxLength: 15,
               decoration: const InputDecoration(
                   border: UnderlineInputBorder(),
                   labelText: 'Product Title *',
@@ -282,6 +286,7 @@ class _ProductAdvertisementAddFormState
             SizedBox(height: size.height * 0.015),
             TextFormField(
               controller: productSubTitleController,
+              maxLength: 10,
               decoration: const InputDecoration(
                   border: UnderlineInputBorder(),
                   labelText: 'SubTitle *',

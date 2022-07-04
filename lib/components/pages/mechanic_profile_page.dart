@@ -122,6 +122,7 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
       ),
       bottomNavigationBar: Footer(
         isLogged: true,
+        currentIndex: 0,
       ),
       body: isLoading
           ? CircularProgressIndicator()

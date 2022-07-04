@@ -5,6 +5,7 @@ import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/atoms/service_card_nearby_mechanic.dart';
+import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:auto_picker/components/pages/mechanic_profile_page.dart';
 import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/models/product.dart';
@@ -109,7 +110,7 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
           markerId: const MarkerId('marker'),
           position: point,
           infoWindow: const InfoWindow(
-            title: 'My Location ',
+            title: 'Your Location',
           )));
     });
   }
@@ -121,7 +122,7 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
           position: LatLng(double.parse(mechanic.location_lat),
               double.parse(mechanic.location_lon)),
           infoWindow: InfoWindow(
-            title: mechanic?.specialist,
+            title: mechanic?.name,
           )));
     });
   }
@@ -149,6 +150,10 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
   }
 
   void handleNearByMechanics() {
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus) {
+      currentFocus.unfocus();
+    }
     setState(() {
       isLoading = true;
       mechanicListFiltered = [];
@@ -222,6 +227,12 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
         isLogged: true,
         showBackButton: true,
       ),
+      bottomNavigationBar: !isShowMap
+          ? Footer(
+              isLogged: true,
+              currentIndex: 0,
+            )
+          : null,
       resizeToAvoidBottomInset: false,
       body: isLoading
           ? const Center(child: (CircularProgressIndicator()))
@@ -239,9 +250,13 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
                               children: [
                                 Expanded(
                                   child: TextFormField(
+                                    maxLength: 4,
+                                    keyboardType: TextInputType.number,
                                     controller: distanceController,
                                     decoration: const InputDecoration(
-                                        hintText: 'Enter distance in KM '),
+                                        counterText: "",
+                                        hintText: 'Enter distance in KM ',
+                                        suffixText: ' Km'),
                                     onChanged: (text) {},
                                   ),
                                 ),
@@ -252,8 +267,6 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
                                               '' &&
                                           (distanceController.text)
                                               .isNotEmpty) {
-                                        print(
-                                            "1 ${distanceController.text.isNotEmpty}");
                                         nearByDistance = double.parse(
                                             distanceController.text);
                                         handleNearByMechanics();
@@ -266,11 +279,12 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 GenericText(
-                                  text: "Current Distance : ${nearByDistance}",
+                                  text:
+                                      "Current Distance : ${nearByDistance} Km",
                                 )
                               ],
                             ),
-                            Container(
+                            SizedBox(
                               height:
                                   MediaQuery.of(context).size.height * 3 / 5,
                               child: ListView.builder(

@@ -109,6 +109,7 @@ class _SellerSignUpFormState extends State<SellerSignUpForm> {
               keyboardType: TextInputType.phone,
               maxLength: 11,
               decoration: const InputDecoration(
+                  counterText: "",
                   prefixText: '+94',
                   prefixStyle: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                   border: UnderlineInputBorder(),

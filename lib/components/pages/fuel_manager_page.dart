@@ -1,7 +1,5 @@
 import 'package:auto_picker/components/atoms/custom_app_bar.dart';
-import 'package:auto_picker/models/product.dart';
-import 'package:auto_picker/services/product_controller.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:flutter/material.dart';
 
 class FuelManagerPage extends StatefulWidget {
@@ -22,6 +20,10 @@ class _FuelManagerPageState extends State<FuelManagerPage> {
           title: 'Fuel Cost Manager',
           isLogged: false,
           showBackButton: false,
+        ),
+        bottomNavigationBar: Footer(
+          isLogged: true,
+          currentIndex: 0,
         ),
         body: Center(child: Text('TestPage')));
   }

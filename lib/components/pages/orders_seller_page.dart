@@ -4,7 +4,6 @@ import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:auto_picker/components/organisms/order_tile.dart';
 import 'package:auto_picker/models/notification.dart';
 import 'package:auto_picker/models/order.dart';
-import 'package:auto_picker/models/order_data.dart';
 import 'package:auto_picker/models/product.dart';
 import 'package:auto_picker/models/user_model.dart';
 import 'package:auto_picker/services/notification_controller.dart';
@@ -159,6 +158,7 @@ class _OrdersSellerListState extends State<OrdersSellerListPage> {
       ),
       bottomNavigationBar: Footer(
         isLogged: true,
+        currentIndex: 0,
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())

@@ -180,7 +180,10 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
         isLogged: isLogged,
         showBackButton: true,
       ),
-      bottomNavigationBar: Footer(),
+      bottomNavigationBar: Footer(
+        isLogged: true,
+        currentIndex: 0,
+      ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(

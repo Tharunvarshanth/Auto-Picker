@@ -12,6 +12,7 @@ class Mechanic {
   String location_lat;
   String location_lon;
   bool isPayed;
+  String name;
 
   Mechanic(
       this.workingAddress,
@@ -24,7 +25,8 @@ class Mechanic {
       this.isBlocked,
       this.location_lat,
       this.location_lon,
-      this.isPayed);
+      this.isPayed,
+      this.name);
 
   void updateId(String id) {
     this.id = id;
@@ -46,7 +48,8 @@ class Mechanic {
         json["isBlocked"],
         json["location_lat"],
         json["location_lon"],
-        json["isPayed"]);
+        json["isPayed"],
+        json["name"]);
   }
 
   Map<String, Object> toJson() {
@@ -61,7 +64,8 @@ class Mechanic {
       'isBlocked': isBlocked,
       'location_lat': location_lat,
       'location_lon': location_lon,
-      "isPayed": isPayed
+      "isPayed": isPayed,
+      "name": name
     };
   }
 }

@@ -74,7 +74,7 @@ class _ImageTileState extends State<ImageTile> {
                       BoxShadow(offset: Offset(20, 20), color: Colors.yellow),
                     ],*/
                     gradient: RadialGradient(
-                        colors: [Colors.blue[100], Colors.blue[200]])),
+                        colors: [Colors.blue[400], Colors.blue[600]])),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -84,6 +84,7 @@ class _ImageTileState extends State<ImageTile> {
                         padding: EdgeInsets.all(widget.textPadding),
                         child: Text(
                           widget.text,
+                          maxLines: 1,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: widget.textColor,
@@ -95,6 +96,7 @@ class _ImageTileState extends State<ImageTile> {
                         padding: EdgeInsets.all(widget.textPadding),
                         child: Text(
                           widget.subText,
+                          maxLines: 1,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: widget.subTextColor,
