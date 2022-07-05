@@ -32,101 +32,103 @@ class ServiceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       return Container(
+        margin: EdgeInsets.fromLTRB(0, 15, 0, 5),
         width: constraints.maxWidth * 1,
-        child: SingleChildScrollView(
-          child: Card(
-            child: Padding(
-              padding: EdgeInsets.all(padding),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Wrap(
-                    direction: Axis.horizontal,
-                    alignment: WrapAlignment.spaceBetween,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          GenericText(
-                            text: miniTitle,
-                            textAlign: TextAlign.start,
-                            textSize: titleSize ?? 16,
-                          ),
-                          GenericText(
-                            text: miniSubTitle,
-                            textAlign: TextAlign.start,
-                            textSize: subTitleSize ?? 14,
-                          ),
-                        ],
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                      ),
-                      GenericButton(
-                        isBold: true,
-                        text: buttonTitle,
-                        textColor: AppColors.primaryVariant,
-                        onPressed: buttonPressed,
-                        borderColor: AppColors.primaryVariant,
-                        backgroundColor: AppColors.skyBlue,
-                        paddingVertical: 5,
-                        elevation: 0,
-                      )
-                    ],
-                  ),
-                  const Divider(
-                    color: Colors.black45,
-                  ),
-                  Wrap(
-                    direction: Axis.horizontal,
-                    alignment: WrapAlignment.spaceBetween,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Location -',
-                            textAlign: TextAlign.start,
-                            style: TextStyle(fontSize: titleSize),
-                          ),
-                        ],
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                      ),
-                      TextButton(
-                          onPressed: locationPressed,
-                          child: GenericText(
-                              text: location, textSize: subTitleSize))
-                    ],
-                  ),
-                  const Divider(
-                    color: Colors.black45,
-                  ),
-                  Wrap(
-                    direction: Axis.horizontal,
-                    alignment: WrapAlignment.spaceBetween,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Working Hours -',
-                            textAlign: TextAlign.start,
-                            style: TextStyle(fontSize: titleSize),
-                          ),
-                        ],
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                      ),
-                      Text(
-                        openHours,
-                        style: TextStyle(fontSize: subTitleSize),
-                      )
-                    ],
-                  ),
-                ],
-              ),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(padding),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Wrap(
+                  direction: Axis.horizontal,
+                  alignment: WrapAlignment.spaceBetween,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        GenericText(
+                          text: miniTitle,
+                          textAlign: TextAlign.start,
+                          textSize: titleSize ?? 16,
+                        ),
+                        GenericText(
+                          text: miniSubTitle,
+                          textAlign: TextAlign.start,
+                          textSize: subTitleSize ?? 14,
+                        ),
+                      ],
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                    ),
+                    GenericButton(
+                      isBold: true,
+                      text: buttonTitle,
+                      textColor: AppColors.primaryVariant,
+                      onPressed: buttonPressed,
+                      borderColor: AppColors.primaryVariant,
+                      backgroundColor: AppColors.skyBlue,
+                      paddingVertical: 5,
+                      elevation: 0,
+                    )
+                  ],
+                ),
+                const Divider(
+                  color: Colors.black45,
+                ),
+                Wrap(
+                  direction: Axis.horizontal,
+                  alignment: WrapAlignment.spaceBetween,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Location -',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(fontSize: titleSize),
+                        ),
+                      ],
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                    ),
+                    TextButton(
+                        onPressed: locationPressed,
+                        child:
+                            GenericText(text: location, textSize: subTitleSize))
+                  ],
+                ),
+                const Divider(
+                  color: Colors.black45,
+                ),
+                Wrap(
+                  direction: Axis.horizontal,
+                  alignment: WrapAlignment.spaceBetween,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Working Hours -',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(fontSize: titleSize),
+                        ),
+                      ],
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                    ),
+                    Text(
+                      openHours,
+                      style: TextStyle(fontSize: subTitleSize),
+                    )
+                  ],
+                ),
+              ],
             ),
           ),
         ),

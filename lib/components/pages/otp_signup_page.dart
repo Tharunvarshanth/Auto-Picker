@@ -9,6 +9,7 @@ import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/models/seller.dart';
 import 'package:auto_picker/models/user_model.dart';
 import 'package:auto_picker/routes.dart';
+import 'package:auto_picker/services/feedback_controller.dart';
 import 'package:auto_picker/services/mechanic_controller.dart';
 import 'package:auto_picker/services/notification_controller.dart';
 import 'package:auto_picker/services/order_controller.dart';
@@ -59,6 +60,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
 
   var productController = ProductController();
   var advertisementController = AdvertisementController();
+  var mFeedbackController = FeedBackController();
 
   void initState() {
     super.initState();
@@ -121,7 +123,8 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
               widget.params["location-lon"],
               false,
               widget.params["name"]);
-          resOther = await mechanicController.addMechanic(mechanic);
+          await mFeedbackController.addTestFeedback(fireUser);
+          await mechanicController.addMechanic(mechanic);
         }
         break;
       case Users.Seller:

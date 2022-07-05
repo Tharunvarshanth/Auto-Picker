@@ -154,7 +154,7 @@ class _MechanicsSignUpEditFormState extends State<MechanicsSignUpEditForm> {
             GenericInputOptionSelect(
               width: size.width,
               labelText: 'Specialist',
-              value: specialist,
+              dropDownValue: specialist,
               itemList: MechanicSpecialistSkills,
               onValueChange: (text) => handleMechanicsSpecialist(text),
             ),

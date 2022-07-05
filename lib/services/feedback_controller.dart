@@ -30,13 +30,15 @@ class FeedBackController {
         .get();
   }
 
-  Future<dynamic> addTestAdvertisment(String uId) async {
+  Future<dynamic> addTestFeedback(String uId) async {
     var res;
-    await feedbackCollection.doc(uId).set({'test': 'test'}).then((value) {
-      print("addSpareAdvertisement:success");
+    await feedbackCollection
+        .doc(uId)
+        .set({"createdAt": DateTime.now().toLocal().toString()}).then((value) {
+      print("addTestFeedbacksuccess");
       res = true;
     }).catchError((onError) {
-      print("addSpareAdvertisement: $onError");
+      print("addTestFeedback: $onError");
       res = null;
     });
     return res;

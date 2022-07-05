@@ -371,7 +371,7 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
             GenericInputOptionSelect(
               width: size.width,
               labelText: 'Condition *',
-              value: condition,
+              dropDownValue: condition,
               itemList: SPAREPARTSCONDITIONLIST,
               onValueChange: (text) => handleConditionChange(text),
             ),

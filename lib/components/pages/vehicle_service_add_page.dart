@@ -90,7 +90,7 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
         context: context,
         builder: (context) => ItemDialogMessage(
               icon: 'assets/images/x-circle.svg',
-              titleText: 'Fill All Required Fields',
+              titleText: 'Fill All Fields',
               bodyText: "",
               primaryButtonText: 'Ok',
               onPressedPrimary: () => Navigator.pop(context),
@@ -103,28 +103,40 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
 
     return Scaffold(
         body: SafeArea(
-            child: Stack(children: [
-      IconButton(
-        padding: const EdgeInsets.all(12),
-        iconSize: 36,
-        alignment: Alignment.topLeft,
-        icon: const Icon(Icons.arrow_back),
-        color: AppColors.black,
-        onPressed: () {
-          navigateBack(context);
-        },
-      ),
-      SingleChildScrollView(
-        padding: EdgeInsets.fromLTRB(20, 75, 10, 50),
-        child: Column(
+            child: SingleChildScrollView(
+      child: Stack(children: [
+        IconButton(
+          padding: EdgeInsets.all(12),
+          iconSize: 40,
+          alignment: Alignment.topLeft,
+          icon: Image.asset(
+            "assets/images/back-arrow.png",
+            scale: 1.2,
+          ),
+          onPressed: () {
+            navigateBack(context);
+          },
+        ),
+        Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: [
-            GenericText(
-              text: 'Add Vehicle Service',
-              textSize: 36,
-              isBold: true,
+            Container(
+              height: 200,
+              margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+              child: Image.asset(
+                "assets/images/calendar.png",
+                scale: 0.5,
+              ),
+            ),
+            const Text(
+              "Add Vehicle Service",
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+              ),
             ),
             GenericText(
               textAlign: TextAlign.left,
@@ -136,11 +148,18 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
-                    GenericTextField(
+                    TextFormField(
                       controller: currentMileage,
-                      labelText: 'Current Mileage *',
-                      hintText: "150,000",
-                      borderColor: AppColors.ash,
+                      decoration: const InputDecoration(
+                          border: UnderlineInputBorder(),
+                          labelText: 'Current Mileage *',
+                          labelStyle: TextStyle(fontSize: 15)),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter Your Address';
+                        }
+                        return null;
+                      },
                     ),
                     GenericTextButton(
                       text: serviceDate ?? 'Serviced Date *',
@@ -206,11 +225,19 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
                         }, currentTime: DateTime.now(), locale: LocaleType.en);
                       },
                     ),
-                    GenericTextField(
+                    TextFormField(
                       controller: descriptionController,
-                      labelText: 'Description *',
-                      hintText: '',
-                      borderColor: AppColors.ash,
+                      decoration: const InputDecoration(
+                          border: UnderlineInputBorder(),
+                          labelText: 'Description *',
+                          hintText: '',
+                          labelStyle: TextStyle(fontSize: 15)),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter Your Address';
+                        }
+                        return null;
+                      },
                     ),
                     SizedBox(height: size.height * 0.015),
                     GenericButton(
@@ -236,7 +263,7 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
                 ))
           ],
         ),
-      ),
-    ])));
+      ]),
+    )));
   }
 }

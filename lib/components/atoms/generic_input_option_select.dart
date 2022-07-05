@@ -15,7 +15,7 @@ class GenericInputOptionSelect extends StatelessWidget {
   TextInputType inputType;
   Icon prefixIcon;
   double width;
-  String value;
+  String dropDownValue;
   List<String> itemList;
   bool enable = true;
   void Function() onTap = () => {};
@@ -37,7 +37,7 @@ class GenericInputOptionSelect extends StatelessWidget {
       this.width,
       this.enable,
       this.onTap,
-      this.value})
+      this.dropDownValue})
       : super(key: key);
 
   @override
@@ -68,7 +68,7 @@ class GenericInputOptionSelect extends StatelessWidget {
                 isExpanded: true,
                 menuMaxHeight: 500,
                 borderRadius: BorderRadius.circular(5),
-                value: value,
+                value: dropDownValue,
                 icon: const Icon(Icons.arrow_drop_down),
                 elevation: 16,
                 style: const TextStyle(color: AppColors.black),

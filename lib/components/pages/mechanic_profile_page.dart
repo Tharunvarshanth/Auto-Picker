@@ -69,8 +69,8 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
   void setData() async {
     var _user = await userController.getUser(widget.mechanic.id);
     userModel = UserModel.fromJson(_user);
-    QuerySnapshot res = await feedbackController
-        .getFeedbackList('UUw8Cu9hDEZQCtsz3PC0lIlpdN52');
+    QuerySnapshot res =
+        await feedbackController.getFeedbackList(widget.mechanic.id);
     print("feedback ${res.size}");
     if (res.size > 0) {
       res.docs.forEach((element) async {
@@ -87,13 +87,11 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
   }
 
   void addFeedback() async {
-    // existingUser.currentUser.uid
     var _user = await userController.getUser(widget.mechanic.id);
     userModel = UserModel.fromJson(_user);
     var feedback = FeedBackData(
         userModel.fullName, DateTime.now().toString(), feedbackText);
-    var res =
-        feedbackController.addFeedback(feedback, existingUser.currentUser.uid);
+    var res = feedbackController.addFeedback(feedback, widget.mechanic.id);
   }
 
   Future<void> _makePhoneCall(String phoneNumber) async {
@@ -125,7 +123,7 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
         currentIndex: 0,
       ),
       body: isLoading
-          ? CircularProgressIndicator()
+          ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: 8),
               child: Column(
@@ -136,10 +134,16 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
                   ),
                   getHeader(),
                   InfoTile(SvgPicture.asset("assets/images/map-pin.svg"),
-                      title: "City", subTitle: widget.mechanic.workingCity),
+                      title: widget.mechanic.workingCity, subTitle: "City"),
+                  Divider(
+                    color: Colors.grey,
+                    thickness: 1,
+                    endIndent: MediaQuery.of(context).size.width * 1 / 8,
+                    indent: MediaQuery.of(context).size.width * 1 / 8,
+                  ),
                   InfoTile(SvgPicture.asset("assets/images/map-pin.svg"),
-                      title: "Working Address",
-                      subTitle: widget.mechanic.workingAddress),
+                      title: widget.mechanic.workingAddress,
+                      subTitle: "Working Address"),
                   Divider(
                     color: Colors.grey,
                     thickness: 1,
@@ -147,9 +151,9 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
                     indent: MediaQuery.of(context).size.width * 1 / 8,
                   ),
                   InfoTile(SvgPicture.asset("assets/images/clock.svg"),
-                      title: "Working Hours",
-                      subTitle:
-                          "${utcTo12HourFormat(widget.mechanic.workingTime_From)} - ${utcTo12HourFormat(widget.mechanic.workingTime_To)}"),
+                      title:
+                          "${utcTo12HourFormat(widget.mechanic.workingTime_From)} - ${utcTo12HourFormat(widget.mechanic.workingTime_To)}",
+                      subTitle: "Working Hours"),
                   Divider(
                     color: Colors.grey,
                     thickness: 1,
@@ -157,7 +161,7 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
                     indent: MediaQuery.of(context).size.width * 1 / 8,
                   ),
                   InfoTile(SvgPicture.asset("assets/images/phone.svg"),
-                      title: 'Phone Number', subTitle: userModel.phoneNumber),
+                      title: userModel.phoneNumber, subTitle: 'Phone Number'),
                   Divider(
                     color: Colors.grey,
                     thickness: 1,
@@ -172,13 +176,20 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
                     textAlign: TextAlign.start,
                     style: TextStyle(fontSize: 20),
                   ),
-                  TextField(
+                  TextFormField(
                     onChanged: (text) {
                       feedbackText = text;
                     },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Enter Feedback'),
+                    decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                      hintText: 'Enter Feedback',
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter Your Name';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(
                     height: 5,
@@ -237,7 +248,7 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
             CircularProfileAvatar(
               profileUrl ?? '',
               initialsText: Text(
-                userModel.fullName,
+                userModel.fullName[0],
                 style: TextStyle(fontSize: 24, color: Colors.white),
               ),
               radius: 40,
@@ -247,7 +258,7 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
                 height: 40,
                 child: CircularProgressIndicator(),
               ),
-              backgroundColor: AppColors.green,
+              backgroundColor: AppColors.primaryVariant,
             ),
             const SizedBox(
               width: 16,
@@ -283,14 +294,6 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
                     ),
                     const SizedBox(
                       width: 8,
-                    ),
-                    GenericButton(
-                      text: 'CHAT',
-                      onPressed: () {},
-                      paddingHorizontal: 2,
-                      textColor: AppColors.blue,
-                      backgroundColor: AppColors.white,
-                      paddingVertical: 2,
                     ),
                   ],
                 )
