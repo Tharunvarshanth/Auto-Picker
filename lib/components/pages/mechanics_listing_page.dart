@@ -2,6 +2,7 @@ import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/generic_icon_button.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_citys_select.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_select.dart';
+import 'package:auto_picker/components/atoms/generic_input_option_specialist_select.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/generic_time_picker.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
@@ -71,10 +72,15 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
     });
   }
 
-  void handleSpecialist(specialist) {
+  void handleSpecialist(specia) {
+    if (specia == specialist) {
+      specialist = null;
+      return;
+    }
     setState(() {
-      specialist = specialist;
+      specialist = specia;
     });
+    print("Tharun ${specialist}");
   }
 
   getMechanicsList() async {
@@ -120,7 +126,7 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
   }
 
   void filtering() {
-    print("filtering $city $_valueChangedTo $_valueChangedFrom $specialist");
+    print("filtering  $specialist");
     setState(() {
       isLoading = true;
     });
@@ -172,6 +178,104 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
     }
   }
 
+  void createFilter(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            scrollable: true,
+            title: Text('Sort'),
+            content: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Form(
+                child: Column(
+                  children: <Widget>[
+                    GenericInputOptionSpecialistSelect(
+                        width: size.width,
+                        labelText: 'Specialist',
+                        hintText: 'Choose Specialist',
+                        value: specialist,
+                        itemList: MechanicSpecialistSkills,
+                        onValueChange: (text) => handleSpecialist(text)),
+                    SizedBox(height: size.height * 0.015),
+                    GenericInputOptionCitysSelect(
+                      width: size.width,
+                      labelText: '  Working City',
+                      value: city,
+                      itemList: dropDownCityList,
+                      onValueChange: (text) => handleCity(text),
+                    ),
+                    SizedBox(height: size.height * 0.015),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Container(
+                          width: 100,
+                          child: GenericTimePicker(
+                              controller: timePickerToController,
+                              labelText: 'Start',
+                              onChanged: (value) => {
+                                    print("time ${value}"),
+                                    setState(() {
+                                      _valueChangedTo = value;
+                                    })
+                                  },
+                              onSaved: (value) => {
+                                    setState(() {
+                                      _valueSavedTo = value;
+                                    })
+                                  }),
+                        ),
+                        SizedBox(height: size.height * 0.015),
+                        Container(
+                          width: 100,
+                          child: GenericTimePicker(
+                              controller: timePickerFromController,
+                              labelText: 'Finish',
+                              onChanged: (value) => {
+                                    print("time ${value}"),
+                                    setState(() {
+                                      _valueChangedFrom = value;
+                                    })
+                                  },
+                              onSaved: (value) => {
+                                    print("time onsave ${value}}"),
+                                    setState(() {
+                                      _valueSavedTo = value;
+                                    })
+                                  }),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            actions: [
+              RaisedButton(
+                  child: Text("Filter"),
+                  onPressed: () {
+                    filtering();
+                    Navigator.pop(context, 'Cancel');
+                  }),
+              RaisedButton(
+                  child: Text("Cancel"),
+                  onPressed: () {
+                    setState(() {
+                      _valueChangedFrom = '';
+                      _valueChangedTo = '';
+                      city = null;
+                      specialist = null;
+                      mechanicListFiltered = mechanicList;
+                    });
+                    Navigator.pop(context, 'Cancel');
+                  })
+            ],
+          );
+        });
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -212,129 +316,23 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         GenericIconButton(
-                          text: 'Sort by request',
-                          iconLeft: "assets/images/filter.svg",
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    scrollable: true,
-                                    title: Text('Sort'),
-                                    content: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Form(
-                                        child: Column(
-                                          children: <Widget>[
-                                            GenericInputOptionSelect(
-                                                width: size.width,
-                                                labelText: 'Specialist',
-                                                hintText: 'Choose Specialist',
-                                                dropDownValue: specialist,
-                                                itemList:
-                                                    MechanicSpecialistSkills,
-                                                onValueChange: (text) =>
-                                                    handleSpecialist(text)),
-                                            SizedBox(
-                                                height: size.height * 0.015),
-                                            GenericInputOptionCitysSelect(
-                                              width: size.width,
-                                              labelText: '  Working City',
-                                              value: city,
-                                              itemList: dropDownCityList,
-                                              onValueChange: (text) =>
-                                                  handleCity(text),
-                                            ),
-                                            SizedBox(
-                                                height: size.height * 0.015),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: <Widget>[
-                                                Container(
-                                                  width: 100,
-                                                  child: GenericTimePicker(
-                                                      controller:
-                                                          timePickerToController,
-                                                      labelText: 'Start',
-                                                      onChanged: (value) => {
-                                                            print(
-                                                                "time ${value}"),
-                                                            setState(() {
-                                                              _valueChangedTo =
-                                                                  value;
-                                                            })
-                                                          },
-                                                      onSaved: (value) => {
-                                                            setState(() {
-                                                              _valueSavedTo =
-                                                                  value;
-                                                            })
-                                                          }),
-                                                ),
-                                                SizedBox(
-                                                    height:
-                                                        size.height * 0.015),
-                                                Container(
-                                                  width: 100,
-                                                  child: GenericTimePicker(
-                                                      controller:
-                                                          timePickerFromController,
-                                                      labelText: 'Finish',
-                                                      onChanged: (value) => {
-                                                            print(
-                                                                "time ${value}"),
-                                                            setState(() {
-                                                              _valueChangedFrom =
-                                                                  value;
-                                                            })
-                                                          },
-                                                      onSaved: (value) => {
-                                                            print(
-                                                                "time onsave ${value}}"),
-                                                            setState(() {
-                                                              _valueSavedTo =
-                                                                  value;
-                                                            })
-                                                          }),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    actions: [
-                                      RaisedButton(
-                                          child: Text("Filter"),
-                                          onPressed: () {
-                                            filtering();
-                                            Navigator.pop(context, 'Cancel');
-                                          }),
-                                      RaisedButton(
-                                          child: Text("Cancel"),
-                                          onPressed: () {
-                                            setState(() {
-                                              _valueChangedFrom = '';
-                                              _valueChangedTo = '';
-                                              city = null;
-                                              specialist = null;
-                                              mechanicListFiltered =
-                                                  mechanicList;
-                                            });
-                                            Navigator.pop(context, 'Cancel');
-                                          })
-                                    ],
-                                  );
-                                });
-                          },
-                        ),
+                            text: 'Sort by request',
+                            iconLeft: "assets/images/filter.svg",
+                            onPressed: () {
+                              createFilter(context);
+                            }),
                         GenericIconButton(
                             text: 'Clear',
-                            iconLeft: "assets/images/filter-remove.svg",
+                            iconLeft: "assets/images/filter.svg",
                             onPressed: () {
                               setState(() {
-                                mechanicListFiltered = mechanicList;
+                                setState(() {
+                                  _valueChangedFrom = '';
+                                  _valueChangedTo = '';
+                                  city = null;
+                                  specialist = null;
+                                  mechanicListFiltered = mechanicList;
+                                });
                               });
                             })
                       ],

@@ -1,4 +1,5 @@
 import 'package:auto_picker/themes/colors.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
 import 'generic_text.dart';
@@ -42,6 +43,7 @@ class GenericInputOptionSelect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final myKey = GlobalKey<DropdownSearchState<String>>();
     Size size = MediaQuery.of(context).size;
     return Column(
       children: [
