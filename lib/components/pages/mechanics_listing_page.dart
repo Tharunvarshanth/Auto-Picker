@@ -1,5 +1,6 @@
 import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/generic_icon_button.dart';
+import 'package:auto_picker/components/atoms/generic_input_option_citys_select.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_select.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/generic_time_picker.dart';
@@ -7,15 +8,13 @@ import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/atoms/service_card.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:auto_picker/components/pages/mechanic_profile_page.dart';
+import 'package:auto_picker/models/city.dart';
 import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/services/mechanic_controller.dart';
 import 'package:auto_picker/utilities/constands.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
-
 import '../../routes.dart';
 
 class MechanicsListingPage extends StatefulWidget {
@@ -35,7 +34,6 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
   bool isLogged = false;
   bool isLoading = true;
   String specialist;
-  String city;
 
   String _valueChangedTo = '';
   String _valueToValidateTo = '';
@@ -45,6 +43,8 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
   String _valueToValidateFrom = '';
   String _valueSavedFrom = '';
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  City city;
+  List<City> dropDownCityList = [];
 
   @override
   void initState() {
@@ -54,6 +54,26 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
     getMechanicsList();
     setState(() {
       isLogged = _auth.currentUser != null;
+    });
+    setData();
+  }
+
+  void setData() async {
+    var citys = await readCityJsonData();
+    setState(() {
+      dropDownCityList = citys;
+    });
+  }
+
+  void handleCity(City cityName) {
+    setState(() {
+      city = cityName;
+    });
+  }
+
+  void handleSpecialist(specialist) {
+    setState(() {
+      specialist = specialist;
     });
   }
 
@@ -113,12 +133,12 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
     });
   }
 
-  void _filteredCity(city) {
+  void _filteredCity(City city) {
     if (city != null) {
       print("filteredCity");
       setState(() {
         mechanicListFiltered = mechanicListFiltered
-            .where((element) => element.workingCity == city)
+            .where((element) => element.workingCity == city.city)
             .toList();
       });
     }
@@ -152,12 +172,6 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
     }
   }
 
-  void handleCity(cityName) {
-    setState(() {
-      city = cityName;
-    });
-  }
-
   @override
   void dispose() {
     // TODO: implement dispose
@@ -166,12 +180,6 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> cityList = [
-      Users.Admin,
-      Users.Mechanic,
-      Users.NormalUser,
-      Users.Seller
-    ];
     Size size = MediaQuery.of(context).size;
     return SafeArea(
         child: Scaffold(
@@ -221,40 +229,22 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
                                             GenericInputOptionSelect(
                                                 width: size.width,
                                                 labelText: 'Specialist',
-                                                value: specialist,
+                                                hintText: 'Choose Specialist',
+                                                dropDownValue: specialist,
                                                 itemList:
                                                     MechanicSpecialistSkills,
-                                                onValueChange: (text) => {
-                                                      setState(() {
-                                                        if (specialist ==
-                                                            text) {
-                                                          specialist = null;
-                                                        } else {
-                                                          specialist = text;
-                                                        }
-                                                      })
-                                                    }),
+                                                onValueChange: (text) =>
+                                                    handleSpecialist(text)),
                                             SizedBox(
                                                 height: size.height * 0.015),
-                                            GenericInputOptionSelect(
-                                                width: size.width,
-                                                labelText: 'Working City',
-                                                value: city,
-                                                itemList: cityList,
-                                                onValueChange: (text) => {
-                                                      if (text == city)
-                                                        {
-                                                          setState(() {
-                                                            city = null;
-                                                          }),
-                                                        }
-                                                      else
-                                                        {
-                                                          setState(() {
-                                                            city = text;
-                                                          }),
-                                                        }
-                                                    }),
+                                            GenericInputOptionCitysSelect(
+                                              width: size.width,
+                                              labelText: '  Working City',
+                                              value: city,
+                                              itemList: dropDownCityList,
+                                              onValueChange: (text) =>
+                                                  handleCity(text),
+                                            ),
                                             SizedBox(
                                                 height: size.height * 0.015),
                                             Row(
@@ -316,7 +306,7 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
                                     ),
                                     actions: [
                                       RaisedButton(
-                                          child: Text("Search"),
+                                          child: Text("Filter"),
                                           onPressed: () {
                                             filtering();
                                             Navigator.pop(context, 'Cancel');
@@ -339,6 +329,14 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
                                 });
                           },
                         ),
+                        GenericIconButton(
+                            text: 'Clear',
+                            iconLeft: "assets/images/filter-remove.svg",
+                            onPressed: () {
+                              setState(() {
+                                mechanicListFiltered = mechanicList;
+                              });
+                            })
                       ],
                     ),
                   ),

@@ -224,7 +224,7 @@ class _SignUpFormState extends State<SignUpForm> {
             GenericInputOptionSelect(
               width: size.width,
               labelText: ' Role',
-              value: role,
+              dropDownValue: role,
               itemList: roleList,
               borderColor: AppColors.ash,
               onValueChange: (text) => handleRole(text),
