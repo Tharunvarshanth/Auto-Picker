@@ -242,7 +242,7 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
                               onSaved: (value) => {
                                     print("time onsave ${value}}"),
                                     setState(() {
-                                      _valueSavedTo = value;
+                                      _valueSavedFrom = value;
                                     })
                                   }),
                         ),
@@ -353,7 +353,7 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
                           buttonPressed: () =>
                               navigateToMechanicProfilePage(index),
                           openHours:
-                              "${utcTo12HourFormat(mechanicListFiltered[index].workingTime_From)} - ${utcTo12HourFormat(mechanicListFiltered[index].workingTime_To)}",
+                              "${TwentryFourTo12HourFormat(mechanicListFiltered[index].workingTime_From)} - ${TwentryFourTo12HourFormat(mechanicListFiltered[index].workingTime_To)}",
                         );
                       },
                     ),

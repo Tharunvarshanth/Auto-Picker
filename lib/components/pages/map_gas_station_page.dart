@@ -79,11 +79,14 @@ class MapGasStationPageState extends State<MapGasStationPage> {
             Row(
               children: [
                 Expanded(
-                    child: TextFormField(
-                  controller: searchController,
-                  decoration:
-                      const InputDecoration(hintText: 'Search gas station'),
-                  onChanged: (text) {},
+                    child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: searchController,
+                    decoration:
+                        const InputDecoration(hintText: 'Search gas station'),
+                    onChanged: (text) {},
+                  ),
                 )),
                 IconButton(
                     onPressed: () async {

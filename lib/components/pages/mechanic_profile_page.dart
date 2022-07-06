@@ -87,7 +87,7 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
   }
 
   void addFeedback() async {
-    var _user = await userController.getUser(widget.mechanic.id);
+    var _user = await userController.getUser(existingUser.currentUser.uid);
     userModel = UserModel.fromJson(_user);
     var feedback = FeedBackData(
         userModel.fullName, DateTime.now().toString(), feedbackText);
@@ -152,7 +152,7 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
                   ),
                   InfoTile(SvgPicture.asset("assets/images/clock.svg"),
                       title:
-                          "${utcTo12HourFormat(widget.mechanic.workingTime_From)} - ${utcTo12HourFormat(widget.mechanic.workingTime_To)}",
+                          "${TwentryFourTo12HourFormat(widget.mechanic.workingTime_From)} - ${TwentryFourTo12HourFormat(widget.mechanic.workingTime_To)}",
                       subTitle: "Working Hours"),
                   Divider(
                     color: Colors.grey,
@@ -176,32 +176,34 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
                     textAlign: TextAlign.start,
                     style: TextStyle(fontSize: 20),
                   ),
-                  TextFormField(
-                    onChanged: (text) {
-                      feedbackText = text;
-                    },
-                    decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                      hintText: 'Enter Feedback',
+                  if (existingUser.currentUser.uid != widget.mechanic.id)
+                    TextFormField(
+                      onChanged: (text) {
+                        feedbackText = text;
+                      },
+                      decoration: const InputDecoration(
+                        border: UnderlineInputBorder(),
+                        hintText: 'Enter Feedback',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter Your Name';
+                        }
+                        return null;
+                      },
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter Your Name';
-                      }
-                      return null;
-                    },
-                  ),
                   SizedBox(
                     height: 5,
                   ),
-                  Center(
-                    child: GenericButton(
-                      text: 'Send Feedback',
-                      onPressed: () {
-                        addFeedback();
-                      },
+                  if (existingUser.currentUser.uid != widget.mechanic.id)
+                    Center(
+                      child: GenericButton(
+                        text: 'Send Feedback',
+                        onPressed: () {
+                          addFeedback();
+                        },
+                      ),
                     ),
-                  ),
                   SizedBox(
                     height: 10,
                   ),

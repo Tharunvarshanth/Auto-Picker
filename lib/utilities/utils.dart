@@ -29,6 +29,13 @@ String utcTo12HourFormat(String bigTime) {
   return createdDate;
 }
 
+String TwentryFourTo12HourFormat(String bigTime) {
+  DateTime tempDate = DateFormat("hh:mm").parse(bigTime);
+  var dateFormat = DateFormat("h:mm a");
+  var localDate = dateFormat.format(tempDate);
+  return localDate;
+}
+
 stringToTimeFormat(String bigTime) {
   DateTime tempDate = DateFormat("hh:mm").parse(bigTime);
 

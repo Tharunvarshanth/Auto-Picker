@@ -77,11 +77,14 @@ class MapLatLonEditPageState extends State<MapLatLonEditPage> {
             Row(
               children: [
                 Expanded(
-                    child: TextFormField(
-                  controller: searchController,
-                  decoration:
-                      const InputDecoration(hintText: 'Enter the place'),
-                  onChanged: (text) {},
+                    child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: searchController,
+                    decoration:
+                        const InputDecoration(hintText: 'Enter the place'),
+                    onChanged: (text) {},
+                  ),
                 )),
                 IconButton(
                     onPressed: () async {

@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/pages/mechanics_signup_page.dart';
 import 'package:auto_picker/services/location_services.dart';
 import 'package:flutter/material.dart';
@@ -71,17 +69,20 @@ class MapLatLonPageState extends State<MapLatLonPage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
             Row(
               children: [
                 Expanded(
-                    child: TextFormField(
-                  controller: searchController,
-                  decoration: InputDecoration(hintText: 'Enter the place'),
-                  onChanged: (text) {},
+                    child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: searchController,
+                    decoration: InputDecoration(hintText: 'Enter the place'),
+                    onChanged: (text) {},
+                  ),
                 )),
                 IconButton(
                     onPressed: () async {
@@ -111,8 +112,8 @@ class MapLatLonPageState extends State<MapLatLonPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: fixMyLocation,
-        label: Text('Get my location marker'),
-        icon: Icon(Icons.done),
+        label: const Text('Get my location marker'),
+        icon: const Icon(Icons.done),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );
