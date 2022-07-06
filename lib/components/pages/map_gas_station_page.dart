@@ -35,6 +35,7 @@ class MapGasStationPageState extends State<MapGasStationPage> {
   }
 
   void _setMarker(LatLng point) {
+    _markers.clear();
     setState(() {
       _markers.add(Marker(markerId: MarkerId('marker'), position: point));
       userLocation = point;

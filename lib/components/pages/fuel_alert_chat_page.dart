@@ -53,7 +53,6 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
 
   GoogleMapController mapController;
   bool isShowMap = false;
-  double nearByDistance = 10.00;
   City city;
   List<City> dropDownCityList = [];
   List<GroupModel> data = [];
@@ -162,8 +161,12 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
           return StatefulBuilder(
             builder: (context, setState) {
               return AlertDialog(
+                shape: const RoundedRectangleBorder(
+                    side: BorderSide(
+                        color: Color(0xFF2A8068)), //the outline color
+                    borderRadius: BorderRadius.all(Radius.circular(15))),
                 scrollable: true,
-                title: Text('Add Fuel Status'),
+                title: Text('Add Fuel Avialble'),
                 content: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Form(
@@ -182,7 +185,10 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
                         ListTile(
                           title: const Text('Diesel'),
                           leading: Checkbox(
-                            checkColor: AppColors.Blue,
+                            splashRadius: 20,
+                            activeColor: Colors.transparent,
+                            checkColor: AppColors.themePrimary,
+                            materialTapTargetSize: MaterialTapTargetSize.padded,
                             value: dieselMsg,
                             onChanged: (bool value) {
                               setState(() {
@@ -194,7 +200,10 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
                         ListTile(
                           title: const Text('Petrol'),
                           leading: Checkbox(
-                            checkColor: AppColors.Blue,
+                            splashRadius: 20,
+                            activeColor: Colors.transparent,
+                            checkColor: AppColors.themePrimary,
+                            materialTapTargetSize: MaterialTapTargetSize.padded,
                             value: petrolMsg,
                             onChanged: (bool value) {
                               setState(() {
@@ -247,6 +256,12 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
                           return;
                         }
                         addMessage();
+                        Navigator.pop(context, 'Cancel');
+                      }),
+                  RaisedButton(
+                      child: Text("Cancel"),
+                      onPressed: () {
+                        Navigator.pop(context, 'Cancel');
                       })
                 ],
               );
@@ -271,6 +286,7 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
   }
 
   viewPetrolStationLoc(FuelAlert fuelAlert) {
+    _markers.clear();
     setState(() {
       isShowMap = true;
       _markers.add(Marker(
@@ -281,6 +297,11 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
             title: 'Petrol Station',
           )));
     });
+    _kGooglePlex = CameraPosition(
+      target: LatLng(double.parse(fuelAlert.fillingStationLat),
+          double.parse(fuelAlert.fillingStationLon)),
+      zoom: 14.4746,
+    );
   }
 
   Widget mapWindow() {
@@ -327,7 +348,9 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
                         headerBuilder: getDefaultHeaderBuilder((d) => d.date,
                             bkColor: AppColors.blue,
                             style: const TextStyle(
-                                fontSize: 18, color: Colors.white)),
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold)),
                         itemBuilder: (context, itemData, index, headerData,
                                 headerIndex) =>
                             FuelAlertTile(

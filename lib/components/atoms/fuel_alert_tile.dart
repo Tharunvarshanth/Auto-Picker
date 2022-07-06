@@ -73,17 +73,44 @@ class FuelAlertTile extends StatelessWidget {
                     children: <Widget>[
                       ListTile(
                           title: const Text('Diesel'),
-                          leading: Checkbox(
-                            checkColor: AppColors.Blue,
-                            value: diesel,
-                          )),
+                          leading: diesel
+                              ? const Icon(
+                                  Icons.check,
+                                  color: Colors.green,
+                                  size: 30.0,
+                                )
+                              : Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  child: Text(
+                                    'X',
+                                    style: TextStyle(
+                                        fontSize: 22,
+                                        color: Colors.red[400],
+                                        fontWeight: FontWeight.w600),
+                                    textAlign: TextAlign.right,
+                                  ),
+                                )),
                       ListTile(
-                        title: const Text('Petrol'),
-                        leading: Checkbox(
-                          checkColor: AppColors.Blue,
-                          value: petrol,
-                        ),
-                      ),
+                          title: const Text('Petrol'),
+                          leading: petrol
+                              ? const Icon(
+                                  Icons.check,
+                                  color: AppColors.green,
+                                  size: 30.0,
+                                )
+                              : Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  child: Text(
+                                    'X',
+                                    style: TextStyle(
+                                        fontSize: 22,
+                                        color: Colors.red[400],
+                                        fontWeight: FontWeight.w600),
+                                    textAlign: TextAlign.right,
+                                  ),
+                                )),
                     ],
                   )
                 ],

@@ -34,6 +34,7 @@ class MapLatLonEditPageState extends State<MapLatLonEditPage> {
   }
 
   void _setMarker(LatLng point) {
+    _markers.clear();
     print("Map Edit Page ${point.latitude}");
     setState(() {
       _markers.add(Marker(markerId: MarkerId('marker'), position: point));
