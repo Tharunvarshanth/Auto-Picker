@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_citys_select.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_select.dart';
+import 'package:auto_picker/components/atoms/generic_text.dart';
+import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/pages/mechanics_signup_page.dart';
@@ -32,6 +34,7 @@ class _SignUpFormState extends State<SignUpForm> {
   bool isvalidUser = false;
   List<City> dropDownCityList = [];
   String formattedNumber;
+  bool isAcceptsTermsAndConditons = false;
   void initState() {
     super.initState();
     setData();
@@ -147,6 +150,17 @@ class _SignUpFormState extends State<SignUpForm> {
     return null;
   }
 
+  void showTermsAndConditions() {
+    showDialog(
+        context: context,
+        builder: (context) => ItemDialogMessage(
+            titleText: 'Terms and Conditions',
+            bodyText:
+                "Protection from abusive users: You have the right to suspend or delete the accounts of abusive users who violate your app’s terms and conditions. Prohibited activities could include copyright infringement, spamming other users, and general misuse of your app. Arbitration over litigation: You can choose to settle disputes via arbitration, which can be more efficient and cost-effective than litigation.",
+            primaryButtonText: 'Close',
+            onPressedPrimary: () => Navigator.pop(context, 'Cancel')));
+  }
+
   @override
   void dispose() {
     nameController.dispose();
@@ -230,6 +244,33 @@ class _SignUpFormState extends State<SignUpForm> {
               onValueChange: (text) => handleRole(text),
             ),
             SizedBox(height: size.height * 0.015),
+            //Terms and conditions
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Checkbox(
+                  checkColor: Colors.white,
+                  value: isAcceptsTermsAndConditons,
+                  onChanged: (bool value) {
+                    setState(() {
+                      isAcceptsTermsAndConditons = value;
+                    });
+                  },
+                ),
+                TextButton(
+                  child: Text('Terms and condtions'),
+                  onPressed: () {
+                    showTermsAndConditions();
+                  },
+                  style: TextButton.styleFrom(
+                      textStyle: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: AppColors.grey,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold)),
+                ),
+              ],
+            ),
             GenericButton(
               textColor: AppColors.white,
               backgroundColor: AppColors.Blue,
