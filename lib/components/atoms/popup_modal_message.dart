@@ -48,7 +48,7 @@ class ItemDialogMessage extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              SvgPicture.asset(icon, height: 50, width: 50),
+              if (icon != null) SvgPicture.asset(icon, height: 50, width: 50),
               const SizedBox(
                 height: 10,
               ),

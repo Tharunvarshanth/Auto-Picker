@@ -27,6 +27,7 @@ class FeedBackController {
     return await feedbackCollection
         .doc(id)
         .collection(FirebaseCollections.FeedbackList)
+        .orderBy("dateTime", descending: true)
         .get();
   }
 

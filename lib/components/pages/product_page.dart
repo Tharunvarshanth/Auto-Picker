@@ -148,7 +148,8 @@ class _ProductPageState extends State<ProductPage> {
     var res = await orderController.addOrder(order);
     if (res != null) {
       var res1 = false;
-
+      print("addOrder:success id ${res}");
+      order.orderId = res;
       res1 = await orderController.updateOrderField(order, 'orderId', res);
       if (res1) {
         List<String> list = [order.sellerId]; //[order.sellerId];

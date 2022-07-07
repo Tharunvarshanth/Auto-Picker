@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:math';
 import 'package:auto_picker/models/city.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +29,13 @@ String utcTo12HourFormat(String bigTime) {
   return createdDate;
 }
 
+String TwentryFourTo12HourFormat(String bigTime) {
+  DateTime tempDate = DateFormat("hh:mm").parse(bigTime);
+  var dateFormat = DateFormat("h:mm a");
+  var localDate = dateFormat.format(tempDate);
+  return localDate;
+}
+
 stringToTimeFormat(String bigTime) {
   DateTime tempDate = DateFormat("hh:mm").parse(bigTime);
 
@@ -49,14 +56,10 @@ readCityJsonData() async {
       await rootBundle.loadString('assets/cities-and-postalcode.json');
   var jsonResult = json.decode(data) as List<dynamic>;
   return jsonResult.map((e) => City.fromJson(e)).toList();
+}
 
-  //read json file*/
-/*
-  final jsondata =
-      await rootBundle.loadString('assets/cities-and-postalcode.json');
-  //decode json data as list
-  final list = json.decode(jsondata) as List<dynamic>;
+int randomNumberGenerator(int min, int max) {
+  final _random = new Random();
 
-  //map json and initialize using DataModel
-  return list.map((e) => City.fromJson(e)).toList();*/
+  return min + _random.nextInt(max - min);
 }

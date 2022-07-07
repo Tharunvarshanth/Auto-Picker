@@ -35,6 +35,7 @@ class MapGasStationPageState extends State<MapGasStationPage> {
   }
 
   void _setMarker(LatLng point) {
+    _markers.clear();
     setState(() {
       _markers.add(Marker(markerId: MarkerId('marker'), position: point));
       userLocation = point;
@@ -79,11 +80,14 @@ class MapGasStationPageState extends State<MapGasStationPage> {
             Row(
               children: [
                 Expanded(
-                    child: TextFormField(
-                  controller: searchController,
-                  decoration:
-                      const InputDecoration(hintText: 'Search gas station'),
-                  onChanged: (text) {},
+                    child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: searchController,
+                    decoration:
+                        const InputDecoration(hintText: 'Search gas station'),
+                    onChanged: (text) {},
+                  ),
                 )),
                 IconButton(
                     onPressed: () async {
