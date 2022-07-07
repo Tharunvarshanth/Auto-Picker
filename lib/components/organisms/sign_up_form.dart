@@ -272,6 +272,7 @@ class _SignUpFormState extends State<SignUpForm> {
               ],
             ),
             GenericButton(
+              isDisabled: !isAcceptsTermsAndConditons,
               textColor: AppColors.white,
               backgroundColor: AppColors.Blue,
               paddingVertical: 20,
