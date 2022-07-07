@@ -2,14 +2,10 @@ import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:auto_picker/components/ui/left_icon_tile.dart';
-import 'package:auto_picker/components/ui/my_bullet.dart';
-import 'package:auto_picker/components/ui/search_widget.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:bulleted_list/bulleted_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:list_tile_more_customizable/list_tile_more_customizable.dart';
 
 class AboutUsPage extends StatefulWidget {
   const AboutUsPage();

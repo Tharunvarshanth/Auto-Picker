@@ -1,3 +1,4 @@
+import 'package:auto_picker/components/ui/custom_painter.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +12,7 @@ class FuelAlertTile extends StatelessWidget {
   bool diesel;
   bool petrol;
   void Function() onView;
+  int index;
 
   FuelAlertTile(
       {Key key,
@@ -22,120 +24,157 @@ class FuelAlertTile extends StatelessWidget {
       this.city = '',
       this.diesel,
       this.petrol,
-      this.onView})
+      this.onView,
+      this.index})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Card(
-        margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
-        elevation: 0,
-        shape: const RoundedRectangleBorder(
-          side: BorderSide(
-            color: AppColors.whitishBlue,
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-        ),
+    return Center(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(5, 10, 5, 15),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      message,
-                      maxLines: 2,
-                      style: TextStyle(fontSize: 16, color: AppColors.black),
-                      textAlign: TextAlign.start,
-                    ),
-                    fillingStationLat != ""
-                        ? IconButton(
-                            icon: Image.asset('assets/images/gas-station.png'),
-                            iconSize: 35,
-                            onPressed: onView,
-                          )
-                        : Text(''),
-                  ],
+            padding: const EdgeInsets.fromLTRB(5, 10, 5, 15),
+            child: Stack(children: <Widget>[
+              Container(
+                height: 225,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: LinearGradient(
+                        colors: [Colors.blue[400], Colors.blue[600]],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.blue[200],
+                          blurRadius: 12,
+                          offset: Offset(0, 6))
+                    ]),
+              ),
+              Positioned(
+                right: 0,
+                bottom: 0,
+                top: 0,
+                child: CustomPaint(
+                  size: Size(100, 150),
+                  painter: CustomCardShapePainter(
+                      10, Colors.blue[400], Colors.blue[600]),
                 ),
               ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
+              Positioned.fill(
+                  child: Row(
                 children: [
-                  Column(
-                    children: <Widget>[
-                      ListTile(
-                          title: const Text('Diesel'),
-                          leading: diesel
-                              ? const Icon(
-                                  Icons.check,
-                                  color: Colors.green,
-                                  size: 30.0,
-                                )
-                              : Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                  child: Text(
-                                    'X',
-                                    style: TextStyle(
-                                        fontSize: 22,
-                                        color: Colors.red[400],
-                                        fontWeight: FontWeight.w600),
-                                    textAlign: TextAlign.right,
+                  Expanded(
+                    flex: 4,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(10.0, 10, 0, 10),
+                          child: Text(
+                            message,
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ListTile(
+                                  title: const Text('Diesel'),
+                                  leading: diesel
+                                      ? const Icon(
+                                          Icons.check,
+                                          color: Colors.green,
+                                          size: 30.0,
+                                        )
+                                      : Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              10, 0, 0, 0),
+                                          child: Text(
+                                            'X',
+                                            style: TextStyle(
+                                                fontSize: 22,
+                                                color: Colors.red[400],
+                                                fontWeight: FontWeight.w600),
+                                            textAlign: TextAlign.right,
+                                          ),
+                                        )),
+                              ListTile(
+                                  title: const Text('Petrol'),
+                                  leading: petrol
+                                      ? const Icon(
+                                          Icons.check,
+                                          color: AppColors.green,
+                                          size: 30.0,
+                                        )
+                                      : Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              10, 0, 0, 0),
+                                          child: Text(
+                                            'X',
+                                            style: TextStyle(
+                                                fontSize: 22,
+                                                color: Colors.red[400],
+                                                fontWeight: FontWeight.w600),
+                                            textAlign: TextAlign.right,
+                                          ),
+                                        )),
+                              Row(
+                                children: <Widget>[
+                                  fillingStationLat != ""
+                                      ? IconButton(
+                                          icon: Image.asset(
+                                              'assets/images/gas-station.png'),
+                                          iconSize: 35,
+                                          onPressed: onView,
+                                        )
+                                      : Text(''),
+                                  const SizedBox(
+                                    width: 8,
                                   ),
-                                )),
-                      ListTile(
-                          title: const Text('Petrol'),
-                          leading: petrol
-                              ? const Icon(
-                                  Icons.check,
-                                  color: AppColors.green,
-                                  size: 30.0,
-                                )
-                              : Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                  child: Text(
-                                    'X',
-                                    style: TextStyle(
-                                        fontSize: 22,
-                                        color: Colors.red[400],
-                                        fontWeight: FontWeight.w600),
-                                    textAlign: TextAlign.right,
+                                  Flexible(
+                                    child: Text(
+                                      'City :  ${city}',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                        fontFamily: 'Avenir',
+                                      ),
+                                    ),
                                   ),
-                                )),
-                    ],
-                  )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text(
-                    'City : ${city}',
-                    style: TextStyle(
-                        fontSize: 14,
-                        color: AppColors.black,
-                        fontWeight: FontWeight.w600),
-                    textAlign: TextAlign.start,
-                  ),
-                  Text(
-                    timeStamp,
-                    maxLines: 2,
-                    style: TextStyle(fontSize: 12, color: AppColors.black),
-                    textAlign: TextAlign.start,
+                                  SizedBox(width: 5),
+                                ],
+                              ),
+                              Text(
+                                timeStamp,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Avenir',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
+              )),
+              Positioned(
+                right: 0,
+                bottom: 0,
+                top: 0,
+                child: CustomPaint(
+                  size: Size(100, 150),
+                  painter: CustomCardShapePainter(
+                      10, Colors.blue[400], Colors.blue[600]),
+                ),
               ),
-            ],
-          ),
-        ));
+            ])));
   }
 }
