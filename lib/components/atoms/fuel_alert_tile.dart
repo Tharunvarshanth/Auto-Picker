@@ -39,10 +39,10 @@ class FuelAlertTile extends StatelessWidget {
                 height: 225,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    gradient: LinearGradient(
-                        colors: [Colors.blue[400], Colors.blue[600]],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight),
+                    gradient: LinearGradient(colors: [
+                      Colors.blue[600],
+                      Colors.blue[400],
+                    ], begin: Alignment.topLeft, end: Alignment.bottomRight),
                     boxShadow: [
                       BoxShadow(
                           color: Colors.blue[200],
@@ -109,7 +109,7 @@ class FuelAlertTile extends StatelessWidget {
                                   leading: petrol
                                       ? const Icon(
                                           Icons.check,
-                                          color: AppColors.green,
+                                          color: Colors.green,
                                           size: 30.0,
                                         )
                                       : Padding(

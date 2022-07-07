@@ -346,7 +346,7 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
               )
             : Padding(
                 padding: !isShowMap
-                    ? const EdgeInsets.fromLTRB(5, 5, 5, 80)
+                    ? const EdgeInsets.fromLTRB(5, 5, 5, 40)
                     : const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                 child: Stack(children: <Widget>[
                   !isShowMap
@@ -414,7 +414,8 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
                 color: Colors.white,
               ),
             ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterFloat,
     );
   }
 }

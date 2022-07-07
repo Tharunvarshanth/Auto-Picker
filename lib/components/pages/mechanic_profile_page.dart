@@ -91,7 +91,23 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
     userModel = UserModel.fromJson(_user);
     var feedback = FeedBackData(
         userModel.fullName, DateTime.now().toString(), feedbackText);
-    var res = feedbackController.addFeedback(feedback, widget.mechanic.id);
+    var addres = feedbackController.addFeedback(feedback, widget.mechanic.id);
+
+    FocusScope.of(context).requestFocus(FocusNode());
+    feedbackText = '';
+    feedBackList.clear();
+
+    QuerySnapshot res =
+        await feedbackController.getFeedbackList(widget.mechanic.id);
+    print("feedback ${res.size}");
+    if (res.size > 0) {
+      res.docs.forEach((element) async {
+        print("feedback $element");
+        setState(() {
+          feedBackList.add(FeedBackData.fromJson(element));
+        });
+      });
+    }
   }
 
   Future<void> _makePhoneCall(String phoneNumber) async {
@@ -177,38 +193,36 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
                     style: TextStyle(fontSize: 20),
                   ),
                   if (existingUser.currentUser.uid != widget.mechanic.id)
-                    TextFormField(
-                      onChanged: (text) {
-                        feedbackText = text;
-                      },
-                      decoration: const InputDecoration(
-                        border: UnderlineInputBorder(),
-                        hintText: 'Enter Feedback',
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter Your Name';
-                        }
-                        return null;
-                      },
+                    Row(
+                      children: [
+                        Expanded(
+                            child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            onChanged: (text) {
+                              feedbackText = text;
+                            },
+                            decoration: const InputDecoration(
+                              border: UnderlineInputBorder(),
+                              hintText: 'Enter Feedback',
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter Your Name';
+                              }
+                              return null;
+                            },
+                          ),
+                        )),
+                        IconButton(
+                            onPressed: () async {
+                              addFeedback();
+                            },
+                            icon: Icon(Icons.send))
+                      ],
                     ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  if (existingUser.currentUser.uid != widget.mechanic.id)
-                    Center(
-                      child: GenericButton(
-                        text: 'Send Feedback',
-                        onPressed: () {
-                          addFeedback();
-                        },
-                      ),
-                    ),
-                  SizedBox(
-                    height: 10,
-                  ),
                   FutureBuilder(
-                      future: Future.delayed(Duration(seconds: 5)),
+                      future: Future.delayed(Duration(seconds: 2)),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
@@ -229,7 +243,7 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
                                   'https://cdn.dribbble.com/users/683081/screenshots/2728654/exfuse_app_main_nocontent.png',
                                   height: 200,
                                 ),
-                          height: 100,
+                          height: 200,
                           width: MediaQuery.of(context).size.width,
                         );
                       })
@@ -282,7 +296,7 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
                 Wrap(
                   children: [
                     GenericButton(
-                      text: _hasCallSupport ? 'CALL' : 'Calling not supported',
+                      text: _hasCallSupport ? 'Call' : 'Calling not supported',
                       textColor: AppColors.white,
                       backgroundColor: Colors.blue,
                       paddingHorizontal: 2,
@@ -329,20 +343,20 @@ Widget feedBackTile(FeedBackData feedBackData) {
       title: Column(
         children: [
           Text(
-            feedBackData.userName,
-            style: const TextStyle(fontSize: 18),
+            feedBackData.feedbackMessage,
+            style: const TextStyle(fontSize: 16),
           ),
           Text(
             'Date: ${feedBackData.dateTime.substring(0, 16)}',
-            style: const TextStyle(fontSize: 14, color: Colors.grey),
+            style: const TextStyle(fontSize: 12, color: Colors.grey),
           )
         ],
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
       ),
       subtitle: Text(
-        feedBackData.feedbackMessage,
-        style: const TextStyle(fontSize: 14),
+        feedBackData.userName,
+        style: const TextStyle(fontSize: 12),
       ),
     ),
   );

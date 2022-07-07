@@ -18,14 +18,13 @@ class GenericTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      child: Text(text),
+    return OutlinedButton(
       onPressed: onPressed,
-      style: TextButton.styleFrom(
-          textStyle: TextStyle(
-              color: color ?? AppColors.grey,
-              fontSize: textSize ?? 16,
-              fontWeight: isBold ? FontWeight.bold : FontWeight.normal)),
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))),
+      ),
+      child: Text(text),
     );
   }
 }
