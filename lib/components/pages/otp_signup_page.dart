@@ -64,7 +64,6 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
 
   void initState() {
     super.initState();
-    print("widget params ${widget.params}");
     _verifyPhone();
   }
 

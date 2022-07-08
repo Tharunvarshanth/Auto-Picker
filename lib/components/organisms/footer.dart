@@ -68,14 +68,16 @@ class Footer extends StatelessWidget {
                 icon: LineIcons.home,
                 text: 'Home',
               ),
-              GButton(
-                icon: LineIcons.inbox,
-                text: 'Notification',
-              ),
-              GButton(
-                icon: LineIcons.user,
-                text: 'Profile',
-              ),
+              if (isLogged)
+                GButton(
+                  icon: LineIcons.inbox,
+                  text: 'Notification',
+                ),
+              if (isLogged)
+                GButton(
+                  icon: LineIcons.user,
+                  text: 'Profile',
+                ),
               GButton(
                 icon: LineIcons.store,
                 text: 'Menu',
