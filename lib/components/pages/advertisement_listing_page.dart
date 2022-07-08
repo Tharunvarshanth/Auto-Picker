@@ -138,6 +138,7 @@ class _AdvertisementListingPageState extends State<AdvertisementListingPage> {
               showBackButton: true,
             ),
             bottomNavigationBar: Footer(
+              currentIndex: -1,
               isLogged: true,
             ),
             body: Container(

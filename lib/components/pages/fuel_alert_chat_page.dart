@@ -335,7 +335,7 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
       ),
       bottomNavigationBar: Footer(
         isLogged: true,
-        currentIndex: 0,
+        currentIndex: -1,
       ),
       body: SafeArea(
         child: isLoading

@@ -214,7 +214,6 @@ class _OrdersSellerListState extends State<OrdersSellerListPage> {
       ),
       bottomNavigationBar: Footer(
         isLogged: true,
-        currentIndex: 0,
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())

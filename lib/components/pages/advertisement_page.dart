@@ -132,6 +132,7 @@ class _AdvertisementPageState extends State<AdvertisementPage> {
         isLogged: isLogged,
       ),
       bottomNavigationBar: Footer(
+        currentIndex: -1,
         isLogged: isLogged,
       ),
       body: isLoading

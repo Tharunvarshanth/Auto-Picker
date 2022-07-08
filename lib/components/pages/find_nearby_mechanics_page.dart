@@ -230,7 +230,7 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
       bottomNavigationBar: !isShowMap
           ? Footer(
               isLogged: true,
-              currentIndex: 0,
+              currentIndex: -1,
             )
           : null,
       resizeToAvoidBottomInset: false,

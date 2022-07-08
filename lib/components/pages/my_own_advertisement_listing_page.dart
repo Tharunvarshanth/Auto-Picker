@@ -101,7 +101,10 @@ class _MyOwnAdvertismentListingPageState
               isLogged: isLogged,
               showBackButton: true,
             ),
-            bottomNavigationBar: Footer(isLogged: isLogged),
+            bottomNavigationBar: Footer(
+              isLogged: isLogged,
+              currentIndex: -1,
+            ),
             body: Container(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               child: ListView.builder(

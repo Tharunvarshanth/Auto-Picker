@@ -2,6 +2,8 @@ import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:line_icons/line_icons.dart';
 import '../../routes.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
@@ -19,7 +21,7 @@ class Footer extends StatelessWidget {
   Footer(
       {Key key,
       this.backgroundColor = Colors.white,
-      this.currentIndex = 0,
+      this.currentIndex = -1,
       this.elevation = 0,
       this.iconColor = Colors.blue,
       this.iconSize = 20,
@@ -31,31 +33,55 @@ class Footer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CurvedNavigationBar(
-      items: [
-        const Icon(Icons.home, size: 30, color: AppColors.white),
-        if (isLogged)
-          const Icon(
-            Icons.notifications_active_outlined,
-            size: 30,
-            color: AppColors.white,
-          ),
-        if (isLogged)
-          const Icon(Icons.supervised_user_circle_outlined,
-              size: 30, color: AppColors.white),
-        const Icon(Icons.menu_rounded, size: 30, color: AppColors.white),
-      ],
-      onTap: (value) {
-        onTap == null ? onTapDefault(value, context) : onTap(value);
-      },
-      buttonBackgroundColor: AppColors.themePrimary,
-      index: currentIndex == -1 ? 0 : currentIndex,
-      height: 60.0,
-      color: AppColors.themePrimary,
-      animationCurve: Curves.easeInOut,
-      animationDuration: const Duration(milliseconds: 600),
-      backgroundColor: Colors.white,
-      letIndexChange: (index) => true,
+    return Container(
+      color: AppColors.primaryVariant,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        child: GNav(
+            backgroundColor: AppColors.primaryVariant,
+            color: Colors.white,
+            activeColor: Colors.white,
+            tabBackgroundColor: Colors.green,
+            gap: 8,
+            padding: EdgeInsets.all(8),
+            rippleColor: AppColors.Blue,
+            //Colors.grey[800], // tab button ripple color when pressed
+            hoverColor: Colors.blue[700], // tab button hover color
+            haptic: true, // haptic feedback
+            tabBorderRadius: 15,
+            tabActiveBorder: Border.all(
+                color: Colors.blue[400], width: 1), // tab button border
+            tabBorder: Border.all(
+                color: Colors.blue[600], width: 1), // tab button border
+            tabShadow: [
+              BoxShadow(color: Colors.blue[700].withOpacity(0.5), blurRadius: 8)
+            ], // tab button shadow
+            curve: Curves.easeOutExpo, // tab animation curves
+            duration: Duration(milliseconds: 900),
+            iconSize: 24,
+            selectedIndex: currentIndex,
+            onTabChange: (index) {
+              onTap == null ? onTapDefault(index, context) : onTap(index);
+            }, // navigation bar padding
+            tabs: [
+              GButton(
+                icon: LineIcons.home,
+                text: 'Home',
+              ),
+              GButton(
+                icon: LineIcons.inbox,
+                text: 'Notification',
+              ),
+              GButton(
+                icon: LineIcons.user,
+                text: 'Profile',
+              ),
+              GButton(
+                icon: LineIcons.store,
+                text: 'Menu',
+              )
+            ]),
+      ),
     );
   }
 

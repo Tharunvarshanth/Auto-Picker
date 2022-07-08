@@ -1,8 +1,5 @@
 import 'dart:async';
-
-import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/pages/fuel_alert_chat_page.dart';
-import 'package:auto_picker/components/pages/mechanics_signup_page.dart';
 import 'package:auto_picker/services/location_services.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
