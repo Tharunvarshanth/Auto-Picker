@@ -35,6 +35,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
           showBackButton: true,
         ),
         bottomNavigationBar: Footer(
+          currentIndex: -1,
           isLogged: isLogged,
         ),
         body: SingleChildScrollView(

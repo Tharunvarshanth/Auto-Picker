@@ -86,7 +86,7 @@ class _VehicleServiceDateListingPageState
               ),
               bottomNavigationBar: Footer(
                 isLogged: true,
-                currentIndex: 0,
+                currentIndex: -1,
               ),
               body: Container(
                 padding:
