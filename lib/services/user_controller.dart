@@ -54,14 +54,13 @@ class UserController {
     return res;
   }
 
-  Future<List<UserModel>> getUsers() async {
-    await users.doc().get().then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        print('Document exists on the database');
-        return documentSnapshot;
-      }
-      return null;
-    });
+  Future<dynamic> getUsers() async {
+    QuerySnapshot querySnapshot = await users.get();
+    if (querySnapshot.size > 0) {
+      final data = querySnapshot.docs.map((doc) => doc.data()).toList();
+      return data;
+    }
+    return null;
   }
 
   Future<bool> updateUser(UserModel user) async {

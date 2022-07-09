@@ -1,19 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_icon_button.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_select.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
-import 'package:auto_picker/components/atoms/generic_text_button.dart';
-import 'package:auto_picker/components/atoms/generic_text_field.dart';
-import 'package:auto_picker/components/atoms/generic_time_picker.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
-import 'package:auto_picker/components/pages/map_page.dart';
-import 'package:auto_picker/components/pages/mechanics_signup_page.dart';
-import 'package:auto_picker/components/pages/otp_signup_page.dart';
 import 'package:auto_picker/components/pages/product_payment_page.dart';
-import 'package:auto_picker/components/pages/seller_signup_page.dart';
 import 'package:auto_picker/models/product.dart';
 import 'package:auto_picker/routes.dart';
 import 'package:auto_picker/services/product_controller.dart';
@@ -22,9 +14,7 @@ import 'package:auto_picker/utilities/constands.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -48,6 +38,7 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
   String _error = 'No Error Dectected';
   bool isButtonDisabled = true;
   var productController = ProductController();
+  bool isLoading;
 
   void initState() {
     super.initState();
@@ -73,6 +64,9 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
   }
 
   void handleAdd() async {
+    setState(() {
+      isLoading = true;
+    });
     var product = Product(
         existingUser.currentUser.uid,
         priceController.text,
@@ -131,6 +125,10 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
                     navigate(context, RouteGenerator.homePage),
               ));
     }
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void fillRequiredFields() {
@@ -296,6 +294,15 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
         key: _formKey,
         child: Column(
           children: <Widget>[
+            if (isLoading)
+              Center(
+                child: Container(
+                  alignment: Alignment.center,
+                  child: const CircularProgressIndicator(
+                    color: AppColors.blue,
+                  ),
+                ),
+              ),
             Container(
               height: 200,
               margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),

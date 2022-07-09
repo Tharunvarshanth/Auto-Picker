@@ -64,7 +64,7 @@ const PriceNegotiable = "Negotiable";
 const ONESIGNALAPPID = "9118dd3d-282d-42e6-b3a2-78b5bee6c5a0";
 const ORDERTITLTE = "Product Order Received";
 const ORDERBODY = "You have got a order";
-const NOTIFICATIONTYPES = ["Order"];
+const NOTIFICATIONTYPES = ["Order", "Adevertisement"];
 const NOTIFICATION_TYPE_ORDER = "Order";
 const ORDER_CONFIRM_TITLE = 'Order Confirmed';
 const ORDER_CONFIRM_BODY = 'Your order confirmed by product owner';
@@ -76,3 +76,6 @@ const VEHICLE_SERVICE_REMAINDER = "Vehicle Service Remainder";
 
 const ORDER_CANCELLED_TITLE = 'Order Cancelled';
 const ORDER_CANCELLED_BODY = 'Your order was cancelled';
+
+const ADVERTISEMENT_TITLE = 'Order Cancelled';
+const ADVERTISEMENT_BODY = 'Your order was cancelled';

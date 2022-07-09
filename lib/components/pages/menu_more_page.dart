@@ -75,6 +75,9 @@ class _MenuMoreState extends State<MenuMorePage> {
               getTile("Products", () {
                 navigate(context, RouteGenerator.productsListingPage);
               }),
+              getTile("My Orders", () {
+                navigate(context, RouteGenerator.myOrdersPage);
+              }),
               getTile("Link Google Account", () {
                 Navigator.push(
                   context,
