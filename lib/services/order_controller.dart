@@ -1,6 +1,4 @@
-import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/models/order.dart';
-import 'package:auto_picker/models/seller.dart';
 import 'package:auto_picker/utilities/constands.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -85,11 +83,7 @@ class OrderController {
         .get();
   }
 
-  Future<dynamic> getOrderByCustomer(String customId) async {
-    return await orders
-        .doc()
-        .collection(FirebaseCollections.OrdersList)
-        .where('customerId', isEqualTo: customId)
-        .get();
+  Future<dynamic> getOrderByCustomer() async {
+    return await orders.get();
   }
 }

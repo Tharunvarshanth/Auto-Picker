@@ -36,6 +36,7 @@ class _ProductAdvertisementAddFormState
   List<Asset> images = <Asset>[];
   String _error = 'No Error Dectected';
   var advertismentController = AdvertisementController();
+  bool isLoading = false;
 
   void initState() {
     super.initState();
@@ -89,6 +90,9 @@ class _ProductAdvertisementAddFormState
     widget.params['description'] = descriptionController.text;
     widget.params['condition'] = condition;
     widget.params['imageList'] = imageList;*/
+    setState(() {
+      isLoading = true;
+    });
     var advertisement = SpareAdvertisement(
         existingUser.currentUser.uid,
         false,
@@ -113,7 +117,11 @@ class _ProductAdvertisementAddFormState
       print("imageList ${imageList}");
       if (await advertismentController.updateAdvertisement(
           existingUser.currentUser.uid, res, 'imageList', imageList)) {
-        var params = {'adId': res, 'item': productTitleController.text};
+        var params = {
+          'adId': res,
+          'item': productTitleController.text,
+          'subTitle': productSubTitleController.text
+        };
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -126,6 +134,9 @@ class _ProductAdvertisementAddFormState
     } else {
       //error popup
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void fillRequiredFields() {
@@ -245,6 +256,15 @@ class _ProductAdvertisementAddFormState
         key: _formKey,
         child: Column(
           children: <Widget>[
+            if (isLoading)
+              Center(
+                child: Container(
+                  alignment: Alignment.center,
+                  child: const CircularProgressIndicator(
+                    color: AppColors.blue,
+                  ),
+                ),
+              ),
             Container(
               height: 200,
               margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
@@ -286,7 +306,7 @@ class _ProductAdvertisementAddFormState
             SizedBox(height: size.height * 0.015),
             TextFormField(
               controller: productSubTitleController,
-              maxLength: 10,
+              maxLength: 15,
               decoration: const InputDecoration(
                   border: UnderlineInputBorder(),
                   labelText: 'SubTitle *',

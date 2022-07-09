@@ -212,7 +212,7 @@ class _ProductPageState extends State<ProductPage> {
               ),
             )
           : Padding(
-              padding: const EdgeInsets.fromLTRB(8.0, 8, 8, 20),
+              padding: const EdgeInsets.fromLTRB(8.0, 8, 8, 8),
               child: SingleChildScrollView(
                 child: Column(
                   children: [

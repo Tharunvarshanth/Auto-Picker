@@ -1,7 +1,6 @@
 import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import '../../routes.dart';

@@ -1,20 +1,20 @@
 import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
-import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
-import 'package:auto_picker/models/product.dart';
+import 'package:auto_picker/models/notification.dart';
 import 'package:auto_picker/models/user_model.dart';
 import 'package:auto_picker/routes.dart';
 import 'package:auto_picker/services/admin_controller.dart';
+import 'package:auto_picker/services/notification_controller.dart';
 import 'package:auto_picker/services/payhere_services.dart';
-import 'package:auto_picker/services/product_controller.dart';
+import 'package:auto_picker/services/push_messaging_service.dart';
 import 'package:auto_picker/services/spare_advertisement_controller.dart';
 import 'package:auto_picker/services/user_controller.dart';
 import 'package:auto_picker/themes/colors.dart';
+import 'package:auto_picker/utilities/constands.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:payhere_mobilesdk_flutter/payhere_mobilesdk_flutter.dart';
 
@@ -33,8 +33,10 @@ class _AdvertisementPaymentPageState extends State<AdvertisementPaymentPage> {
   var userController = UserController();
   var advertismentController = AdvertisementController();
   var existingUser = FirebaseAuth.instance.currentUser;
+  var notificationController = NotificationController();
   String payment = '';
   bool isLoading = true;
+  var pushMessagingService = PushMessagingSerivce();
   void initState() {
     super.initState();
     getAdvertisementCharges();
@@ -72,7 +74,8 @@ class _AdvertisementPaymentPageState extends State<AdvertisementPaymentPage> {
                   Navigator.pop(context, 'Cancel');
                   var params = {
                     'adId': widget.params["adId"],
-                    'item': widget.params["item"]
+                    'item': widget.params["item"],
+                    'subTitle': widget.params['subTitle']
                   };
                   Navigator.push(
                       context,
@@ -129,12 +132,23 @@ class _AdvertisementPaymentPageState extends State<AdvertisementPaymentPage> {
           widget.params["adId"], {'isPaymentDone': true, 'payment': paymentId});
       print("One Time Payment Success. Payment Id: $paymentId $res");
       showAlert(context, "Payment Success!", "Payment Id: $paymentId ");
+      sendAdvertismentPushNotifications();
     }, (error) {
       print("One Time Payment Failed. Error: $error");
       showAlert(context, "Payment Failed", "$error");
     }, () {
       print("Thank you for your payment");
     });
+  }
+
+  void sendAdvertismentPushNotifications() async {
+    List<String> userList = [];
+    var res = await userController.getUsers();
+    res.forEach((element) {
+      userList.add(element["id"]);
+    });
+    pushMessagingService.sendAdvertisement(
+        userList, widget.params["item"], widget.params['subTitle']);
   }
 
   Widget build(BuildContext context) {

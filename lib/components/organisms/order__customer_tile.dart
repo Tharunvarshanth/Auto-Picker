@@ -1,11 +1,11 @@
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:flutter/material.dart';
 
-class OrderTile extends StatelessWidget {
+class OrderCustomerTile extends StatelessWidget {
   String ItemTitle;
   String itemSubTitle;
   String itemPrice;
-  String orderedBy;
+  String sellerBy;
   String itemImgUrl;
   int itemCount;
   bool isCompleted;
@@ -17,12 +17,12 @@ class OrderTile extends StatelessWidget {
   bool cancelled;
   void Function() cancelOrder;
 
-  OrderTile(
+  OrderCustomerTile(
       {Key key,
       this.ItemTitle,
       this.itemSubTitle,
       this.itemCount,
-      this.orderedBy,
+      this.sellerBy,
       this.itemImgUrl,
       this.itemPrice,
       this.isCompleted,
@@ -88,15 +88,14 @@ class OrderTile extends StatelessWidget {
                   Expanded(
                     flex: 2,
                     child: ListTile(
-                      title: const Text(
-                        "Ordered By",
-                        style: TextStyle(fontSize: 24),
-                      ),
-                      subtitle: Text(
-                        orderedBy,
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ),
+                        title: Text(
+                          sellerBy,
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        subtitle: const Text(
+                          "Seller ",
+                          style: TextStyle(fontSize: 24),
+                        )),
                   ),
                   Expanded(
                     flex: 2,
@@ -137,16 +136,16 @@ class OrderTile extends StatelessWidget {
                 children: [
                   Expanded(
                       child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
                     child: Row(
                       children: [
                         const Text(
                           'Price',
-                          style: TextStyle(fontSize: 20),
+                          style: TextStyle(fontSize: 16),
                         ),
                         Text(
                           itemPrice,
-                          style: const TextStyle(fontSize: 20),
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ],
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -154,61 +153,41 @@ class OrderTile extends StatelessWidget {
                   )),
                   Expanded(
                       child: Container(
-                    decoration: const BoxDecoration(
-                        border: Border(left: BorderSide(color: Colors.grey))),
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Column(
-                      children: [
-                        (!cancelled)
-                            ? ListTile(
-                                trailing: const Text(
-                                  'Completed',
-                                  style: TextStyle(fontSize: 20),
+                          decoration: const BoxDecoration(
+                              border:
+                                  Border(left: BorderSide(color: Colors.grey))),
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          child: Column(children: [
+                            Row(
+                              children: [
+                                const Text(
+                                  'Order Status :',
+                                  style: TextStyle(fontSize: 16),
                                 ),
-                                leading: Checkbox(
-                                  splashRadius: 20,
-                                  materialTapTargetSize:
-                                      MaterialTapTargetSize.padded,
-                                  value: isCompleted,
-                                  onChanged: (bool value) {
-                                    handleIsCompleted();
-                                  },
-                                ))
-                            : const ListTile(
-                                trailing: Text(
-                                  'Cancelled',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                leading: Checkbox(
-                                  splashRadius: 20,
-                                  materialTapTargetSize:
-                                      MaterialTapTargetSize.padded,
-                                  value: true,
-                                )),
-                        if (!isConfirmed)
-                          GenericButton(
-                            text: 'Confirm Order',
-                            paddingVertical: 0,
-                            paddingHorizontal: 8,
-                            shadowColor: Colors.transparent,
-                            onPressed: () {
-                              handleConfirmOrder();
-                            },
-                          ),
-                        if (!cancelled && !isCompleted)
-                          GenericButton(
-                            text: 'Cancel',
-                            paddingVertical: 0,
-                            paddingHorizontal: 8,
-                            shadowColor: Colors.transparent,
-                            onPressed: () {
-                              cancelOrder();
-                            },
-                          )
-                      ],
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    ),
-                  )),
+                                if (!cancelled && !isCompleted && !isConfirmed)
+                                  const Text(
+                                    'Pending',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                if (cancelled)
+                                  const Text(
+                                    'Cancelled',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                if (isCompleted)
+                                  const Text(
+                                    'Completed',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                if (isConfirmed)
+                                  const Text(
+                                    'Confirmed',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                              ],
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            ),
+                          ]))),
                 ],
               )
             ],
