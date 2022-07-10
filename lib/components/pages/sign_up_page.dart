@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:auto_picker/components/organisms/sign_up_form.dart';
 import 'package:flutter/material.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage();

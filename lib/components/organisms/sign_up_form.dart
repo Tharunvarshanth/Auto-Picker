@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_citys_select.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_select.dart';
@@ -14,6 +15,7 @@ import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/constands.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class SignUpForm extends StatefulWidget {
   @override
@@ -31,8 +33,14 @@ class _SignUpFormState extends State<SignUpForm> {
   List<City> dropDownCityList = [];
   String formattedNumber;
   bool isAcceptsTermsAndConditons = false;
+
+  final Completer<WebViewController> _controller =
+      Completer<WebViewController>();
   void initState() {
     super.initState();
+    if (Platform.isAndroid) {
+      WebView.platform = SurfaceAndroidWebView();
+    }
     setData();
   }
 
@@ -151,8 +159,27 @@ class _SignUpFormState extends State<SignUpForm> {
         context: context,
         builder: (context) => ItemDialogMessage(
             titleText: 'Terms and Conditions',
-            bodyText:
-                "Protection from abusive users: You have the right to suspend or delete the accounts of abusive users who violate your app’s terms and conditions. Prohibited activities could include copyright infringement, spamming other users, and general misuse of your app. Arbitration over litigation: You can choose to settle disputes via arbitration, which can be more efficient and cost-effective than litigation.",
+            bodyText: '''
+Last updated: 10/07/2022
+
+Please read these Terms and Conditions carefully before using the Auto Picker mobile
+application operated by us Your access to and use of the Service is conditioned on your acceptance of and compliance with
+these Terms. These Terms apply to all visitors, users and others who access or use the Service.
+By accessing or using the Service you agree to be bound by these Terms. If you disagree
+with any part of the terms, then you may not access the Service.
+
+Purchases
+If you wish to purchase any product or service made available through the Service ("Purchase"),
+you may be asked to supply certain information relevant to your Purchase including.
+
+
+Content
+Our Service allows you to post, link, store, share and otherwise make available certain information,
+text, graphics, videos, or other material ("Content").
+
+Contact Us
+If you have any questions about these Terms, please contact us
+''',
             primaryButtonText: 'Close',
             onPressedPrimary: () => Navigator.pop(context, 'Cancel')));
   }

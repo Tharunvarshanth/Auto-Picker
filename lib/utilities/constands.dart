@@ -79,3 +79,34 @@ const ORDER_CANCELLED_BODY = 'Your order was cancelled';
 
 const ADVERTISEMENT_TITLE = 'Order Cancelled';
 const ADVERTISEMENT_BODY = 'Your order was cancelled';
+
+const TERMS_AND_CONDITIONS = '''
+<h4>Last updated: 10/07/2022</h4>
+
+<p>
+Please read these Terms and Conditions carefully before using
+the Auto Picker mobile
+application operated by us
+Your access to and use of the Service is conditioned on your acceptance of and compliance with
+these Terms. These Terms apply to all visitors, users and others who access or use the Service.
+By accessing or using the Service you agree to be bound by these Terms. If you disagree
+with any part of the terms, then you may not access the Service.
+</p>
+
+<h4>Purchases</h4>
+<p>
+If you wish to purchase any product or service made available through the Service ("Purchase"),
+you may be asked to supply certain information relevant to your Purchase including.
+</p>
+
+<h4>Content</h4>
+<p>
+Our Service allows you to post, link, store, share and otherwise make available certain information,
+text, graphics, videos, or other material ("Content").
+</p>
+
+<h4>Contact Us</h4>
+<p>
+If you have any questions about these Terms, please contact us
+</p>
+''';
