@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_icon_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
+import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/pages/advertisement_payment_page.dart';
 import 'package:auto_picker/models/spare_advertisement.dart';
@@ -288,66 +289,32 @@ class _ProductAdvertisementAddFormState
               color: AppColors.red,
               isBold: true,
             ),
-            TextFormField(
+            GenericTextField(
               controller: productTitleController,
+              labelText: "Product Title",
+              prefixIcon: Icons.fmd_good_sharp,
               maxLength: 15,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Product Title *',
-                  hintText: "Front Bumper",
-                  labelStyle: TextStyle(fontSize: 15)),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter Your Address';
-                }
-                return null;
-              },
             ),
             SizedBox(height: size.height * 0.015),
-            TextFormField(
+            GenericTextField(
               controller: productSubTitleController,
+              labelText: "SubTitle",
+              hintText: "discount 5% offer",
+              prefixIcon: Icons.subtitles,
               maxLength: 15,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'SubTitle *',
-                  hintText: "discount 5% offer",
-                  labelStyle: TextStyle(fontSize: 15)),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter Your Address';
-                }
-                return null;
-              },
             ),
             SizedBox(height: size.height * 0.015),
-            TextFormField(
+            GenericTextField(
               controller: descriptionController,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Description *',
-                  hintText: "Panel -40000, Shell -25000 ,Lower Mesh -20000",
-                  labelStyle: TextStyle(fontSize: 15)),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter Your Address';
-                }
-                return null;
-              },
+              labelText: "Description",
+              prefixIcon: Icons.description,
             ),
             SizedBox(height: size.height * 0.015),
-            TextFormField(
+            GenericTextField(
               controller: priceController,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Price(rs) *',
-                  hintText: "400.00 Rs",
-                  labelStyle: TextStyle(fontSize: 15)),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter Your Address';
-                }
-                return null;
-              },
+              labelText: "Prize",
+              hintText: "400.00 Rs",
+              prefixIcon: Icons.money,
             ),
             SizedBox(height: size.height * 0.025),
             if (widget.advertisement == null)

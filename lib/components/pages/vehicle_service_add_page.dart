@@ -150,21 +150,13 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
                   padding: const EdgeInsets.all(15.0),
                   child: Column(
                     children: <Widget>[
-                      TextFormField(
-                        controller: currentMileage,
-                        decoration: const InputDecoration(
-                            border: UnderlineInputBorder(),
-                            labelText: 'Current Mileage *',
-                            labelStyle: TextStyle(fontSize: 15)),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter Your Address';
-                          }
-                          return null;
-                        },
-                      ),
+                      GenericTextField(
+                          controller: currentMileage,
+                          labelText: "Current Mileage",
+                          prefixIcon: Icons.social_distance),
+                      SizedBox(height: size.height * 0.015),
                       GenericTextButton(
-                        text: serviceDate ?? 'Serviced Date *',
+                        text: serviceDate ?? 'Serviced Date',
                         onPressed: () {
                           DatePicker.showDatePicker(context,
                               showTitleActions: true,
@@ -197,9 +189,9 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
                               locale: LocaleType.en);
                         },
                       ),
+                      SizedBox(height: size.height * 0.015),
                       GenericTextButton(
-                        text:
-                            notificationDate ?? 'Next Serivce Remainder Date *',
+                        text: notificationDate ?? 'Next Serivce Remainder Date',
                         onPressed: () {
                           DatePicker.showDatePicker(context,
                               showTitleActions: true,
@@ -232,20 +224,11 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
                               locale: LocaleType.en);
                         },
                       ),
-                      TextFormField(
-                        controller: descriptionController,
-                        decoration: const InputDecoration(
-                            border: UnderlineInputBorder(),
-                            labelText: 'Description *',
-                            hintText: '',
-                            labelStyle: TextStyle(fontSize: 15)),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter Your Address';
-                          }
-                          return null;
-                        },
-                      ),
+                      SizedBox(height: size.height * 0.015),
+                      GenericTextField(
+                          controller: descriptionController,
+                          labelText: "Description",
+                          prefixIcon: Icons.description),
                       SizedBox(height: size.height * 0.015),
                       GenericButton(
                         textColor: AppColors.white,

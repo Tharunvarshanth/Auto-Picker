@@ -91,24 +91,31 @@ class _VehicleServiceDateListingPageState
               body: Container(
                 padding:
                     const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                child: ListView.builder(
-                  controller: _controller,
-                  itemCount: serviceRecordList.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        //navigate(context, RouteGenerator.addVehcileServicePage);
-                      },
-                      child: VehicleServiceRecord(
-                        title: serviceRecordList[index].description ?? '',
-                        desciption: serviceRecordList[index].mileage ?? '',
-                        notificationsDate:
-                            serviceRecordList[index].notificationDate ?? '',
-                        date: serviceRecordList[index].date,
+                child: serviceRecordList.length > 0
+                    ? ListView.builder(
+                        controller: _controller,
+                        itemCount: serviceRecordList.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              //navigate(context, RouteGenerator.addVehcileServicePage);
+                            },
+                            child: VehicleServiceRecord(
+                              title: serviceRecordList[index].description ?? '',
+                              desciption:
+                                  serviceRecordList[index].mileage ?? '',
+                              notificationsDate:
+                                  serviceRecordList[index].notificationDate ??
+                                      '',
+                              date: serviceRecordList[index].date,
+                            ),
+                          );
+                        },
+                      )
+                    : Center(
+                        child: Image.network(
+                            'https://shuvautsav.com/frontend/dist/images/logo/no-item-found-here.png'),
                       ),
-                    );
-                  },
-                ),
               ),
               floatingActionButton: FloatingActionButton.extended(
                 onPressed: () =>

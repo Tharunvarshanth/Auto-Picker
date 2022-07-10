@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ImageTile extends StatefulWidget {
+  int index;
   String imgUrl;
   String text;
   double textSize;
@@ -16,6 +17,7 @@ class ImageTile extends StatefulWidget {
 
   ImageTile(
       {Key key,
+      this.index,
       this.imgUrl,
       this.subTextColor = Colors.black,
       this.subtextSize = 16,
@@ -42,39 +44,23 @@ class _ImageTileState extends State<ImageTile> {
         padding: EdgeInsets.symmetric(vertical: 0, horizontal: widget.margin),
         child: Stack(
           children: [
-            /*if (widget.imgUrl != null)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(widget.borderRadius),
-                child: Image.network(
-                  widget.imgUrl ?? '',
-                  fit: BoxFit.cover,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Center(
-                        child: CircularProgressIndicator(
-                      value: loadingProgress.expectedTotalBytes != null
-                          ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes
-                          : null,
-                    ));
-                  },
-                  errorBuilder: (context, error, stackTrace) {
-                    return Placeholder();
-                  },
-                ),
-              ),*/
             Container(
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                    color: Colors.blue,
+                    color: widget.index % 2 == 0 ? Colors.blue : Colors.pink,
                     borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    border: Border.all(color: Colors.blue[300], width: 3),
-                    /*boxShadow: [
-                      BoxShadow(offset: Offset(40, 40), color: Colors.pink),
-                      BoxShadow(offset: Offset(20, 20), color: Colors.yellow),
-                    ],*/
+                    border: Border.all(
+                        color: widget.index % 2 == 0
+                            ? Colors.blue[200]
+                            : Colors.deepPurple[200],
+                        width: 3),
                     gradient: RadialGradient(
-                        colors: [Colors.blue[400], Colors.blue[600]])),
+                        colors: widget.index % 2 == 0
+                            ? [Colors.blue[100], Colors.blue[200]]
+                            : [
+                                Colors.deepPurple[100],
+                                Colors.deepPurple[200]
+                              ])),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.start,

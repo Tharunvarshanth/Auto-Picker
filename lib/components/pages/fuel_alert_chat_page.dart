@@ -4,6 +4,8 @@ import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/fuel_alert_tile.dart';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_citys_select.dart';
+import 'package:auto_picker/components/atoms/generic_text_button.dart';
+import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:auto_picker/components/pages/map_gas_station_page.dart';
@@ -174,13 +176,10 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
                   child: Form(
                     child: Column(
                       children: <Widget>[
-                        TextFormField(
-                          controller: messageController,
-                          decoration: const InputDecoration(
-                            labelText: 'Message',
-                            icon: Icon(Icons.message),
-                          ),
-                        ),
+                        GenericTextField(
+                            controller: messageController,
+                            labelText: "Message",
+                            prefixIcon: Icons.message),
                         const SizedBox(
                           height: 10,
                         ),
@@ -216,7 +215,7 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
                         ),
                         Container(
                           width: 150,
-                          child: GenericButton(
+                          child: GenericTextButton(
                               text: 'Choose Gas Station location',
                               onPressed: () {
                                 Map<String, dynamic> m = {

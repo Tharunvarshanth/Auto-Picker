@@ -1,12 +1,13 @@
 import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import '../../routes.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
-class Footer extends StatelessWidget {
+class Footer extends StatefulWidget {
   Color backgroundColor;
   Color iconColor;
   void Function(int index) onTap;
@@ -29,6 +30,19 @@ class Footer extends StatelessWidget {
       this.selectedItemColor = AppColors.black,
       this.unselectedItemColor = Colors.blue})
       : super(key: key);
+  @override
+  _FooterState createState() => _FooterState();
+}
+
+class _FooterState extends State<Footer> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  bool isLogged = false;
+
+  @override
+  void initState() {
+    super.initState();
+    isLogged = _auth?.currentUser != null ? true : false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,9 +72,11 @@ class Footer extends StatelessWidget {
             curve: Curves.easeOutExpo, // tab animation curves
             duration: Duration(milliseconds: 900),
             iconSize: 24,
-            selectedIndex: currentIndex,
+            selectedIndex: widget.currentIndex,
             onTabChange: (index) {
-              onTap == null ? onTapDefault(index, context) : onTap(index);
+              widget.onTap == null
+                  ? onTapDefault(index, context)
+                  : widget.onTap(index);
             }, // navigation bar padding
             tabs: [
               GButton(
