@@ -84,12 +84,42 @@ class GenericInputOptionSpecialistSelect extends StatelessWidget {
                 showSearchBox: true,
                 items: itemList,
                 dropdownSearchDecoration: InputDecoration(
+                  filled: true,
+                  focusColor: Colors.blue[100],
+                  prefixText: "Specialist",
+                  counterText: "",
+                  prefixIcon: Icon(
+                    Icons.folder_special_sharp,
+                    color: Colors.blue[500],
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        const BorderSide(color: Colors.transparent, width: 1.0),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  fillColor: Colors.blue[100],
+                  hintText: "",
+                  hintStyle: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  labelText: labelText != "" ? value : "",
+                  labelStyle: TextStyle(
+                    color: Colors.blue[500],
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                /*dropdownSearchDecoration: InputDecoration(
                   border: UnderlineInputBorder(),
                   contentPadding: EdgeInsets.fromLTRB(8, 10, 0, 2),
                   labelStyle: const TextStyle(color: AppColors.black),
                   labelText: value,
                   hintText: "Specialist",
-                ),
+                ),*/
                 onChanged: (String newValue) {
                   onValueChange(newValue);
                 },

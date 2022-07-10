@@ -167,19 +167,10 @@ class _MechanicsSignUpEditFormState extends State<MechanicsSignUpEditForm> {
               onValueChange: (text) => handleCity(text),
             ),
             SizedBox(height: size.height * 0.015),
-            TextFormField(
+            GenericTextField(
               controller: addressController,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Address',
-                  hintText: "No 16 , Galle Road",
-                  labelStyle: TextStyle(fontSize: 15)),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter Your Name';
-                }
-                return null;
-              },
+              labelText: "Address",
+              prefixIcon: Icons.streetview,
             ),
             SizedBox(height: size.height * 0.015),
             Row(

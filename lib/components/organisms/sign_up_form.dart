@@ -1,10 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_citys_select.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_select.dart';
-import 'package:auto_picker/components/atoms/generic_text.dart';
-import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/pages/mechanics_signup_page.dart';
@@ -16,7 +13,6 @@ import 'package:auto_picker/services/user_controller.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/constands.dart';
 import 'package:auto_picker/utilities/utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -86,7 +82,7 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   void handleNext() {
-    print(city.city);
+    print(city?.city);
     if (isvalidUser) {
       var param = {
         'name': nameController.text,
@@ -178,32 +174,16 @@ class _SignUpFormState extends State<SignUpForm> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            TextFormField(
+            GenericTextField(
               controller: nameController,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Enter your Name here',
-                  labelStyle: TextStyle(fontSize: 15)),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter Your Name';
-                }
-                return null;
-              },
+              labelText: "Name",
+              prefixIcon: Icons.supervised_user_circle,
             ),
             SizedBox(height: size.height * 0.015),
-            TextFormField(
+            GenericTextField(
               controller: addressController,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Enter your Address here',
-                  labelStyle: TextStyle(fontSize: 15)),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter Your Address';
-                }
-                return null;
-              },
+              labelText: "Address",
+              prefixIcon: Icons.streetview,
             ),
             SizedBox(height: size.height * 0.020),
             GenericInputOptionCitysSelect(
@@ -214,25 +194,13 @@ class _SignUpFormState extends State<SignUpForm> {
               onValueChange: (text) => handleCity(text),
             ),
             SizedBox(height: size.height * 0.015),
-            TextFormField(
+            GenericTextField(
               keyboardType: TextInputType.phone,
               maxLength: 10,
-              decoration: const InputDecoration(
-                  prefixText: '+94',
-                  counterText: "",
-                  prefixStyle: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                  border: UnderlineInputBorder(),
-                  labelText: 'Enter your Phone number here',
-                  labelStyle: TextStyle(
-                    fontSize: 15,
-                  )),
+              prefixText: '+94',
+              labelText: 'Mobile Number',
+              prefixIcon: Icons.call,
               controller: phoneNumberController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter Your Phone number';
-                }
-                return null;
-              },
             ),
             SizedBox(height: size.height * 0.030),
             GenericInputOptionSelect(
@@ -263,7 +231,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     showTermsAndConditions();
                   },
                   style: TextButton.styleFrom(
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                           decoration: TextDecoration.underline,
                           color: AppColors.grey,
                           fontSize: 16,
@@ -283,7 +251,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     addressController.text.isEmpty ||
                     phoneNumberController.text.isEmpty ||
                     role.toString().isEmpty ||
-                    city.city.toString().isEmpty) {
+                    city == null) {
                   fillRequiredFields('Fill All Required Fields');
                   return;
                 }

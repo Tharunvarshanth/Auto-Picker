@@ -57,11 +57,12 @@ class GenericInputOptionSelect extends StatelessWidget {
         ),
         DecoratedBox(
           decoration: BoxDecoration(
+              color: Colors.blue[100],
               border: Border.all(color: AppColors.ash, width: 1),
-              borderRadius: BorderRadius.circular(5),
+              borderRadius: BorderRadius.circular(15),
               boxShadow: <BoxShadow>[]),
           child: Container(
-            margin: EdgeInsets.fromLTRB(15, 0, 5, 0),
+            margin: EdgeInsets.fromLTRB(15, 2, 5, 2),
             width: width,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
@@ -69,11 +70,12 @@ class GenericInputOptionSelect extends StatelessWidget {
                 onTap: () => onTap,
                 isExpanded: true,
                 menuMaxHeight: 500,
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(15),
                 value: dropDownValue,
                 icon: const Icon(Icons.arrow_drop_down),
                 elevation: 16,
-                style: const TextStyle(color: AppColors.black),
+                style: const TextStyle(
+                    color: AppColors.black, fontWeight: FontWeight.w600),
                 underline: Container(),
                 onChanged: (String newValue) {
                   onValueChange(newValue);

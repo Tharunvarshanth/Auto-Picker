@@ -4,6 +4,7 @@ import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_icon_button.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_select.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
+import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/pages/product_payment_page.dart';
 import 'package:auto_picker/models/product.dart';
@@ -329,48 +330,22 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
               color: AppColors.red,
               isBold: true,
             ),
-            TextFormField(
+            GenericTextField(
               controller: productTitleController,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Product Title *',
-                  hintText: "Front Bumper",
-                  labelStyle: TextStyle(fontSize: 15)),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter Your Address';
-                }
-                return null;
-              },
+              labelText: "Product Title",
+              prefixIcon: Icons.fmd_good_sharp,
+              maxLength: 15,
             ),
             SizedBox(height: size.height * 0.015),
-            TextFormField(
-              controller: descriptionController,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Description *',
-                  hintText: "Panel -40000, Shell -25000 ,Lower Mesh -20000",
-                  labelStyle: TextStyle(fontSize: 15)),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter Your Address';
-                }
-                return null;
-              },
-            ),
-            TextFormField(
+            GenericTextField(
+                controller: descriptionController,
+                labelText: "Description",
+                prefixIcon: Icons.description),
+            SizedBox(height: size.height * 0.015),
+            GenericTextField(
               controller: priceController,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Price(rs) *',
-                  hintText: "400.00 Rs",
-                  labelStyle: TextStyle(fontSize: 15)),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter Your Address';
-                }
-                return null;
-              },
+              labelText: "Price(rs)",
+              prefixIcon: Icons.description,
             ),
             SizedBox(
               height: size.height * 0.025,

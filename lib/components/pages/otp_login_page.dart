@@ -1,23 +1,17 @@
 import 'dart:async';
-
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
-import 'package:auto_picker/components/atoms/popup_modal_order.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/atoms/single_digit_field.dart';
 import 'package:auto_picker/routes.dart';
 import 'package:auto_picker/services/user_controller.dart';
 import 'package:auto_picker/store/cache/sharedPreferences/user_info.dart';
 import 'package:auto_picker/themes/colors.dart';
-import 'package:auto_picker/utilities/constands.dart';
 import 'package:auto_picker/utilities/utils.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class OtpLoginPage extends StatefulWidget {
@@ -290,21 +284,25 @@ class _OtpLoginPage extends State<OtpLoginPage> {
                         color: Colors.blue,
                       ),
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 30),
+                    GenericTextField(
+                      autofocus: true,
+                      keyboardType: TextInputType.phone,
+                      maxLength: 10,
+                      controller: _numberController,
+                      prefixText: '+94',
+                      labelText: "Mobile Number",
+                      prefixIcon: Icons.call,
+                    ),
+                    /*
                     TextFormField(
                       autofocus: true,
                       keyboardType: TextInputType.phone,
                       maxLength: 10,
-                      decoration: const InputDecoration(
-                          prefixText: '+94',
-                          counterText: "",
-                          prefixStyle:
-                              TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                          border: UnderlineInputBorder(),
-                          labelText: 'Enter your Phone number here',
-                          labelStyle: TextStyle(
-                            fontSize: 15,
-                          )),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                       controller: _numberController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -312,7 +310,41 @@ class _OtpLoginPage extends State<OtpLoginPage> {
                         }
                         return null;
                       },
-                    ),
+                      decoration: InputDecoration(
+                        filled: true,
+                        focusColor: Colors.blue[100],
+
+                        prefixIcon: Icon(
+                          Icons.call,
+                          color: Colors.blue[500],
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: Colors.blue, width: 1.0),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        fillColor: Colors.blue[100],
+                        hintText: "",
+                        //make hint text
+                        hintStyle: const TextStyle(
+                          fontSize: 16,
+                          fontFamily: "verdana_regular",
+                          fontWeight: FontWeight.w600,
+                        ),
+                        //create lable
+                        labelText: 'Mobile Number',
+                        //lable style
+                        labelStyle: TextStyle(
+                          color: Colors.blue[500],
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),*/
                     SizedBox(height: 15),
                     SizedBox(
                         width: MediaQuery.of(context).size.width * 0.4,

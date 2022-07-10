@@ -15,32 +15,32 @@ class GenericInputOptionCitysSelect extends StatelessWidget {
   Color focusBorderColor;
   Icon fieldIcon;
   TextInputType inputType;
-  Icon prefixIcon;
+  IconData prefixIcon;
   double width;
   City value;
   List<City> itemList;
   bool enable = true;
   void Function() onTap = () => {};
   void Function(City city) onValueChange;
-  GenericInputOptionCitysSelect(
-      {Key key,
-      this.counterText = '',
-      this.prefixText = '',
-      this.helperText = '',
-      this.hintText = '',
-      this.labelText = '',
-      this.fieldIcon,
-      this.prefixIcon,
-      this.inputType = TextInputType.text,
-      this.borderColor = Colors.grey,
-      this.focusBorderColor = Colors.blue,
-      this.onValueChange,
-      this.itemList,
-      this.width,
-      this.enable,
-      this.onTap,
-      this.value})
-      : super(key: key);
+  GenericInputOptionCitysSelect({
+    Key key,
+    this.counterText = '',
+    this.prefixText = '',
+    this.helperText = '',
+    this.hintText = '',
+    this.labelText = '',
+    this.fieldIcon,
+    this.prefixIcon,
+    this.inputType = TextInputType.text,
+    this.borderColor = Colors.grey,
+    this.focusBorderColor = Colors.blue,
+    this.onValueChange,
+    this.itemList,
+    this.width,
+    this.enable,
+    this.onTap,
+    this.value,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +74,7 @@ class GenericInputOptionCitysSelect extends StatelessWidget {
         ),
         DecoratedBox(
           decoration: BoxDecoration(
-              border: Border.all(color: AppColors.ash, width: 1),
+              border: Border.all(color: Colors.transparent, width: 1),
               borderRadius: BorderRadius.circular(5),
               boxShadow: const <BoxShadow>[]),
           child: SizedBox(
@@ -84,11 +84,32 @@ class GenericInputOptionCitysSelect extends StatelessWidget {
                 showSearchBox: true,
                 items: itemList,
                 dropdownSearchDecoration: InputDecoration(
-                  border: UnderlineInputBorder(),
-                  contentPadding: EdgeInsets.fromLTRB(8, 10, 0, 2),
-                  labelStyle: const TextStyle(color: AppColors.black),
-                  labelText: value?.city,
+                  filled: true,
+                  focusColor: Colors.blue[100],
+                  prefixText: prefixText,
+                  counterText: "",
+                  prefixIcon: Icon(
+                    Icons.location_city,
+                    color: Colors.blue[500],
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  fillColor: Colors.blue[100],
                   hintText: "Choose city",
+                  hintStyle: TextStyle(
+                    color: Colors.blue[500],
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  labelText: value?.city,
+                  labelStyle: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 onChanged: (City newValue) {
                   onValueChange(newValue);
@@ -108,27 +129,7 @@ class GenericInputOptionCitysSelect extends StatelessWidget {
                     ),
                   );
                 },
-              )
-
-              /* DropdownButton<City>(
-              menuMaxHeight: 500,
-              onTap: () => onTap,
-              isExpanded: true,
-
-              //borderRadius: BorderRadius.circular(30),
-              value: value,
-              icon: const Icon(Icons.arrow_drop_down),
-              elevation: 16,
-              style: const TextStyle(color: AppColors.blue),
-              underline: Container(),
-              onChanged: (City newValue) {
-                onValueChange(newValue);
-              },
-              items: items,
-
-            ),
-            */
-              ),
+              )),
         )
       ],
       crossAxisAlignment: CrossAxisAlignment.start,
