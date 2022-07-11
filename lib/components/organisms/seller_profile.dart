@@ -49,7 +49,7 @@ class _SellerProfileState extends State<SellerProfile> {
           ),
         ),
         TextDescriptionWithButton(
-            title: 'My Orders',
+            title: 'Received Orders',
             description: 'You can view received order',
             onPress: () => navigate(context, RouteGenerator.orderSellerPage)),
         TextDescriptionWithButton(

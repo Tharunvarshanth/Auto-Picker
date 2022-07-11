@@ -139,14 +139,17 @@ class _AdvertisementPaymentPageState extends State<AdvertisementPaymentPage> {
     }, () {
       print("Thank you for your payment");
     });
+    sendAdvertismentPushNotifications();
   }
 
   void sendAdvertismentPushNotifications() async {
+    print("push for advertisment");
     List<String> userList = [];
     var res = await userController.getUsers();
     res.forEach((element) {
       userList.add(element["id"]);
     });
+    print("push for advertisment ITEM ${widget.params["item"]}");
     pushMessagingService.sendAdvertisement(
         userList, widget.params["item"], widget.params['subTitle']);
   }

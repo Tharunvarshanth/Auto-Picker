@@ -33,6 +33,7 @@ class AdvertisementController {
     return await advertisements
         .doc(Uid)
         .collection(FirebaseCollections.AdvertisementList)
+        .orderBy('createdDate', descending: true)
         .get();
   }
 

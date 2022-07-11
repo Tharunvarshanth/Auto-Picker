@@ -15,7 +15,6 @@ import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/constands.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class SignUpForm extends StatefulWidget {
   @override
@@ -34,13 +33,8 @@ class _SignUpFormState extends State<SignUpForm> {
   String formattedNumber;
   bool isAcceptsTermsAndConditons = false;
 
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
   void initState() {
     super.initState();
-    if (Platform.isAndroid) {
-      WebView.platform = SurfaceAndroidWebView();
-    }
     setData();
   }
 

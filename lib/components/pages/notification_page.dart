@@ -103,6 +103,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                             itemBuilder: (context, index) {
                               var data = notificationsList[index];
                               return NotificationTile(
+                                messageType: data.messageType,
                                 dateTime: data.timeStamp,
                                 description: data.message,
                                 notificationImgUrl:

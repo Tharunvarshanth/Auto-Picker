@@ -50,7 +50,7 @@ class PushMessagingSerivce {
   }
 
   Future<Response> sendOrderNotification(
-      List<String> tokenIdList, String contents, String heading) async {
+      List<String> tokenIdList, String heading, String contents) async {
     await post(
       Uri.parse('https://onesignal.com/api/v1/notifications'),
       headers: <String, String>{
@@ -88,7 +88,45 @@ class PushMessagingSerivce {
   }
 
   Future<Response> sendAdvertisement(
-      List<String> tokenIdList, String contents, String heading) async {
+      List<String> tokenIdList, String heading, String contents) async {
+    await post(
+      Uri.parse('https://onesignal.com/api/v1/notifications'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization':
+            'Basic NTdmZjM0ZjEtNTQ0Ny00MTQ2LTg3M2UtNjZhNDA2NzY3ZTVj',
+      },
+      body: jsonEncode(<String, dynamic>{
+        "app_id":
+            ONESIGNALAPPID, //kAppId is the App Id that one get from the OneSignal When the application is registered.
+
+        "include_external_user_ids":
+            tokenIdList, //tokenIdList Is the List of All the Token Id to to Whom notification must be sent.
+
+        // android_accent_color reprsent the color of the heading text in the notifiction
+        "android_accent_color": "FF9976D2",
+
+        "small_icon":
+            "https://firebasestorage.googleapis.com/v0/b/auto-picker-7ed1f.appspot.com/o/FCMImages%2Fadvertisment.jpg?alt=media&token=6c23b1ca-b9b6-4a5c-befe-35bdf69b6879",
+
+        "large_icon":
+            "https://firebasestorage.googleapis.com/v0/b/auto-picker-7ed1f.appspot.com/o/FCMImages%2Fadvertisment.jpg?alt=media&token=6c23b1ca-b9b6-4a5c-befe-35bdf69b6879",
+
+        "headings": {"en": heading},
+
+        "contents": {"en": contents},
+      }),
+    ).then((value) {
+      print("sendNotification ${value.body}");
+      return true;
+    }).catchError((onError) {
+      print("sendNotification:error $onError");
+      return false;
+    });
+  }
+
+  Future<Response> sendFuelAlertAvailable(
+      List<String> tokenIdList, String heading, String contents) async {
     await post(
       Uri.parse('https://onesignal.com/api/v1/notifications'),
       headers: <String, String>{

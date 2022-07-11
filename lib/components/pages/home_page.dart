@@ -194,7 +194,7 @@ class _HomePageState extends State<HomePage> {
 
   void navigateToProductPage(int index) {
     var isOwner =
-        productList[index].uid == _auth.currentUser.uid ? true : false;
+        productList[index].uid == _auth.currentUser?.uid ? true : false;
     if (isLogged) {
       Navigator.push(
           context,
@@ -256,7 +256,7 @@ class _HomePageState extends State<HomePage> {
 
   void navigateToAdvertisementPage(int index) {
     var isOwner =
-        advertisementList[index].uid == _auth.currentUser.uid ? true : false;
+        advertisementList[index].uid == _auth.currentUser?.uid ? true : false;
     print("advert");
     if (isLogged) {
       Navigator.push(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class OrderCustomerTile extends StatelessWidget {
   String ItemTitle;
   String itemSubTitle;
+  String createdTimeStamp;
   String itemPrice;
   String sellerBy;
   String itemImgUrl;
@@ -20,6 +21,7 @@ class OrderCustomerTile extends StatelessWidget {
   OrderCustomerTile(
       {Key key,
       this.ItemTitle,
+      this.createdTimeStamp,
       this.itemSubTitle,
       this.itemCount,
       this.sellerBy,
@@ -188,6 +190,30 @@ class OrderCustomerTile extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             ),
                           ]))),
+                ],
+              ),
+              const Divider(
+                thickness: 2,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                      child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      children: [
+                        const Text(
+                          'Order Created time stamp',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        Text(
+                          createdTimeStamp.toString().substring(0, 16),
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+                  )),
                 ],
               )
             ],

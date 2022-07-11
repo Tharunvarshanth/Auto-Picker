@@ -108,7 +108,8 @@ class _AdvertisementPageState extends State<AdvertisementPage> {
   void paymentPage() {
     var params = {
       'adId': widget.advertisement.aId,
-      'item': widget.advertisement.title
+      'item': widget.advertisement.title,
+      'subTitle': widget.advertisement.subtitle
     };
     Navigator.push(
       context,

@@ -2,7 +2,6 @@ import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:auto_picker/components/organisms/order__customer_tile.dart';
-import 'package:auto_picker/components/organisms/order_tile.dart';
 import 'package:auto_picker/models/order.dart';
 import 'package:auto_picker/models/product.dart';
 import 'package:auto_picker/models/user_model.dart';
@@ -57,7 +56,6 @@ class _OrdersCustomersListState extends State<OrdersCustomersListPage> {
           .collection(FirebaseCollections.OrdersList)
           .get();
       if (res2 != null) {
-        print(res2);
         res2.docs.forEach((element) async {
           var tP = Order.fromJson(element.data());
           if (tP.customerId == auth.currentUser.uid) {
@@ -66,14 +64,11 @@ class _OrdersCustomersListState extends State<OrdersCustomersListPage> {
             });
             var prodRes = await productController.getProduct(
                 element['sellerId'], element['productId']);
-            print("orderListing product ${prodRes["pId"]}");
             if (prodRes["pId"] != null) {
-              print("orderListing product1 ${prodRes}");
               setState(() {
                 productList.add(Product.fromJson(prodRes));
               });
             } else {
-              print("orderListing product2 $prodRes");
               setState(() {
                 productList.add(Product.fromEmptyJson());
               });
@@ -180,6 +175,8 @@ class _OrdersCustomersListState extends State<OrdersCustomersListPage> {
                               } else {
                                 return (OrderCustomerTile(
                                   index: index,
+                                  createdTimeStamp:
+                                      ordersList[index].orderCreatedDate,
                                   isConfirmed: ordersList[index]?.isConfirmed,
                                   isCompleted: ordersList[index]?.isCompleted,
                                   ItemTitle: productList[index]?.title,

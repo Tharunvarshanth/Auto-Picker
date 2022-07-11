@@ -12,11 +12,13 @@ import 'package:auto_picker/models/notification.dart';
 import 'package:auto_picker/models/order.dart';
 import 'package:auto_picker/models/product.dart';
 import 'package:auto_picker/models/seller.dart';
+import 'package:auto_picker/models/user_model.dart';
 import 'package:auto_picker/services/notification_controller.dart';
 import 'package:auto_picker/services/order_controller.dart';
 import 'package:auto_picker/services/product_controller.dart';
 import 'package:auto_picker/services/push_messaging_service.dart';
 import 'package:auto_picker/services/seller_controller.dart';
+import 'package:auto_picker/services/user_controller.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/constands.dart';
 import 'package:auto_picker/utilities/utils.dart';
@@ -49,6 +51,8 @@ class _ProductPageState extends State<ProductPage> {
   var noOfItemsController = TextEditingController();
   var pushMessagingService = PushMessagingSerivce();
   var notificationController = NotificationController();
+  var userControlller = UserController();
+  UserModel currentUser;
 
   void initState() {
     super.initState();
@@ -75,6 +79,8 @@ class _ProductPageState extends State<ProductPage> {
     setState(() {
       isLoading = false;
     });
+    currentUser = UserModel.fromJson(
+        await userControlller.getUser(_auth.currentUser.uid));
   }
 
   Future<void> _makePhoneCall(String phoneNumber) async {
@@ -148,15 +154,17 @@ class _ProductPageState extends State<ProductPage> {
     var res = await orderController.addOrder(order);
     if (res != null) {
       var res1 = false;
-      print("addOrder:success id ${res}");
       order.orderId = res;
       res1 = await orderController.updateOrderField(order, 'orderId', res);
       if (res1) {
         List<String> list = [order.sellerId]; //[order.sellerId];
-        var no = NotificationModel(ORDERTITLTE, ORDERBODY,
+
+        var pmBody =
+            'You have got a order from  ${currentUser.fullName} for product : ${widget.product.title}';
+
+        var no = NotificationModel(ORDERTITLTE, pmBody,
             DateTime.now().toString(), NOTIFICATIONTYPES[0], false);
-        pushMessagingService.sendOrderNotification(
-            list, ORDERBODY, ORDERTITLTE);
+        pushMessagingService.sendOrderNotification(list, ORDERTITLTE, pmBody);
 
         notificationController.addNotification(no, order.sellerId);
         Navigator.pop(context, 'Cancel');

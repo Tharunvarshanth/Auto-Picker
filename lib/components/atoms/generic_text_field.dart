@@ -55,6 +55,8 @@ class GenericTextField extends StatelessWidget {
                 color: Colors.blue[500],
               ),
               border: OutlineInputBorder(
+                borderSide:
+                    const BorderSide(color: Colors.transparent, width: 1.0),
                 borderRadius: BorderRadius.circular(15.0),
               ),
               focusedBorder: OutlineInputBorder(

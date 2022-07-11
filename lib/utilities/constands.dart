@@ -54,6 +54,7 @@ class FirebaseCollections {
   static const VehicleServiceMaintenance = 'vehicleServiceMaintenance';
   static const VehicleServiceList = 'vehicleServiceList';
   static const FuelAlertList = 'fuelAlertList';
+  static const FuelCityPreferencesList = 'fuelCityPreferences';
 }
 
 const SPAREPARTSCONDITIONLIST = ["Recondition", "Used", "Brand New"];

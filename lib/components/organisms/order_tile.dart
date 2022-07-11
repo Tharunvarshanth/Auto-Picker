@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class OrderTile extends StatelessWidget {
   String ItemTitle;
+  String createdTimeStamp;
   String itemSubTitle;
   String itemPrice;
   String orderedBy;
@@ -20,6 +21,7 @@ class OrderTile extends StatelessWidget {
   OrderTile(
       {Key key,
       this.ItemTitle,
+      this.createdTimeStamp,
       this.itemSubTitle,
       this.itemCount,
       this.orderedBy,
@@ -205,6 +207,30 @@ class OrderTile extends StatelessWidget {
                               cancelOrder();
                             },
                           )
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+                  )),
+                ],
+              ),
+              const Divider(
+                thickness: 2,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                      child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    child: Row(
+                      children: [
+                        const Text(
+                          'Order Created time stamp',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        Text(
+                          createdTimeStamp,
+                          style: const TextStyle(fontSize: 16),
+                        ),
                       ],
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     ),

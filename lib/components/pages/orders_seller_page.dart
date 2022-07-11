@@ -12,6 +12,7 @@ import 'package:auto_picker/services/order_controller.dart';
 import 'package:auto_picker/services/product_controller.dart';
 import 'package:auto_picker/services/push_messaging_service.dart';
 import 'package:auto_picker/services/user_controller.dart';
+import 'package:auto_picker/store/cache/sharedPreferences/user_info.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/constands.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -36,9 +37,12 @@ class _OrdersSellerListState extends State<OrdersSellerListPage> {
   var productController = ProductController();
   var notificationController = NotificationController();
   FirebaseAuth auth = FirebaseAuth.instance;
+  var userInfo = UserInfoCache();
   bool isLoading = true;
   String role = "";
   var pushMessagingService = PushMessagingSerivce();
+  UserModel currentUser;
+
   @override
   void initState() {
     super.initState();
@@ -79,6 +83,9 @@ class _OrdersSellerListState extends State<OrdersSellerListPage> {
           userList.add(_user);
         });
       });
+
+      currentUser = UserModel.fromJson(
+          await userControlller.getUser(auth.currentUser.uid));
     }
 
     Future.delayed(const Duration(milliseconds: 4000), () {
@@ -90,10 +97,14 @@ class _OrdersSellerListState extends State<OrdersSellerListPage> {
 
   void onPressConfirmOrder(int index) async {
     List<String> list = [ordersList[index].customerId];
-    var no = NotificationModel(ORDER_CONFIRM_TITLE, ORDER_CONFIRM_BODY,
+    var pmBody =
+        'Your order confirmed by product owner ${currentUser.fullName} for product : ${productList[index].title}';
+
+    var no = NotificationModel(ORDER_CONFIRM_TITLE, pmBody,
         DateTime.now().toString(), NOTIFICATIONTYPES[0], false);
+
     pushMessagingService.sendOrderNotification(
-        list, ORDER_CONFIRM_TITLE, ORDER_CONFIRM_BODY);
+        list, ORDER_CONFIRM_TITLE, pmBody);
 
     notificationController.addNotification(no, ordersList[index].customerId);
     var res = await orderController.updateOrderField(
@@ -102,10 +113,14 @@ class _OrdersSellerListState extends State<OrdersSellerListPage> {
 
   void cancelOrder(int index) async {
     List<String> list = [ordersList[index].customerId];
-    var no = NotificationModel(ORDER_CANCELLED_TITLE, ORDER_CANCELLED_BODY,
+    var pmBody =
+        'Your order was cancelled by product owner ${currentUser.fullName} for product : ${productList[index].title}';
+
+    var no = NotificationModel(ORDER_CANCELLED_TITLE, pmBody,
         DateTime.now().toString(), NOTIFICATIONTYPES[0], false);
+
     pushMessagingService.sendOrderNotification(
-        list, ORDER_CANCELLED_TITLE, ORDER_CANCELLED_BODY);
+        list, ORDER_CANCELLED_TITLE, pmBody);
 
     notificationController.addNotification(no, ordersList[index].customerId);
     var res = await orderController.updateOrderField(
@@ -119,13 +134,17 @@ class _OrdersSellerListState extends State<OrdersSellerListPage> {
   }
 
   void onPressIsCompleted(int index) async {
-    print("handleIsCompleted");
     if (!ordersList[index].isCompleted) {
       List<String> list = [ordersList[index].customerId];
-      var no = NotificationModel(ORDER_COMPLETED_TITLE, ORDER_COMPLETED_BODY,
+
+      var pmBody =
+          'Your order marked as completed by product owner ${currentUser.fullName} for product : ${productList[index].title}';
+
+      var no = NotificationModel(ORDER_COMPLETED_TITLE, pmBody,
           DateTime.now().toString(), NOTIFICATIONTYPES[0], false);
+
       pushMessagingService.sendOrderNotification(
-          list, ORDER_COMPLETED_TITLE, ORDER_COMPLETED_BODY);
+          list, ORDER_COMPLETED_TITLE, pmBody);
 
       notificationController.addNotification(no, ordersList[index].customerId);
       var res = await orderController.updateOrderField(
@@ -135,7 +154,6 @@ class _OrdersSellerListState extends State<OrdersSellerListPage> {
       });
       getList();
     } else {
-      print("onPressIsCompleted ${ordersList[index].isCompleted}");
       showDialog(
           context: context,
           builder: (context) => ItemDialogMessage(
@@ -208,7 +226,7 @@ class _OrdersSellerListState extends State<OrdersSellerListPage> {
     return SafeArea(
         child: Scaffold(
       appBar: const CustomAppBar(
-        title: 'My Orders',
+        title: 'Received Orders',
         isLogged: true,
         showBackButton: true,
       ),
@@ -235,6 +253,8 @@ class _OrdersSellerListState extends State<OrdersSellerListPage> {
                               } else {
                                 return (OrderTile(
                                   index: index,
+                                  createdTimeStamp:
+                                      ordersList[index].orderCreatedDate,
                                   isConfirmed: ordersList[index].isConfirmed,
                                   isCompleted: ordersList[index].isCompleted,
                                   ItemTitle: productList[index].title,

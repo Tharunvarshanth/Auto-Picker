@@ -294,57 +294,6 @@ class _OtpLoginPage extends State<OtpLoginPage> {
                       labelText: "Mobile Number",
                       prefixIcon: Icons.call,
                     ),
-                    /*
-                    TextFormField(
-                      autofocus: true,
-                      keyboardType: TextInputType.phone,
-                      maxLength: 10,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      controller: _numberController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter Your Phone number';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        filled: true,
-                        focusColor: Colors.blue[100],
-
-                        prefixIcon: Icon(
-                          Icons.call,
-                          color: Colors.blue[500],
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Colors.blue, width: 1.0),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        fillColor: Colors.blue[100],
-                        hintText: "",
-                        //make hint text
-                        hintStyle: const TextStyle(
-                          fontSize: 16,
-                          fontFamily: "verdana_regular",
-                          fontWeight: FontWeight.w600,
-                        ),
-                        //create lable
-                        labelText: 'Mobile Number',
-                        //lable style
-                        labelStyle: TextStyle(
-                          color: Colors.blue[500],
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),*/
                     SizedBox(height: 15),
                     SizedBox(
                         width: MediaQuery.of(context).size.width * 0.4,
