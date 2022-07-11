@@ -82,6 +82,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: const CustomAppBar(
           title: 'Profile Controller',
@@ -104,7 +105,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   padding: EdgeInsets.fromLTRB(7.5, 20, 7.5, 10),
                   child: Column(
                     children: [
-                      Row(
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -157,27 +158,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           )
                         ],
                       ),
-                      TextDescription(
-                        title: userModel.role,
-                        description: 'User Type',
-                      ),
-                      TextDescription(
-                        title: userModel.phoneNumber,
-                        description: 'Phone Number',
-                      ),
+                      detailsCard(userModel.role, 'User Type'),
+                      detailsCard(userModel.phoneNumber, 'Phone Number'),
                       if (userModel.email != '')
-                        TextDescription(
-                          title: userModel.email,
-                          description: 'email',
-                        ),
-                      TextDescription(
-                        title: userModel.city,
-                        description: 'City',
-                      ),
-                      TextDescription(
-                        title: userModel.address,
-                        description: 'Address',
-                      ),
+                        detailsCard(userModel.email, 'email'),
+                      detailsCard(userModel.city, 'City'),
+                      detailsCard(userModel.address, 'Address'),
+                      SizedBox(height: size.height * 0.015),
                       if (userRole == Users.Seller)
                         SellerProfile(this.sellerModel)
                       else if (userRole == Users.Mechanic)
@@ -187,4 +174,49 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
         ));
   }
+
+  Widget detailsCard(title, description) => Card(
+        shadowColor: AppColors.themePrimary,
+        elevation: 2,
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Container(
+          alignment: Alignment.centerLeft,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color.fromARGB(255, 168, 203, 255),
+                Color.fromARGB(255, 168, 203, 255)
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 17,
+                  color: AppColors.themePrimary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              // const SizedBox(height: 4),
+              // Text(
+              //   description,
+              //   style: TextStyle(
+              //     fontSize: 15,
+              //     color: AppColors.themePrimary,
+              //   ),
+              // ),
+            ],
+          ),
+        ),
+      );
 }
