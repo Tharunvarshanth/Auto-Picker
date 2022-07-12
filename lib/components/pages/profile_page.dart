@@ -1,4 +1,5 @@
 import 'package:auto_picker/components/atoms/custom_app_bar.dart';
+import 'package:auto_picker/components/atoms/details_card_description.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/text_description.dart';
@@ -158,12 +159,12 @@ class _ProfilePageState extends State<ProfilePage> {
                           )
                         ],
                       ),
-                      detailsCard(userModel.role, 'User Type'),
-                      detailsCard(userModel.phoneNumber, 'Phone Number'),
+                      DetailsCardDescription(title: userModel.role),
+                      DetailsCardDescription(title: userModel.phoneNumber),
                       if (userModel.email != '')
-                        detailsCard(userModel.email, 'email'),
-                      detailsCard(userModel.city, 'City'),
-                      detailsCard(userModel.address, 'Address'),
+                        DetailsCardDescription(title: userModel.email),
+                      DetailsCardDescription(title: userModel.city),
+                      DetailsCardDescription(title: userModel.address),
                       SizedBox(height: size.height * 0.015),
                       if (userRole == Users.Seller)
                         SellerProfile(this.sellerModel)
@@ -174,49 +175,4 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
         ));
   }
-
-  Widget detailsCard(title, description) => Card(
-        shadowColor: AppColors.themePrimary,
-        elevation: 2,
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Container(
-          alignment: Alignment.centerLeft,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color.fromARGB(255, 168, 203, 255),
-                Color.fromARGB(255, 168, 203, 255)
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomCenter,
-            ),
-          ),
-          padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 17,
-                  color: AppColors.themePrimary,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              // const SizedBox(height: 4),
-              // Text(
-              //   description,
-              //   style: TextStyle(
-              //     fontSize: 15,
-              //     color: AppColors.themePrimary,
-              //   ),
-              // ),
-            ],
-          ),
-        ),
-      );
 }
