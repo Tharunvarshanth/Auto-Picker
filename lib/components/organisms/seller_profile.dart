@@ -1,3 +1,4 @@
+import 'package:auto_picker/components/atoms/details_card_description.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/text_description.dart';
 import 'package:auto_picker/components/atoms/text_description_with_button.dart';
@@ -22,23 +23,17 @@ class _SellerProfileState extends State<SellerProfile> {
   bool isLoading = true;
   String userRole;
 
-  void initState() {
-    super.initState();
-  }
-
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         const SizedBox(
-          height: 5,
+          height: 10,
         ),
         GenericText(
           text: 'Shop Controller',
           textSize: 30,
           isBold: true,
-        ),
-        const SizedBox(
-          height: 20,
         ),
         TextDescriptionWithButton(
           title: 'Add New Product',
@@ -79,19 +74,17 @@ class _SellerProfileState extends State<SellerProfile> {
                 builder: (context) => const AddNewAdvertisementPage()),
           ),
         ),
-        TextDescription(
-          title: widget.seller.address,
-          description: 'Shop Address',
-        ),
-        TextDescription(
+        DetailsCardDescription(
+            title: widget.seller.address, description: 'Shop Address'),
+        DetailsCardDescription(
           title: widget.seller.city,
           description: 'Shop City',
         ),
-        TextDescription(
+        DetailsCardDescription(
           title: widget.seller.shopName,
           description: 'Shop Name',
         ),
-        TextDescription(
+        DetailsCardDescription(
           title: widget.seller.contactDetails,
           description: 'Shop Contact Details',
         ),

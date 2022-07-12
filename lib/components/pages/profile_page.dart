@@ -159,17 +159,30 @@ class _ProfilePageState extends State<ProfilePage> {
                           )
                         ],
                       ),
-                      DetailsCardDescription(title: userModel.role),
-                      DetailsCardDescription(title: userModel.phoneNumber),
+                      DetailsCardDescription(
+                          title: userModel.role, description: 'Role'),
+                      DetailsCardDescription(
+                        title: userModel.phoneNumber,
+                        description: 'Mobile Number',
+                      ),
                       if (userModel.email != '')
-                        DetailsCardDescription(title: userModel.email),
-                      DetailsCardDescription(title: userModel.city),
-                      DetailsCardDescription(title: userModel.address),
-                      SizedBox(height: size.height * 0.015),
+                        DetailsCardDescription(
+                          title: userModel.email,
+                          description: 'Email',
+                        ),
+                      DetailsCardDescription(
+                        title: userModel.city,
+                        description: 'City',
+                      ),
+                      DetailsCardDescription(
+                        title: userModel.address,
+                        description: 'Address',
+                      ),
                       if (userRole == Users.Seller)
-                        SellerProfile(this.sellerModel)
-                      else if (userRole == Users.Mechanic)
-                        MechanicProfile(this.mechanicModel)
+                        SizedBox(height: size.height * 0.015),
+                      if (userRole == Users.Seller) SellerProfile(sellerModel),
+                      if (userRole == Users.Mechanic)
+                        MechanicProfile(mechanicModel)
                     ],
                   ),
                 ),

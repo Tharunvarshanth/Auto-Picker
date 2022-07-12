@@ -337,7 +337,7 @@ class _OtpLoginPage extends State<OtpLoginPage> {
                         child: Text(
                           'Code is send to ${formattedNumber}',
                           style:
-                              TextStyle(fontSize: 18, color: Colors.grey[400]),
+                              TextStyle(fontSize: 18, color: Colors.grey[800]),
                         ),
                       ),
                       Padding(
