@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_icon_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
+import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/pages/advertisement_payment_page.dart';
 import 'package:auto_picker/models/spare_advertisement.dart';
@@ -36,6 +37,7 @@ class _ProductAdvertisementAddFormState
   List<Asset> images = <Asset>[];
   String _error = 'No Error Dectected';
   var advertismentController = AdvertisementController();
+  bool isLoading = false;
 
   void initState() {
     super.initState();
@@ -84,11 +86,9 @@ class _ProductAdvertisementAddFormState
   }
 
   void handleAdd() async {
-    /*  widget.params['price'] = priceController.text;
-    widget.params['title'] = productTitleController.text;
-    widget.params['description'] = descriptionController.text;
-    widget.params['condition'] = condition;
-    widget.params['imageList'] = imageList;*/
+    setState(() {
+      isLoading = true;
+    });
     var advertisement = SpareAdvertisement(
         existingUser.currentUser.uid,
         false,
@@ -113,7 +113,11 @@ class _ProductAdvertisementAddFormState
       print("imageList ${imageList}");
       if (await advertismentController.updateAdvertisement(
           existingUser.currentUser.uid, res, 'imageList', imageList)) {
-        var params = {'adId': res, 'item': productTitleController.text};
+        var params = {
+          'adId': res,
+          'item': productTitleController.text,
+          'subTitle': productSubTitleController.text
+        };
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -126,6 +130,9 @@ class _ProductAdvertisementAddFormState
     } else {
       //error popup
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void fillRequiredFields() {
@@ -245,6 +252,15 @@ class _ProductAdvertisementAddFormState
         key: _formKey,
         child: Column(
           children: <Widget>[
+            if (isLoading)
+              Center(
+                child: Container(
+                  alignment: Alignment.center,
+                  child: const CircularProgressIndicator(
+                    color: AppColors.blue,
+                  ),
+                ),
+              ),
             Container(
               height: 200,
               margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
@@ -268,66 +284,32 @@ class _ProductAdvertisementAddFormState
               color: AppColors.red,
               isBold: true,
             ),
-            TextFormField(
+            GenericTextField(
               controller: productTitleController,
+              labelText: "Product Title",
+              prefixIcon: Icons.fmd_good_sharp,
               maxLength: 15,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Product Title *',
-                  hintText: "Front Bumper",
-                  labelStyle: TextStyle(fontSize: 15)),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter Your Address';
-                }
-                return null;
-              },
             ),
             SizedBox(height: size.height * 0.015),
-            TextFormField(
+            GenericTextField(
               controller: productSubTitleController,
-              maxLength: 10,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'SubTitle *',
-                  hintText: "discount 5% offer",
-                  labelStyle: TextStyle(fontSize: 15)),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter Your Address';
-                }
-                return null;
-              },
+              labelText: "SubTitle",
+              hintText: "discount 5% offer",
+              prefixIcon: Icons.subtitles,
+              maxLength: 15,
             ),
             SizedBox(height: size.height * 0.015),
-            TextFormField(
+            GenericTextField(
               controller: descriptionController,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Description *',
-                  hintText: "Panel -40000, Shell -25000 ,Lower Mesh -20000",
-                  labelStyle: TextStyle(fontSize: 15)),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter Your Address';
-                }
-                return null;
-              },
+              labelText: "Description",
+              prefixIcon: Icons.description,
             ),
             SizedBox(height: size.height * 0.015),
-            TextFormField(
+            GenericTextField(
               controller: priceController,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Price(rs) *',
-                  hintText: "400.00 Rs",
-                  labelStyle: TextStyle(fontSize: 15)),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter Your Address';
-                }
-                return null;
-              },
+              labelText: "Prize",
+              hintText: "400.00 Rs",
+              prefixIcon: Icons.money,
             ),
             SizedBox(height: size.height * 0.025),
             if (widget.advertisement == null)

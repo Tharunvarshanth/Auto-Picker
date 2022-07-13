@@ -1,16 +1,9 @@
-import 'dart:async';
-import 'dart:convert';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_citys_select.dart';
-import 'package:auto_picker/components/atoms/generic_input_option_select.dart';
-import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/pages/mechanics_form_edit_page.dart';
-import 'package:auto_picker/components/pages/mechanics_signup_page.dart';
-import 'package:auto_picker/components/pages/otp_signup_page.dart';
 import 'package:auto_picker/components/pages/seller_edit_page.dart';
-import 'package:auto_picker/components/pages/seller_signup_page.dart';
 import 'package:auto_picker/models/city.dart';
 import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/models/seller.dart';
@@ -20,7 +13,6 @@ import 'package:auto_picker/services/user_controller.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/constands.dart';
 import 'package:auto_picker/utilities/utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class EditSignUpForm extends StatefulWidget {
@@ -136,35 +128,16 @@ class _EditSignUpFormState extends State<EditSignUpForm> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            TextFormField(
+            GenericTextField(
               controller: nameController,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Name',
-                  hintText: "Kamal",
-                  labelStyle: TextStyle(fontSize: 15)),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter Your Name';
-                }
-                return null;
-              },
+              labelText: "Name",
+              prefixIcon: Icons.supervised_user_circle,
             ),
             SizedBox(height: size.height * 0.015),
-            TextFormField(
-              controller: addressController,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Address',
-                  hintText: 'No 16,Galle Road',
-                  labelStyle: TextStyle(fontSize: 15)),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter Your Name';
-                }
-                return null;
-              },
-            ),
+            GenericTextField(
+                controller: addressController,
+                labelText: "Address",
+                prefixIcon: Icons.streetview),
             SizedBox(height: size.height * 0.015),
             GenericInputOptionCitysSelect(
               width: size.width,

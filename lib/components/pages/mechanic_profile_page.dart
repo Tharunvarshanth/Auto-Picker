@@ -69,8 +69,8 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
   void setData() async {
     var _user = await userController.getUser(widget.mechanic.id);
     userModel = UserModel.fromJson(_user);
-    QuerySnapshot res = await feedbackController
-        .getFeedbackList('UUw8Cu9hDEZQCtsz3PC0lIlpdN52');
+    QuerySnapshot res =
+        await feedbackController.getFeedbackList(widget.mechanic.id);
     print("feedback ${res.size}");
     if (res.size > 0) {
       res.docs.forEach((element) async {
@@ -87,13 +87,27 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
   }
 
   void addFeedback() async {
-    // existingUser.currentUser.uid
-    var _user = await userController.getUser(widget.mechanic.id);
+    var _user = await userController.getUser(existingUser.currentUser.uid);
     userModel = UserModel.fromJson(_user);
     var feedback = FeedBackData(
         userModel.fullName, DateTime.now().toString(), feedbackText);
-    var res =
-        feedbackController.addFeedback(feedback, existingUser.currentUser.uid);
+    var addres = feedbackController.addFeedback(feedback, widget.mechanic.id);
+
+    FocusScope.of(context).requestFocus(FocusNode());
+    feedbackText = '';
+    feedBackList.clear();
+
+    QuerySnapshot res =
+        await feedbackController.getFeedbackList(widget.mechanic.id);
+    print("feedback ${res.size}");
+    if (res.size > 0) {
+      res.docs.forEach((element) async {
+        print("feedback $element");
+        setState(() {
+          feedBackList.add(FeedBackData.fromJson(element));
+        });
+      });
+    }
   }
 
   Future<void> _makePhoneCall(String phoneNumber) async {
@@ -122,10 +136,10 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
       ),
       bottomNavigationBar: Footer(
         isLogged: true,
-        currentIndex: 0,
+        currentIndex: -1,
       ),
       body: isLoading
-          ? CircularProgressIndicator()
+          ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: 8),
               child: Column(
@@ -136,10 +150,16 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
                   ),
                   getHeader(),
                   InfoTile(SvgPicture.asset("assets/images/map-pin.svg"),
-                      title: "City", subTitle: widget.mechanic.workingCity),
+                      title: widget.mechanic.workingCity, subTitle: "City"),
+                  Divider(
+                    color: Colors.grey,
+                    thickness: 1,
+                    endIndent: MediaQuery.of(context).size.width * 1 / 8,
+                    indent: MediaQuery.of(context).size.width * 1 / 8,
+                  ),
                   InfoTile(SvgPicture.asset("assets/images/map-pin.svg"),
-                      title: "Working Address",
-                      subTitle: widget.mechanic.workingAddress),
+                      title: widget.mechanic.workingAddress,
+                      subTitle: "Working Address"),
                   Divider(
                     color: Colors.grey,
                     thickness: 1,
@@ -147,9 +167,9 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
                     indent: MediaQuery.of(context).size.width * 1 / 8,
                   ),
                   InfoTile(SvgPicture.asset("assets/images/clock.svg"),
-                      title: "Working Hours",
-                      subTitle:
-                          "${utcTo12HourFormat(widget.mechanic.workingTime_From)} - ${utcTo12HourFormat(widget.mechanic.workingTime_To)}"),
+                      title:
+                          "${TwentryFourTo12HourFormat(widget.mechanic.workingTime_From)} - ${TwentryFourTo12HourFormat(widget.mechanic.workingTime_To)}",
+                      subTitle: "Working Hours"),
                   Divider(
                     color: Colors.grey,
                     thickness: 1,
@@ -157,7 +177,7 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
                     indent: MediaQuery.of(context).size.width * 1 / 8,
                   ),
                   InfoTile(SvgPicture.asset("assets/images/phone.svg"),
-                      title: 'Phone Number', subTitle: userModel.phoneNumber),
+                      title: userModel.phoneNumber, subTitle: 'Phone Number'),
                   Divider(
                     color: Colors.grey,
                     thickness: 1,
@@ -172,30 +192,37 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
                     textAlign: TextAlign.start,
                     style: TextStyle(fontSize: 20),
                   ),
-                  TextField(
-                    onChanged: (text) {
-                      feedbackText = text;
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Enter Feedback'),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Center(
-                    child: GenericButton(
-                      text: 'Send Feedback',
-                      onPressed: () {
-                        addFeedback();
-                      },
+                  if (existingUser.currentUser.uid != widget.mechanic.id)
+                    Row(
+                      children: [
+                        Expanded(
+                            child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            onChanged: (text) {
+                              feedbackText = text;
+                            },
+                            decoration: const InputDecoration(
+                              border: UnderlineInputBorder(),
+                              hintText: 'Enter Feedback',
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter Your Name';
+                              }
+                              return null;
+                            },
+                          ),
+                        )),
+                        IconButton(
+                            onPressed: () async {
+                              addFeedback();
+                            },
+                            icon: Icon(Icons.send))
+                      ],
                     ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
                   FutureBuilder(
-                      future: Future.delayed(Duration(seconds: 5)),
+                      future: Future.delayed(Duration(seconds: 2)),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
@@ -216,7 +243,7 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
                                   'https://cdn.dribbble.com/users/683081/screenshots/2728654/exfuse_app_main_nocontent.png',
                                   height: 200,
                                 ),
-                          height: 100,
+                          height: 200,
                           width: MediaQuery.of(context).size.width,
                         );
                       })
@@ -237,7 +264,7 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
             CircularProfileAvatar(
               profileUrl ?? '',
               initialsText: Text(
-                userModel.fullName,
+                userModel.fullName[0],
                 style: TextStyle(fontSize: 24, color: Colors.white),
               ),
               radius: 40,
@@ -247,7 +274,7 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
                 height: 40,
                 child: CircularProgressIndicator(),
               ),
-              backgroundColor: AppColors.green,
+              backgroundColor: AppColors.primaryVariant,
             ),
             const SizedBox(
               width: 16,
@@ -269,7 +296,7 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
                 Wrap(
                   children: [
                     GenericButton(
-                      text: _hasCallSupport ? 'CALL' : 'Calling not supported',
+                      text: _hasCallSupport ? 'Call' : 'Calling not supported',
                       textColor: AppColors.white,
                       backgroundColor: Colors.blue,
                       paddingHorizontal: 2,
@@ -283,14 +310,6 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
                     ),
                     const SizedBox(
                       width: 8,
-                    ),
-                    GenericButton(
-                      text: 'CHAT',
-                      onPressed: () {},
-                      paddingHorizontal: 2,
-                      textColor: AppColors.blue,
-                      backgroundColor: AppColors.white,
-                      paddingVertical: 2,
                     ),
                   ],
                 )
@@ -324,20 +343,20 @@ Widget feedBackTile(FeedBackData feedBackData) {
       title: Column(
         children: [
           Text(
-            feedBackData.userName,
-            style: const TextStyle(fontSize: 18),
+            feedBackData.feedbackMessage,
+            style: const TextStyle(fontSize: 16),
           ),
           Text(
             'Date: ${feedBackData.dateTime.substring(0, 16)}',
-            style: const TextStyle(fontSize: 14, color: Colors.grey),
+            style: const TextStyle(fontSize: 12, color: Colors.grey),
           )
         ],
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
       ),
       subtitle: Text(
-        feedBackData.feedbackMessage,
-        style: const TextStyle(fontSize: 14),
+        feedBackData.userName,
+        style: const TextStyle(fontSize: 12),
       ),
     ),
   );

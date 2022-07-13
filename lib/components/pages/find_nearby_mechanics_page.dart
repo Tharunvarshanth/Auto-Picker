@@ -230,7 +230,7 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
       bottomNavigationBar: !isShowMap
           ? Footer(
               isLogged: true,
-              currentIndex: 0,
+              currentIndex: -1,
             )
           : null,
       resizeToAvoidBottomInset: false,
@@ -303,7 +303,7 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
                                     buttonPressed: () =>
                                         navigateToMechanicProfilePage(index),
                                     openHours:
-                                        "${utcTo12HourFormat(mechanicListFiltered[index].workingTime_From)} - ${utcTo12HourFormat(mechanicListFiltered[index].workingTime_To)}",
+                                        "${TwentryFourTo12HourFormat(mechanicListFiltered[index].workingTime_From)} - ${TwentryFourTo12HourFormat(mechanicListFiltered[index].workingTime_To)}",
                                   );
                                 },
                               ),

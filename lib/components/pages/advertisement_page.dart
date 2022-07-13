@@ -72,10 +72,6 @@ class _AdvertisementPageState extends State<AdvertisementPage> {
   }
 
   Future<void> _makePhoneCall(String phoneNumber) async {
-    // Use `Uri` to ensure that `phoneNumber` is properly URL-encoded.
-    // Just using 'tel:$phoneNumber' would create invalid URLs in some cases,
-    // such as spaces in the input, which would cause `launch` to fail on some
-    // platforms.
     final Uri launchUri = Uri(
       scheme: 'tel',
       path: phoneNumber,
@@ -112,7 +108,8 @@ class _AdvertisementPageState extends State<AdvertisementPage> {
   void paymentPage() {
     var params = {
       'adId': widget.advertisement.aId,
-      'item': widget.advertisement.title
+      'item': widget.advertisement.title,
+      'subTitle': widget.advertisement.subtitle
     };
     Navigator.push(
       context,
@@ -136,6 +133,7 @@ class _AdvertisementPageState extends State<AdvertisementPage> {
         isLogged: isLogged,
       ),
       bottomNavigationBar: Footer(
+        currentIndex: -1,
         isLogged: isLogged,
       ),
       body: isLoading
@@ -246,6 +244,24 @@ class _AdvertisementPageState extends State<AdvertisementPage> {
                               ),
                               GenericText(
                                 text: "${seller.address}",
+                                textAlign: TextAlign.left,
+                                textSize: 18,
+                              ),
+                            ]),
+                        Divider(
+                          thickness: 2,
+                        ),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              GenericText(
+                                text: "Created At  : ",
+                                textAlign: TextAlign.left,
+                                textSize: 18,
+                              ),
+                              GenericText(
+                                text:
+                                    "${widget.advertisement.createdDate.toString().substring(0, 16)}",
                                 textAlign: TextAlign.left,
                                 textSize: 18,
                               ),

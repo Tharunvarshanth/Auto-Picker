@@ -2,7 +2,6 @@ import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/routes.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:auto_picker/services/user_controller.dart';
 import 'package:auto_picker/store/cache/sharedPreferences/user_info.dart';
@@ -31,11 +30,10 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
     super.initState();
     setState(() {
       isLinkingPage = widget.isLinkingPage;
-      isAlreadyLinked = existingUser?.email != null ? true : false;
+      isAlreadyLinked = existingUser.email == null ? false : true;
     });
   }
 
-  //first time sign up
   linkEmailGoogle() async {
     //get currently logged in user
 
@@ -144,7 +142,7 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(30.0),
                     child: Text(
                       "Hello There!",
                       style:

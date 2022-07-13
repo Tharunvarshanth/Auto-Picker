@@ -2,6 +2,7 @@ import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_citys_select.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_select.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
+import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/atoms/generic_time_picker.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/pages/map_page.dart';
@@ -118,26 +119,15 @@ class _MechanicsSignUpFormState extends State<MechanicsSignUpForm> {
             GenericInputOptionSelect(
               width: size.width,
               labelText: '  Specialist',
-              value: specialist,
+              dropDownValue: specialist,
               itemList: MechanicSpecialistSkills,
               onValueChange: (text) => handleMechanicsSpecialist(text),
             ),
             SizedBox(height: size.height * 0.015),
-            TextFormField(
+            GenericTextField(
               controller: addressController,
-              decoration: const InputDecoration(
-                  hintText: ' No 16, Galle Rd, Colombo 11.',
-                  hintStyle:
-                      TextStyle(color: Color.fromARGB(255, 145, 145, 145)),
-                  border: UnderlineInputBorder(),
-                  labelText: 'Enter your Work place Address',
-                  labelStyle: TextStyle(fontSize: 14)),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter Your Address';
-                }
-                return null;
-              },
+              labelText: "Work place Address",
+              prefixIcon: Icons.streetview,
             ),
             SizedBox(height: size.height * 0.030),
             Row(

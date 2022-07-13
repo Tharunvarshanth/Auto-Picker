@@ -1,7 +1,11 @@
+import 'dart:ffi';
+
 import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/fuel_alert_tile.dart';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_citys_select.dart';
+import 'package:auto_picker/components/atoms/generic_text_button.dart';
+import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:auto_picker/components/pages/map_gas_station_page.dart';
@@ -17,9 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:section_view/section_view.dart';
-
-import 'map_page.dart';
+import 'package:grouped_list/grouped_list.dart';
 
 class GroupModel {
   String date;
@@ -53,7 +55,7 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
 
   GoogleMapController mapController;
   bool isShowMap = false;
-  double nearByDistance = 10.00;
+  bool isLoading = true;
   City city;
   List<City> dropDownCityList = [];
   List<GroupModel> data = [];
@@ -104,7 +106,7 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
       for (var element in res) {
         print("Fuel Alert element:   $element");
         FuelAlert _fuelAlert = FuelAlert.fromJson(element);
-
+        fuelAlertList.add(_fuelAlert);
         if (i == 0) {
           print("Fuel Alert index:   $i");
           prevTimeStampe = dateFormat.parse(_fuelAlert.timeStamp);
@@ -147,6 +149,7 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
     var citys = await readCityJsonData();
     setState(() {
       dropDownCityList = citys;
+      isLoading = false;
     });
   }
 
@@ -162,27 +165,31 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
           return StatefulBuilder(
             builder: (context, setState) {
               return AlertDialog(
+                shape: const RoundedRectangleBorder(
+                    side: BorderSide(
+                        color: Color(0xFF2A8068)), //the outline color
+                    borderRadius: BorderRadius.all(Radius.circular(15))),
                 scrollable: true,
-                title: Text('Add Fuel Status'),
+                title: Text('Add Fuel Avialble'),
                 content: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Form(
                     child: Column(
                       children: <Widget>[
-                        TextFormField(
-                          controller: messageController,
-                          decoration: const InputDecoration(
-                            labelText: 'Message',
-                            icon: Icon(Icons.message),
-                          ),
-                        ),
+                        GenericTextField(
+                            controller: messageController,
+                            labelText: "Message",
+                            prefixIcon: Icons.message),
                         const SizedBox(
                           height: 10,
                         ),
                         ListTile(
                           title: const Text('Diesel'),
                           leading: Checkbox(
-                            checkColor: AppColors.Blue,
+                            splashRadius: 20,
+                            activeColor: Colors.transparent,
+                            checkColor: AppColors.themePrimary,
+                            materialTapTargetSize: MaterialTapTargetSize.padded,
                             value: dieselMsg,
                             onChanged: (bool value) {
                               setState(() {
@@ -194,7 +201,10 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
                         ListTile(
                           title: const Text('Petrol'),
                           leading: Checkbox(
-                            checkColor: AppColors.Blue,
+                            splashRadius: 20,
+                            activeColor: Colors.transparent,
+                            checkColor: AppColors.themePrimary,
+                            materialTapTargetSize: MaterialTapTargetSize.padded,
                             value: petrolMsg,
                             onChanged: (bool value) {
                               setState(() {
@@ -205,7 +215,7 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
                         ),
                         Container(
                           width: 150,
-                          child: GenericButton(
+                          child: GenericTextButton(
                               text: 'Choose Gas Station location',
                               onPressed: () {
                                 Map<String, dynamic> m = {
@@ -247,6 +257,12 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
                           return;
                         }
                         addMessage();
+                        Navigator.pop(context, 'Cancel');
+                      }),
+                  RaisedButton(
+                      child: Text("Cancel"),
+                      onPressed: () {
+                        Navigator.pop(context, 'Cancel');
                       })
                 ],
               );
@@ -271,6 +287,7 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
   }
 
   viewPetrolStationLoc(FuelAlert fuelAlert) {
+    _markers.clear();
     setState(() {
       isShowMap = true;
       _markers.add(Marker(
@@ -281,6 +298,11 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
             title: 'Petrol Station',
           )));
     });
+    _kGooglePlex = CameraPosition(
+      target: LatLng(double.parse(fuelAlert.fillingStationLat),
+          double.parse(fuelAlert.fillingStationLon)),
+      zoom: 14.4746,
+    );
   }
 
   Widget mapWindow() {
@@ -303,6 +325,7 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
   }
 
   Widget build(BuildContext context) {
+    var screenSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: const CustomAppBar(
         title: 'Fuel Alert',
@@ -311,26 +334,49 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
       ),
       bottomNavigationBar: Footer(
         isLogged: true,
-        currentIndex: 0,
+        currentIndex: -1,
       ),
       body: SafeArea(
-        child: Padding(
-          padding: !isShowMap
-              ? const EdgeInsets.fromLTRB(5, 5, 5, 80)
-              : const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-          child: Stack(children: <Widget>[
-            !isShowMap
-                ? data.length != 0
-                    ? SectionView<GroupModel, FuelAlert>(
-                        source: data,
-                        onFetchListData: (header) => header.fuelAlert,
-                        headerBuilder: getDefaultHeaderBuilder((d) => d.date,
-                            bkColor: AppColors.blue,
-                            style: const TextStyle(
-                                fontSize: 18, color: Colors.white)),
-                        itemBuilder: (context, itemData, index, headerData,
-                                headerIndex) =>
-                            FuelAlertTile(
+        child: isLoading
+            ? Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.white,
+                ),
+              )
+            : Padding(
+                padding: !isShowMap
+                    ? const EdgeInsets.fromLTRB(5, 5, 5, 40)
+                    : const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                child: Stack(children: <Widget>[
+                  !isShowMap
+                      ? data.length != 0
+                          ? GroupedListView<FuelAlert, String>(
+                              elements: fuelAlertList,
+                              useStickyGroupSeparators: true,
+                              groupSeparatorBuilder: (String value) =>
+                                  Container(
+                                width: screenSize.width / 5,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: AppColors.Blue),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    value.toString().substring(0, 10),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: AppColors.ashWhite,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ),
+                              groupBy: (element) =>
+                                  element.timeStamp.toString().substring(0, 10),
+
+                              itemBuilder: (context, FuelAlert itemData) =>
+                                  FuelAlertTile(
                                 onView: () => viewPetrolStationLoc(itemData),
                                 timeStamp:
                                     getFormattedTimeStamp(itemData?.timeStamp),
@@ -340,11 +386,15 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
                                 fillingStationLon: itemData?.fillingStationLon,
                                 petrol: itemData?.petrol,
                                 diesel: itemData?.diesel,
-                                city: itemData?.city))
-                    : const Text('No Messages')
-                : mapWindow()
-          ]),
-        ),
+                                city: itemData?.city,
+                              ),
+
+                              order: GroupedListOrder.DESC, // optional
+                            )
+                          : const Text('No Messages')
+                      : mapWindow()
+                ]),
+              ),
       ),
       floatingActionButton: isShowMap
           ? FloatingActionButton.extended(
@@ -363,7 +413,8 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
                 color: Colors.white,
               ),
             ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterFloat,
     );
   }
 }

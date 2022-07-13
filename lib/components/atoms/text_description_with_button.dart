@@ -27,7 +27,7 @@ class TextDescriptionWithButton extends StatelessWidget {
       this.titleColor = Colors.black,
       this.titleTextSize,
       this.icon = Icons.arrow_right,
-      this.padding = 10,
+      this.padding = 0,
       this.onPress,
       this.url = "assets/images/chevron-right-blue.svg",
       this.borderColor = Colors.black})
@@ -37,44 +37,71 @@ class TextDescriptionWithButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: onPress,
-      child: Container(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              flex: 4,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                        fontSize: titleTextSize ?? 20, color: titleColor),
-                    textAlign: TextAlign.start,
-                  ),
-                  Text(
-                    description,
-                    style: TextStyle(
-                        fontSize: descriptionTextSize ?? 16,
-                        color: descriptionColor),
-                    textAlign: TextAlign.start,
-                  )
-                ],
-              ),
+      child: Card(
+        shadowColor: AppColors.themePrimary,
+        elevation: 4,
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Container(
+          alignment: Alignment.centerLeft,
+          width: MediaQuery.of(context).size.width,
+          decoration: const BoxDecoration(
+            //color: Colors.blue[100]
+            gradient: LinearGradient(
+              colors: [
+                Color.fromARGB(255, 168, 203, 255),
+                Color.fromARGB(255, 168, 203, 255)
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomCenter,
             ),
-            Expanded(
-              child: IconButton(
-                onPressed: onPress,
-                icon: SvgPicture.asset(url),
-                color: AppColors.blue,
-                iconSize: 36,
-              ),
-              flex: 1,
-            )
-          ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  flex: 4,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 17,
+                          color: AppColors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                      Text(
+                        description,
+                        style: TextStyle(
+                            fontSize: descriptionTextSize ?? 16,
+                            color: descriptionColor),
+                        textAlign: TextAlign.start,
+                      )
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: IconButton(
+                    onPressed: onPress,
+                    icon: SvgPicture.asset(url),
+                    color: AppColors.blue,
+                    iconSize: 36,
+                  ),
+                  flex: 1,
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );

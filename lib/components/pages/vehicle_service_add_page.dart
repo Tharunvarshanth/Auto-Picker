@@ -90,7 +90,7 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
         context: context,
         builder: (context) => ItemDialogMessage(
               icon: 'assets/images/x-circle.svg',
-              titleText: 'Fill All Required Fields',
+              titleText: 'Fill All Fields',
               bodyText: "",
               primaryButtonText: 'Ok',
               onPressedPrimary: () => Navigator.pop(context),
@@ -103,28 +103,40 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
 
     return Scaffold(
         body: SafeArea(
-            child: Stack(children: [
-      IconButton(
-        padding: const EdgeInsets.all(12),
-        iconSize: 36,
-        alignment: Alignment.topLeft,
-        icon: const Icon(Icons.arrow_back),
-        color: AppColors.black,
-        onPressed: () {
-          navigateBack(context);
-        },
-      ),
-      SingleChildScrollView(
-        padding: EdgeInsets.fromLTRB(20, 75, 10, 50),
-        child: Column(
+            child: SingleChildScrollView(
+      child: Stack(children: [
+        IconButton(
+          padding: EdgeInsets.all(12),
+          iconSize: 40,
+          alignment: Alignment.topLeft,
+          icon: Image.asset(
+            "assets/images/back-arrow.png",
+            scale: 1.2,
+          ),
+          onPressed: () {
+            navigateBack(context);
+          },
+        ),
+        Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: [
-            GenericText(
-              text: 'Add Vehicle Service',
-              textSize: 36,
-              isBold: true,
+            Container(
+              height: 200,
+              margin: EdgeInsets.symmetric(vertical: 40.0, horizontal: 0.0),
+              child: Image.asset(
+                "assets/images/calendar.png",
+                scale: 0.5,
+              ),
+            ),
+            const Text(
+              "Add Vehicle Service",
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+              ),
             ),
             GenericText(
               textAlign: TextAlign.left,
@@ -134,109 +146,115 @@ class _VehicleServiceAddPageState extends State<VehicleServiceAddPage> {
             ),
             Form(
                 key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    GenericTextField(
-                      controller: currentMileage,
-                      labelText: 'Current Mileage *',
-                      hintText: "150,000",
-                      borderColor: AppColors.ash,
-                    ),
-                    GenericTextButton(
-                      text: serviceDate ?? 'Serviced Date *',
-                      onPressed: () {
-                        DatePicker.showDatePicker(context,
-                            showTitleActions: true,
-                            minTime: DateTime(DateTime.now().year,
-                                DateTime.now().month - 1, 0),
-                            maxTime: DateTime(DateTime.now().year,
-                                DateTime.now().month + 1, 0),
-                            theme: const DatePickerTheme(
-                                headerColor: AppColors.skyBlue,
-                                backgroundColor: Colors.blue,
-                                itemStyle: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18),
-                                doneStyle: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16)), onChanged: (date) {
-                          print('change $date in time zone ' +
-                              date.timeZoneOffset.inHours.toString());
-                        }, onConfirm: (date) {
-                          print('confirm $date');
-                          setState(() {
-                            serviceDate = date
-                                .toString()
-                                .replaceRange(10, date.toString().length, '');
-                            ;
-                          });
-                        }, currentTime: DateTime.now(), locale: LocaleType.en);
-                      },
-                    ),
-                    GenericTextButton(
-                      text: notificationDate ?? 'Next Serivce Remainder Date *',
-                      onPressed: () {
-                        DatePicker.showDatePicker(context,
-                            showTitleActions: true,
-                            minTime: DateTime(DateTime.now().year,
-                                DateTime.now().month + 1, 0),
-                            maxTime: DateTime(DateTime.now().year + 1,
-                                DateTime.now().month + 1, 0),
-                            theme: const DatePickerTheme(
-                                headerColor: AppColors.skyBlue,
-                                backgroundColor: Colors.blue,
-                                itemStyle: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18),
-                                doneStyle: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16)), onChanged: (date) {
-                          print('change $date in time zone ' +
-                              date.timeZoneOffset.inHours.toString());
-                        }, onConfirm: (date) {
-                          print('confirm $date');
-                          setState(() {
-                            notificationDateTime = date;
-                            notificationDate = date
-                                .toString()
-                                .replaceRange(10, date.toString().length, '');
-                          });
-                        }, currentTime: DateTime.now(), locale: LocaleType.en);
-                      },
-                    ),
-                    GenericTextField(
-                      controller: descriptionController,
-                      labelText: 'Description *',
-                      hintText: '',
-                      borderColor: AppColors.ash,
-                    ),
-                    SizedBox(height: size.height * 0.015),
-                    GenericButton(
-                      textColor: AppColors.white,
-                      backgroundColor: AppColors.Blue,
-                      paddingVertical: 20,
-                      paddingHorizontal: 80,
-                      text: 'Next',
-                      onPressed: () {
-                        print(serviceDate);
-                        if (serviceDate == null ||
-                            descriptionController.text.isEmpty ||
-                            notificationDate == null ||
-                            currentMileage.text.isEmpty) {
-                          fillRequiredFields();
-                          return;
-                        }
-                        addVehcileServiceHistory();
-                      },
-                      isBold: true,
-                    )
-                  ],
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    children: <Widget>[
+                      GenericTextField(
+                          controller: currentMileage,
+                          labelText: "Current Mileage",
+                          prefixIcon: Icons.social_distance),
+                      SizedBox(height: size.height * 0.015),
+                      GenericTextButton(
+                        text: serviceDate ?? 'Serviced Date',
+                        onPressed: () {
+                          DatePicker.showDatePicker(context,
+                              showTitleActions: true,
+                              minTime: DateTime(DateTime.now().year,
+                                  DateTime.now().month - 1, 0),
+                              maxTime: DateTime(DateTime.now().year,
+                                  DateTime.now().month + 1, 0),
+                              theme: const DatePickerTheme(
+                                  headerColor: AppColors.skyBlue,
+                                  backgroundColor: Colors.blue,
+                                  itemStyle: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                  doneStyle: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16)), onChanged: (date) {
+                            print('change $date in time zone ' +
+                                date.timeZoneOffset.inHours.toString());
+                          }, onConfirm: (date) {
+                            print('confirm $date');
+                            setState(() {
+                              serviceDate = date
+                                  .toString()
+                                  .replaceRange(10, date.toString().length, '');
+                              ;
+                            });
+                          },
+                              currentTime: DateTime.now(),
+                              locale: LocaleType.en);
+                        },
+                      ),
+                      SizedBox(height: size.height * 0.015),
+                      GenericTextButton(
+                        text: notificationDate ?? 'Next Serivce Remainder Date',
+                        onPressed: () {
+                          DatePicker.showDatePicker(context,
+                              showTitleActions: true,
+                              minTime: DateTime(DateTime.now().year,
+                                  DateTime.now().month + 1, 0),
+                              maxTime: DateTime(DateTime.now().year + 1,
+                                  DateTime.now().month + 1, 0),
+                              theme: const DatePickerTheme(
+                                  headerColor: AppColors.skyBlue,
+                                  backgroundColor: Colors.blue,
+                                  itemStyle: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                  doneStyle: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16)), onChanged: (date) {
+                            print('change $date in time zone ' +
+                                date.timeZoneOffset.inHours.toString());
+                          }, onConfirm: (date) {
+                            print('confirm $date');
+                            setState(() {
+                              notificationDateTime = date;
+                              notificationDate = date
+                                  .toString()
+                                  .replaceRange(10, date.toString().length, '');
+                            });
+                          },
+                              currentTime: DateTime.now(),
+                              locale: LocaleType.en);
+                        },
+                      ),
+                      SizedBox(height: size.height * 0.015),
+                      GenericTextField(
+                          controller: descriptionController,
+                          labelText: "Description",
+                          prefixIcon: Icons.description),
+                      SizedBox(height: size.height * 0.015),
+                      GenericButton(
+                        textColor: AppColors.white,
+                        backgroundColor: AppColors.Blue,
+                        paddingVertical: 20,
+                        paddingHorizontal: 80,
+                        text: 'Next',
+                        onPressed: () {
+                          print(serviceDate);
+                          if (serviceDate == null ||
+                              descriptionController.text.isEmpty ||
+                              notificationDate == null ||
+                              currentMileage.text.isEmpty) {
+                            fillRequiredFields();
+                            return;
+                          }
+                          addVehcileServiceHistory();
+                        },
+                        isBold: true,
+                      )
+                    ],
+                  ),
                 ))
           ],
         ),
-      ),
-    ])));
+      ]),
+    )));
   }
 }

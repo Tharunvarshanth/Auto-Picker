@@ -1,4 +1,5 @@
 import 'package:auto_picker/themes/colors.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
 import 'generic_text.dart';
@@ -15,7 +16,7 @@ class GenericInputOptionSelect extends StatelessWidget {
   TextInputType inputType;
   Icon prefixIcon;
   double width;
-  String value;
+  String dropDownValue;
   List<String> itemList;
   bool enable = true;
   void Function() onTap = () => {};
@@ -37,11 +38,12 @@ class GenericInputOptionSelect extends StatelessWidget {
       this.width,
       this.enable,
       this.onTap,
-      this.value})
+      this.dropDownValue})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final myKey = GlobalKey<DropdownSearchState<String>>();
     Size size = MediaQuery.of(context).size;
     return Column(
       children: [
@@ -55,11 +57,12 @@ class GenericInputOptionSelect extends StatelessWidget {
         ),
         DecoratedBox(
           decoration: BoxDecoration(
+              color: Colors.blue[100],
               border: Border.all(color: AppColors.ash, width: 1),
-              borderRadius: BorderRadius.circular(5),
+              borderRadius: BorderRadius.circular(15),
               boxShadow: <BoxShadow>[]),
           child: Container(
-            margin: EdgeInsets.fromLTRB(15, 0, 5, 0),
+            margin: EdgeInsets.fromLTRB(15, 2, 5, 2),
             width: width,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
@@ -67,11 +70,12 @@ class GenericInputOptionSelect extends StatelessWidget {
                 onTap: () => onTap,
                 isExpanded: true,
                 menuMaxHeight: 500,
-                borderRadius: BorderRadius.circular(5),
-                value: value,
+                borderRadius: BorderRadius.circular(15),
+                value: dropDownValue,
                 icon: const Icon(Icons.arrow_drop_down),
                 elevation: 16,
-                style: const TextStyle(color: AppColors.black),
+                style: const TextStyle(
+                    color: AppColors.black, fontWeight: FontWeight.w600),
                 underline: Container(),
                 onChanged: (String newValue) {
                   onValueChange(newValue);

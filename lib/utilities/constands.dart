@@ -54,6 +54,7 @@ class FirebaseCollections {
   static const VehicleServiceMaintenance = 'vehicleServiceMaintenance';
   static const VehicleServiceList = 'vehicleServiceList';
   static const FuelAlertList = 'fuelAlertList';
+  static const FuelCityPreferencesList = 'fuelCityPreferences';
 }
 
 const SPAREPARTSCONDITIONLIST = ["Recondition", "Used", "Brand New"];
@@ -63,8 +64,8 @@ const PriceNegotiable = "Negotiable";
 
 const ONESIGNALAPPID = "9118dd3d-282d-42e6-b3a2-78b5bee6c5a0";
 const ORDERTITLTE = "Product Order Received";
-const ORDERBODY = "You have Got a  Order from Please Check My Orders";
-const NOTIFICATIONTYPES = ["Order"];
+const ORDERBODY = "You have got a order";
+const NOTIFICATIONTYPES = ["Order", "Adevertisement"];
 const NOTIFICATION_TYPE_ORDER = "Order";
 const ORDER_CONFIRM_TITLE = 'Order Confirmed';
 const ORDER_CONFIRM_BODY = 'Your order confirmed by product owner';
@@ -73,3 +74,40 @@ const ORDER_COMPLETED_TITLE = "Your order completed";
 const ORDER_COMPLETED_BODY = "Your order marked as completed";
 
 const VEHICLE_SERVICE_REMAINDER = "Vehicle Service Remainder";
+
+const ORDER_CANCELLED_TITLE = 'Order Cancelled';
+const ORDER_CANCELLED_BODY = 'Your order was cancelled';
+
+const ADVERTISEMENT_TITLE = 'Order Cancelled';
+const ADVERTISEMENT_BODY = 'Your order was cancelled';
+
+const TERMS_AND_CONDITIONS = '''
+<h4>Last updated: 10/07/2022</h4>
+
+<p>
+Please read these Terms and Conditions carefully before using
+the Auto Picker mobile
+application operated by us
+Your access to and use of the Service is conditioned on your acceptance of and compliance with
+these Terms. These Terms apply to all visitors, users and others who access or use the Service.
+By accessing or using the Service you agree to be bound by these Terms. If you disagree
+with any part of the terms, then you may not access the Service.
+</p>
+
+<h4>Purchases</h4>
+<p>
+If you wish to purchase any product or service made available through the Service ("Purchase"),
+you may be asked to supply certain information relevant to your Purchase including.
+</p>
+
+<h4>Content</h4>
+<p>
+Our Service allows you to post, link, store, share and otherwise make available certain information,
+text, graphics, videos, or other material ("Content").
+</p>
+
+<h4>Contact Us</h4>
+<p>
+If you have any questions about these Terms, please contact us
+</p>
+''';

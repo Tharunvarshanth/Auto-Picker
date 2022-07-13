@@ -1,5 +1,6 @@
 import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
+import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:auto_picker/components/organisms/order_tile.dart';
 import 'package:auto_picker/models/notification.dart';
@@ -11,6 +12,8 @@ import 'package:auto_picker/services/order_controller.dart';
 import 'package:auto_picker/services/product_controller.dart';
 import 'package:auto_picker/services/push_messaging_service.dart';
 import 'package:auto_picker/services/user_controller.dart';
+import 'package:auto_picker/store/cache/sharedPreferences/user_info.dart';
+import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/constands.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -34,9 +37,12 @@ class _OrdersSellerListState extends State<OrdersSellerListPage> {
   var productController = ProductController();
   var notificationController = NotificationController();
   FirebaseAuth auth = FirebaseAuth.instance;
+  var userInfo = UserInfoCache();
   bool isLoading = true;
   String role = "";
   var pushMessagingService = PushMessagingSerivce();
+  UserModel currentUser;
+
   @override
   void initState() {
     super.initState();
@@ -44,6 +50,8 @@ class _OrdersSellerListState extends State<OrdersSellerListPage> {
   }
 
   void getList() async {
+    ordersList = [];
+
     var user = await userControlller.getUser(auth.currentUser.uid);
     role = user['role'];
     QuerySnapshot res;
@@ -75,6 +83,9 @@ class _OrdersSellerListState extends State<OrdersSellerListPage> {
           userList.add(_user);
         });
       });
+
+      currentUser = UserModel.fromJson(
+          await userControlller.getUser(auth.currentUser.uid));
     }
 
     Future.delayed(const Duration(milliseconds: 4000), () {
@@ -86,25 +97,54 @@ class _OrdersSellerListState extends State<OrdersSellerListPage> {
 
   void onPressConfirmOrder(int index) async {
     List<String> list = [ordersList[index].customerId];
-    var no = NotificationModel(ORDER_CONFIRM_TITLE, ORDER_CONFIRM_BODY,
+    var pmBody =
+        'Your order confirmed by product owner ${currentUser.fullName} for product : ${productList[index].title}';
+
+    var no = NotificationModel(ORDER_CONFIRM_TITLE, pmBody,
         DateTime.now().toString(), NOTIFICATIONTYPES[0], false);
+
     pushMessagingService.sendOrderNotification(
-        list, ORDER_CONFIRM_TITLE, ORDER_CONFIRM_BODY);
+        list, ORDER_CONFIRM_TITLE, pmBody);
 
     notificationController.addNotification(no, ordersList[index].customerId);
     var res = await orderController.updateOrderField(
         ordersList[index], 'isConfirmed', true);
   }
 
-  void cancelOrder() {}
+  void cancelOrder(int index) async {
+    List<String> list = [ordersList[index].customerId];
+    var pmBody =
+        'Your order was cancelled by product owner ${currentUser.fullName} for product : ${productList[index].title}';
+
+    var no = NotificationModel(ORDER_CANCELLED_TITLE, pmBody,
+        DateTime.now().toString(), NOTIFICATIONTYPES[0], false);
+
+    pushMessagingService.sendOrderNotification(
+        list, ORDER_CANCELLED_TITLE, pmBody);
+
+    notificationController.addNotification(no, ordersList[index].customerId);
+    var res = await orderController.updateOrderField(
+        ordersList[index], 'cancelled', true);
+
+    Future.delayed(const Duration(milliseconds: 4000), () {
+      setState(() {
+        getList();
+      });
+    });
+  }
 
   void onPressIsCompleted(int index) async {
     if (!ordersList[index].isCompleted) {
       List<String> list = [ordersList[index].customerId];
-      var no = NotificationModel(ORDER_COMPLETED_TITLE, ORDER_COMPLETED_BODY,
+
+      var pmBody =
+          'Your order marked as completed by product owner ${currentUser.fullName} for product : ${productList[index].title}';
+
+      var no = NotificationModel(ORDER_COMPLETED_TITLE, pmBody,
           DateTime.now().toString(), NOTIFICATIONTYPES[0], false);
+
       pushMessagingService.sendOrderNotification(
-          list, ORDER_COMPLETED_TITLE, ORDER_COMPLETED_BODY);
+          list, ORDER_COMPLETED_TITLE, pmBody);
 
       notificationController.addNotification(no, ordersList[index].customerId);
       var res = await orderController.updateOrderField(
@@ -114,21 +154,17 @@ class _OrdersSellerListState extends State<OrdersSellerListPage> {
       });
       getList();
     } else {
-      print("onPressIsCompleted ${ordersList[index].isCompleted}");
-      // set up the button
-      Widget okButton = TextButton(
-        child: Text("OK"),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      AlertDialog alert = AlertDialog(
-        title: Text('Invalid Operation'),
-        content: Text('You cannot edit the alredy marked value'),
-        actions: [
-          okButton,
-        ],
-      );
+      showDialog(
+          context: context,
+          builder: (context) => ItemDialogMessage(
+                icon: 'assets/images/x-circle.svg',
+                titleText: 'Invalid Operations',
+                bodyText: "You cannot edit the alredy marked value",
+                primaryButtonText: "Ok",
+                onPressedPrimary: () {
+                  Navigator.pop(context, 'Cancel');
+                },
+              ));
     }
   }
 
@@ -138,6 +174,44 @@ class _OrdersSellerListState extends State<OrdersSellerListPage> {
       path: phoneNumber,
     );
     await launch(launchUri.toString());
+  }
+
+  showAlertDialog(BuildContext context, String title, Function() onYes) {
+    // set up the button
+    Widget yesButton = TextButton(
+      child: Text("Yes"),
+      onPressed: () {
+        if (onYes != null) {
+          onYes();
+        }
+        Navigator.pop(context, 'Cancel');
+      },
+    );
+
+    Widget noButton = TextButton(
+      child: Text(
+        "No",
+        style: TextStyle(color: AppColors.black),
+      ),
+      onPressed: () {
+        Navigator.pop(context, 'Cancel');
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text(title),
+      content: Text(""),
+      actions: [yesButton, noButton],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   @override
@@ -152,36 +226,17 @@ class _OrdersSellerListState extends State<OrdersSellerListPage> {
     return SafeArea(
         child: Scaffold(
       appBar: const CustomAppBar(
-        title: 'My Orders',
+        title: 'Received Orders',
         isLogged: true,
         showBackButton: true,
       ),
       bottomNavigationBar: Footer(
         isLogged: true,
-        currentIndex: 0,
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : Column(
               children: [
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
-                  child: Row(
-                    children: [
-                      const Expanded(
-                          flex: 2,
-                          child: ListTile(
-                            title: Text('Sorted By'),
-                            subtitle: Text(
-                              'Recommended',
-                              style: TextStyle(color: Colors.cyan),
-                            ),
-                          )),
-                      IconButton(
-                          onPressed: () {}, icon: Icon(Icons.sync_rounded))
-                    ],
-                  ),
-                ),
                 Expanded(
                   child: Container(
                     child: ordersList.length != 0
@@ -189,30 +244,39 @@ class _OrdersSellerListState extends State<OrdersSellerListPage> {
                             controller: _controller,
                             itemCount: ordersList.length,
                             itemBuilder: (context, index) {
-                              if (productList[index].uid == 'Product Removed') {
+                              if (productList[index]?.uid ==
+                                  'Product Removed') {
                                 return GenericText(
                                   text: 'Product Removed',
                                   isBold: true,
                                 );
                               } else {
                                 return (OrderTile(
-                                    index: index,
-                                    isConfirmed: ordersList[index].isConfirmed,
-                                    isCompleted: ordersList[index].isCompleted,
-                                    ItemTitle: productList[index].title,
-                                    itemCount: ordersList[index].noOfItems,
-                                    itemPrice: productList[index].price,
-                                    makeCall: () => _makePhoneCall(
-                                        userList[index].phoneNumber),
-                                    itemSubTitle:
-                                        productList[index].description,
-                                    itemImgUrl:
-                                        productList[index].imagesList[0],
-                                    orderedBy: userList[index].fullName,
-                                    handleIsCompleted: () =>
-                                        onPressIsCompleted(index),
-                                    handleConfirmOrder: () =>
-                                        onPressConfirmOrder(index)));
+                                  index: index,
+                                  createdTimeStamp:
+                                      ordersList[index].orderCreatedDate,
+                                  isConfirmed: ordersList[index].isConfirmed,
+                                  isCompleted: ordersList[index].isCompleted,
+                                  ItemTitle: productList[index].title,
+                                  itemCount: ordersList[index].noOfItems,
+                                  itemPrice: productList[index].price,
+                                  makeCall: () => _makePhoneCall(
+                                      userList[index].phoneNumber),
+                                  itemSubTitle: productList[index].description,
+                                  itemImgUrl: productList[index].imagesList[0],
+                                  orderedBy: userList[index].fullName,
+                                  handleIsCompleted: () =>
+                                      onPressIsCompleted(index),
+                                  handleConfirmOrder: () =>
+                                      onPressConfirmOrder(index),
+                                  cancelled: ordersList[index].cancelled,
+                                  cancelOrder: () => {
+                                    showAlertDialog(
+                                        context,
+                                        "Are you want to cancel order",
+                                        () => cancelOrder(index))
+                                  },
+                                ));
                               }
                             },
                           )

@@ -23,7 +23,7 @@ class _FuelManagerPageState extends State<FuelManagerPage> {
         ),
         bottomNavigationBar: Footer(
           isLogged: true,
-          currentIndex: 0,
+          currentIndex: -1,
         ),
         body: Center(child: Text('TestPage')));
   }

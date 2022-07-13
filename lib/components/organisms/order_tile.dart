@@ -1,9 +1,9 @@
 import 'package:auto_picker/components/atoms/generic_button.dart';
-import 'package:auto_picker/themes/colors.dart';
 import 'package:flutter/material.dart';
 
 class OrderTile extends StatelessWidget {
   String ItemTitle;
+  String createdTimeStamp;
   String itemSubTitle;
   String itemPrice;
   String orderedBy;
@@ -15,10 +15,13 @@ class OrderTile extends StatelessWidget {
   void Function() handleIsCompleted;
   void Function() handleConfirmOrder;
   void Function() makeCall;
+  bool cancelled;
+  void Function() cancelOrder;
 
   OrderTile(
       {Key key,
       this.ItemTitle,
+      this.createdTimeStamp,
       this.itemSubTitle,
       this.itemCount,
       this.orderedBy,
@@ -29,7 +32,9 @@ class OrderTile extends StatelessWidget {
       this.handleIsCompleted,
       this.handleConfirmOrder,
       this.isConfirmed,
-      this.makeCall})
+      this.makeCall,
+      this.cancelled,
+      this.cancelOrder})
       : super(key: key);
 
   @override
@@ -113,7 +118,7 @@ class OrderTile extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       GenericButton(
-                        text: 'CALL',
+                        text: 'Call',
                         paddingHorizontal: 2,
                         paddingVertical: 2,
                         textColor: Colors.white,
@@ -122,15 +127,6 @@ class OrderTile extends StatelessWidget {
                         onPressed: () {
                           makeCall();
                         },
-                      ),
-                      GenericButton(
-                        text: 'CHAT',
-                        paddingHorizontal: 2,
-                        paddingVertical: 2,
-                        textColor: AppColors.blue,
-                        backgroundColor: AppColors.white,
-                        shadowColor: Colors.transparent,
-                        onPressed: () {},
                       ),
                     ],
                   )
@@ -165,29 +161,76 @@ class OrderTile extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Column(
                       children: [
-                        ListTile(
-                          trailing: const Text(
-                            'Completed',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          leading: Radio(
-                            value: isCompleted,
-                            groupValue: isCompleted,
-                            onChanged: (value) {
-                              handleIsCompleted();
-                            },
-                          ),
-                        ),
-                        if (!isConfirmed && !isCompleted)
+                        (!cancelled)
+                            ? ListTile(
+                                trailing: const Text(
+                                  'Completed',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                leading: Checkbox(
+                                  splashRadius: 20,
+                                  materialTapTargetSize:
+                                      MaterialTapTargetSize.padded,
+                                  value: isCompleted,
+                                  onChanged: (bool value) {
+                                    handleIsCompleted();
+                                  },
+                                ))
+                            : const ListTile(
+                                trailing: Text(
+                                  'Cancelled',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                leading: Checkbox(
+                                  splashRadius: 20,
+                                  materialTapTargetSize:
+                                      MaterialTapTargetSize.padded,
+                                  value: true,
+                                )),
+                        if (!isConfirmed)
                           GenericButton(
-                            text: 'CONFIRM ORDER',
+                            text: 'Confirm Order',
                             paddingVertical: 0,
                             paddingHorizontal: 8,
                             shadowColor: Colors.transparent,
                             onPressed: () {
                               handleConfirmOrder();
                             },
+                          ),
+                        if (!cancelled && !isCompleted)
+                          GenericButton(
+                            text: 'Cancel',
+                            paddingVertical: 0,
+                            paddingHorizontal: 8,
+                            shadowColor: Colors.transparent,
+                            onPressed: () {
+                              cancelOrder();
+                            },
                           )
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+                  )),
+                ],
+              ),
+              const Divider(
+                thickness: 2,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                      child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    child: Row(
+                      children: [
+                        const Text(
+                          'Order Created time stamp',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        Text(
+                          createdTimeStamp,
+                          style: const TextStyle(fontSize: 16),
+                        ),
                       ],
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     ),

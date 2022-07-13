@@ -8,6 +8,7 @@ import 'package:auto_picker/components/pages/map_page.dart';
 import 'package:auto_picker/components/pages/mechanics_signup_page.dart';
 import 'package:auto_picker/components/pages/menu_more_page.dart';
 import 'package:auto_picker/components/pages/notification_page.dart';
+import 'package:auto_picker/components/pages/orders_customers_list_page.dart';
 import 'package:auto_picker/components/pages/otp_login_page.dart';
 import 'package:auto_picker/components/pages/otp_signup_page.dart';
 import 'package:auto_picker/components/pages/profile_page.dart';
@@ -64,6 +65,7 @@ class RouteGenerator {
   static const String vehicleServiceMaintainancePage =
       '/vehicleServiceMaintainancePage';
   static const String fuelAlertPage = '/fuelAlertPage';
+  static const String myOrdersPage = '/myOrdersPage';
 
   RouteGenerator._() {}
 
@@ -131,6 +133,8 @@ class RouteGenerator {
             builder: (_) => const VehicleServiceDateListingPage());
       case fuelAlertPage:
         return MaterialPageRoute(builder: (_) => FuelAlertChatPage());
+      case myOrdersPage:
+        return MaterialPageRoute(builder: (_) => OrdersCustomersListPage());
       case testPage:
         return MaterialPageRoute(builder: (_) => const TestPage());
       default:

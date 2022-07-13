@@ -1,24 +1,16 @@
 import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
-import 'package:auto_picker/components/atoms/generic_text_field.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
-import 'package:auto_picker/components/pages/google_signin_login_page.dart';
-import 'package:auto_picker/models/mechanic.dart';
-import 'package:auto_picker/models/product.dart';
 import 'package:auto_picker/models/user_model.dart';
 import 'package:auto_picker/routes.dart';
 import 'package:auto_picker/services/admin_controller.dart';
-import 'package:auto_picker/services/mechanic_controller.dart';
 import 'package:auto_picker/services/payhere_services.dart';
 import 'package:auto_picker/services/product_controller.dart';
-import 'package:auto_picker/services/seller_controller.dart';
-import 'package:auto_picker/services/spare_advertisement_controller.dart';
 import 'package:auto_picker/services/user_controller.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:payhere_mobilesdk_flutter/payhere_mobilesdk_flutter.dart';
 
@@ -147,18 +139,46 @@ class _ProductPaymentPageState extends State<ProductPaymentPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            SizedBox(
+              height: 25,
+            ),
+            Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 30),
+              height: 200,
+              margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+              child: Image.asset(
+                "assets/images/money.png",
+                scale: 0.5,
+              ),
+            ),
+            SizedBox(
+              height: 25,
+            ),
             GenericText(
               textAlign: TextAlign.center,
               isBold: true,
               textSize: 24,
               text: 'Your charge is $payment',
             ),
+            SizedBox(
+              height: 20,
+            ),
             GenericButton(
               text: 'Pay Now',
               textColor: AppColors.white,
               backgroundColor: AppColors.Blue,
               onPressed: () => payNow(context),
-            )
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            GenericText(
+              textAlign: TextAlign.center,
+              maxLines: 4,
+              textSize: 18,
+              text: 'Your product will be  live after the payment',
+            ),
           ],
         )));
   }

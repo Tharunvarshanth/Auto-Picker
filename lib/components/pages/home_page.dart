@@ -14,6 +14,7 @@ import 'package:auto_picker/models/seller.dart';
 import 'package:auto_picker/models/spare_advertisement.dart';
 import 'package:auto_picker/services/mechanic_controller.dart';
 import 'package:auto_picker/services/product_controller.dart';
+import 'package:auto_picker/services/push_messaging_service.dart';
 import 'package:auto_picker/services/seller_controller.dart';
 import 'package:auto_picker/services/spare_advertisement_controller.dart';
 import 'package:auto_picker/services/user_controller.dart';
@@ -50,7 +51,7 @@ class _HomePageState extends State<HomePage> {
   var sellerController = SellerController();
   var userController = UserController();
   var userRole;
-
+  var pushMessagingService = PushMessagingSerivce();
   @override
   void initState() {
     super.initState();
@@ -60,7 +61,9 @@ class _HomePageState extends State<HomePage> {
     controller.addListener(() {});
     setData();
     validatePayedUser();
-    // setOneSignalToken();
+    if (isLogged) {
+      setOneSignalToken();
+    }
   }
 
   //validating mechanics and seller login then they payed or not
@@ -191,7 +194,7 @@ class _HomePageState extends State<HomePage> {
 
   void navigateToProductPage(int index) {
     var isOwner =
-        productList[index].uid == _auth.currentUser.uid ? true : false;
+        productList[index].uid == _auth.currentUser?.uid ? true : false;
     if (isLogged) {
       Navigator.push(
           context,
@@ -253,7 +256,7 @@ class _HomePageState extends State<HomePage> {
 
   void navigateToAdvertisementPage(int index) {
     var isOwner =
-        advertisementList[index].uid == _auth.currentUser.uid ? true : false;
+        advertisementList[index].uid == _auth.currentUser?.uid ? true : false;
     print("advert");
     if (isLogged) {
       Navigator.push(

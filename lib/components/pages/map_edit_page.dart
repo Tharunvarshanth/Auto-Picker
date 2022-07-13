@@ -34,6 +34,7 @@ class MapLatLonEditPageState extends State<MapLatLonEditPage> {
   }
 
   void _setMarker(LatLng point) {
+    _markers.clear();
     print("Map Edit Page ${point.latitude}");
     setState(() {
       _markers.add(Marker(markerId: MarkerId('marker'), position: point));
@@ -77,11 +78,14 @@ class MapLatLonEditPageState extends State<MapLatLonEditPage> {
             Row(
               children: [
                 Expanded(
-                    child: TextFormField(
-                  controller: searchController,
-                  decoration:
-                      const InputDecoration(hintText: 'Enter the place'),
-                  onChanged: (text) {},
+                    child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: searchController,
+                    decoration:
+                        const InputDecoration(hintText: 'Enter the place'),
+                    onChanged: (text) {},
+                  ),
                 )),
                 IconButton(
                     onPressed: () async {

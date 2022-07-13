@@ -10,9 +10,11 @@ class GenericTextField extends StatelessWidget {
   Color borderColor;
   Color focusBorderColor;
   Icon fieldIcon;
-  TextInputType inputType;
-  Icon prefixIcon;
+  IconData prefixIcon;
   TextEditingController controller;
+  bool autofocus;
+  int maxLength;
+  TextInputType keyboardType;
   GenericTextField(
       {Key key,
       this.controller,
@@ -22,38 +24,57 @@ class GenericTextField extends StatelessWidget {
       this.hintText = '',
       this.labelText = '',
       this.fieldIcon,
-      this.prefixIcon,
-      this.inputType = TextInputType.text,
+      this.prefixIcon = Icons.text_fields,
       this.borderColor = Colors.grey,
-      this.focusBorderColor = Colors.blue})
+      this.focusBorderColor = Colors.blue,
+      this.autofocus = false,
+      this.maxLength = null,
+      this.keyboardType = TextInputType.text})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        GenericText(
-          text: labelText,
-          isBold: true,
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-        TextField(
-            keyboardType: inputType,
+        TextFormField(
+            autofocus: autofocus,
+            keyboardType: keyboardType,
             controller: controller,
+            maxLength: maxLength,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
             decoration: InputDecoration(
-              icon: fieldIcon,
-              prefixIcon: prefixIcon,
-              counterText: counterText,
+              filled: true,
+              focusColor: Colors.blue[100],
               prefixText: prefixText,
-              helperText: helperText,
-              hintText: hintText,
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: focusBorderColor, width: 1.0),
+              counterText: "",
+              prefixIcon: Icon(
+                prefixIcon,
+                color: Colors.blue[500],
               ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: borderColor, width: 1.0),
+              border: OutlineInputBorder(
+                borderSide:
+                    const BorderSide(color: Colors.transparent, width: 1.0),
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide:
+                    const BorderSide(color: Colors.transparent, width: 1.0),
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              fillColor: Colors.blue[100],
+              hintText: "",
+              hintStyle: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+              labelText: labelText != "" ? labelText : "",
+              labelStyle: TextStyle(
+                color: Colors.blue[500],
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
               ),
             ))
       ],

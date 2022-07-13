@@ -1,24 +1,20 @@
 import 'dart:async';
-
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/generic_text_field.dart';
-import 'package:auto_picker/components/atoms/popup_modal_order.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/atoms/single_digit_field.dart';
+import 'package:auto_picker/components/ui/OTP_Sample_Stratey.dart';
 import 'package:auto_picker/routes.dart';
 import 'package:auto_picker/services/user_controller.dart';
 import 'package:auto_picker/store/cache/sharedPreferences/user_info.dart';
 import 'package:auto_picker/themes/colors.dart';
-import 'package:auto_picker/utilities/constands.dart';
 import 'package:auto_picker/utilities/utils.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:otp_autofill/otp_autofill.dart';
 
 class OtpLoginPage extends StatefulWidget {
   const OtpLoginPage();
@@ -27,6 +23,7 @@ class OtpLoginPage extends StatefulWidget {
 }
 
 class _OtpLoginPage extends State<OtpLoginPage> {
+  final scaffoldKey = GlobalKey();
   var d1 = TextEditingController();
   var d2 = TextEditingController();
   var d3 = TextEditingController();
@@ -47,41 +44,70 @@ class _OtpLoginPage extends State<OtpLoginPage> {
   Timer _timer;
   String formattedNumber;
 
+  //otp auto fill
+  OTPTextEditController controller;
+  OTPInteractor _otpInteractor;
+
   void initState() {
     super.initState();
     _numberController = TextEditingController();
+
+    _otpInteractor = OTPInteractor();
+    _otpInteractor
+        .getAppSignature()
+        //ignore: avoid_print
+        .then((value) => print('Application signature - $value'));
   }
 
   void autoFill() {
-    d1.text = _verificationCode[0];
-    d2.text = _verificationCode[1];
-    d3.text = _verificationCode[2];
-    d4.text = _verificationCode[3];
-    d5.text = _verificationCode[4];
-    d6.text = _verificationCode[5];
-    setState(() {
-      isLoading = true;
-    });
-    autoOtpSubmit();
+    //autoOtpSubmit(code),
+    String code;
+    //OTP LISTENER
+    print("autoFill");
+    /*controller = OTPTextEditController(
+      codeLength: 6,
+      //ignore: avoid_print
+      onCodeReceive: (code) => {
+        print('Your Application receive code - $code'),
+        d1.text = code[0],
+        d2.text = code[1],
+        d3.text = code[2],
+        d4.text = code[3],
+        d5.text = code[4],
+        d6.text = code[5],
+        autoOtpSubmit(code),
+      },
+      otpInteractor: _otpInteractor,
+    )..startListenUserConsent(
+        (code) {
+          final exp = RegExp(r'(\d{6})');
+          return exp.stringMatch(code ?? '') ?? '';
+        },
+        strategies: [
+          //SampleStrategy(),
+        ],
+      );
+      */
+    //END
   }
 
   void redirect(UserCredential user) async {
     var _user = await userController.getUser((user.user.uid));
-    print(_user['role']);
+
     await userInfo.saveUser(
         true, user.user.uid, user.user.phoneNumber, '', _user["role"]);
     navigate(context, RouteGenerator.homePage);
   }
 
   //testng devices
-  void autoOtpSubmit() async {
+  void autoOtpSubmit(String code) async {
     setState(() {
       isLoading = true;
     });
     try {
       await auth
           .signInWithCredential(PhoneAuthProvider.credential(
-              verificationId: _verificationCode, smsCode: '123456'))
+              verificationId: _verificationCode, smsCode: code))
           .then((user) async => {
                 //sign in was success
                 if (user != null)
@@ -130,6 +156,7 @@ class _OtpLoginPage extends State<OtpLoginPage> {
     timerCount = 60;
     startTimer();
     var testingNumber = number;
+
     await auth.verifyPhoneNumber(
       phoneNumber: testingNumber,
       timeout: const Duration(seconds: 60),
@@ -238,11 +265,13 @@ class _OtpLoginPage extends State<OtpLoginPage> {
     return null;
   }
 
-  void dispose() {
-    super.dispose();
+  @override
+  Future<void> dispose() async {
+    await controller.stopListen();
     if (_timer != null) {
       _timer.cancel();
     }
+    super.dispose();
   }
 
   @override
@@ -290,28 +319,15 @@ class _OtpLoginPage extends State<OtpLoginPage> {
                         color: Colors.blue,
                       ),
                     ),
-                    SizedBox(height: 10),
-                    TextFormField(
+                    SizedBox(height: 30),
+                    GenericTextField(
                       autofocus: true,
                       keyboardType: TextInputType.phone,
                       maxLength: 10,
-                      decoration: const InputDecoration(
-                          prefixText: '+94',
-                          counterText: "",
-                          prefixStyle:
-                              TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                          border: UnderlineInputBorder(),
-                          labelText: 'Enter your Phone number here',
-                          labelStyle: TextStyle(
-                            fontSize: 15,
-                          )),
                       controller: _numberController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter Your Phone number';
-                        }
-                        return null;
-                      },
+                      prefixText: '+94',
+                      labelText: "Mobile Number",
+                      prefixIcon: Icons.call,
                     ),
                     SizedBox(height: 15),
                     SizedBox(
@@ -343,6 +359,7 @@ class _OtpLoginPage extends State<OtpLoginPage> {
                   ])
                 : Column(
                     children: [
+                      SizedBox(height: 10),
                       Padding(
                         padding: EdgeInsets.fromLTRB(50, 25, 50, 10),
                         child: GenericText(
@@ -356,15 +373,19 @@ class _OtpLoginPage extends State<OtpLoginPage> {
                         child: Text(
                           'Code is send to ${formattedNumber}',
                           style:
-                              TextStyle(fontSize: 18, color: Colors.grey[400]),
+                              TextStyle(fontSize: 18, color: Colors.grey[800]),
                         ),
                       ),
+                      /*  TextField(
+                        textAlign: TextAlign.center,
+                        keyboardType: TextInputType.number,
+                        controller: controller,
+                      ),*/
                       Padding(
                           padding: EdgeInsets.fromLTRB(0, 50, 0, 50),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                SizedBox(height: 10),
                                 SingleDigitField(
                                   widthPercentage: 0.1,
                                   fontSize: 16,
@@ -396,6 +417,27 @@ class _OtpLoginPage extends State<OtpLoginPage> {
                                   controller: d6,
                                 ),
                               ])),
+                      SizedBox(height: 2),
+                      GenericButton(
+                        textColor: AppColors.white,
+                        backgroundColor: AppColors.Blue,
+                        paddingVertical: 20,
+                        paddingHorizontal: 80,
+                        text: 'Submit',
+                        onPressed: () {
+                          //validations ok
+                          String code = d1.text +
+                              d2.text +
+                              d3.text +
+                              d4.text +
+                              d5.text +
+                              d6.text;
+                          if (code.length == 6) {
+                            autoOtpSubmit(code);
+                          }
+                        },
+                        isBold: true,
+                      ),
                       SizedBox(height: 2),
                       GenericText(
                         text: 'Resend timer ',

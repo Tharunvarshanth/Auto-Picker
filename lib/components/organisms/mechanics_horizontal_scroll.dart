@@ -78,19 +78,6 @@ class _MechanicsHorizontalItemScrollState
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        /*
-        IconButton(
-          onPressed: () {
-            widget.controller.animateTo(
-                widget.controller.offset - widget.onPressOffsetChange,
-                duration: Duration(milliseconds: 200),
-                curve: Curves.ease);
-          },
-          icon: const Icon(
-            Icons.arrow_left,
-            size: 36,
-          ),
-        ),*/
         Expanded(
           flex: 3,
           child: SizedBox(
@@ -105,6 +92,7 @@ class _MechanicsHorizontalItemScrollState
                         return GestureDetector(
                           onTap: () => navigateToMechanicProfilePage(index),
                           child: ImageTile(
+                            index: index,
                             text: widget.ImageTileList[index].name ?? '',
                             subText:
                                 widget.ImageTileList[index].workingCity ?? '',
@@ -115,14 +103,6 @@ class _MechanicsHorizontalItemScrollState
                       text: 'No data',
                     )),
         ),
-        /*IconButton(
-            onPressed: () {
-              widget.controller.animateTo(
-                  widget.controller.offset + widget.onPressOffsetChange,
-                  duration: Duration(milliseconds: 200),
-                  curve: Curves.ease);
-            },
-            icon: Icon(Icons.arrow_right)),*/
       ],
     );
   }

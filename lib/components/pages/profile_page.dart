@@ -1,4 +1,5 @@
 import 'package:auto_picker/components/atoms/custom_app_bar.dart';
+import 'package:auto_picker/components/atoms/details_card_description.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/text_description.dart';
@@ -82,6 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: const CustomAppBar(
           title: 'Profile Controller',
@@ -104,7 +106,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   padding: EdgeInsets.fromLTRB(7.5, 20, 7.5, 10),
                   child: Column(
                     children: [
-                      Row(
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -157,31 +159,30 @@ class _ProfilePageState extends State<ProfilePage> {
                           )
                         ],
                       ),
-                      TextDescription(
-                        title: userModel.role,
-                        description: 'User Type',
-                      ),
-                      TextDescription(
+                      DetailsCardDescription(
+                          title: userModel.role, description: 'Role'),
+                      DetailsCardDescription(
                         title: userModel.phoneNumber,
-                        description: 'Phone Number',
+                        description: 'Mobile Number',
                       ),
                       if (userModel.email != '')
-                        TextDescription(
+                        DetailsCardDescription(
                           title: userModel.email,
-                          description: 'email',
+                          description: 'Email',
                         ),
-                      TextDescription(
+                      DetailsCardDescription(
                         title: userModel.city,
                         description: 'City',
                       ),
-                      TextDescription(
+                      DetailsCardDescription(
                         title: userModel.address,
                         description: 'Address',
                       ),
                       if (userRole == Users.Seller)
-                        SellerProfile(this.sellerModel)
-                      else if (userRole == Users.Mechanic)
-                        MechanicProfile(this.mechanicModel)
+                        SizedBox(height: size.height * 0.015),
+                      if (userRole == Users.Seller) SellerProfile(sellerModel),
+                      if (userRole == Users.Mechanic)
+                        MechanicProfile(mechanicModel)
                     ],
                   ),
                 ),

@@ -1,3 +1,4 @@
+import 'package:auto_picker/components/atoms/details_card_description.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/text_description.dart';
 import 'package:auto_picker/components/atoms/text_description_with_button.dart';
@@ -24,15 +25,12 @@ class _SellerProfileState extends State<SellerProfile> {
   bool isLoading = true;
   String userRole;
 
-  void initState() {
-    super.initState();
-  }
-
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         const SizedBox(
-          height: 5,
+          height: 10,
         ),
         Text(
           'Your Shop',

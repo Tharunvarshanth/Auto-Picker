@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
+import 'dart:io';
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_citys_select.dart';
 import 'package:auto_picker/components/atoms/generic_input_option_select.dart';
@@ -14,7 +14,6 @@ import 'package:auto_picker/services/user_controller.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/constands.dart';
 import 'package:auto_picker/utilities/utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -32,6 +31,8 @@ class _SignUpFormState extends State<SignUpForm> {
   bool isvalidUser = false;
   List<City> dropDownCityList = [];
   String formattedNumber;
+  bool isAcceptsTermsAndConditons = false;
+
   void initState() {
     super.initState();
     setData();
@@ -83,7 +84,7 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   void handleNext() {
-    print(city.city);
+    print(city?.city);
     if (isvalidUser) {
       var param = {
         'name': nameController.text,
@@ -147,6 +148,36 @@ class _SignUpFormState extends State<SignUpForm> {
     return null;
   }
 
+  void showTermsAndConditions() {
+    showDialog(
+        context: context,
+        builder: (context) => ItemDialogMessage(
+            titleText: 'Terms and Conditions',
+            bodyText: '''
+Last updated: 10/07/2022
+
+Please read these Terms and Conditions carefully before using the Auto Picker mobile
+application operated by us Your access to and use of the Service is conditioned on your acceptance of and compliance with
+these Terms. These Terms apply to all visitors, users and others who access or use the Service.
+By accessing or using the Service you agree to be bound by these Terms. If you disagree
+with any part of the terms, then you may not access the Service.
+
+Purchases
+If you wish to purchase any product or service made available through the Service ("Purchase"),
+you may be asked to supply certain information relevant to your Purchase including.
+
+
+Content
+Our Service allows you to post, link, store, share and otherwise make available certain information,
+text, graphics, videos, or other material ("Content").
+
+Contact Us
+If you have any questions about these Terms, please contact us
+''',
+            primaryButtonText: 'Close',
+            onPressedPrimary: () => Navigator.pop(context, 'Cancel')));
+  }
+
   @override
   void dispose() {
     nameController.dispose();
@@ -164,32 +195,16 @@ class _SignUpFormState extends State<SignUpForm> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            TextFormField(
+            GenericTextField(
               controller: nameController,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Enter your Name here',
-                  labelStyle: TextStyle(fontSize: 15)),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter Your Name';
-                }
-                return null;
-              },
+              labelText: "Name",
+              prefixIcon: Icons.supervised_user_circle,
             ),
             SizedBox(height: size.height * 0.015),
-            TextFormField(
+            GenericTextField(
               controller: addressController,
-              decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Enter your Address here',
-                  labelStyle: TextStyle(fontSize: 15)),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter Your Address';
-                }
-                return null;
-              },
+              labelText: "Address",
+              prefixIcon: Icons.streetview,
             ),
             SizedBox(height: size.height * 0.020),
             GenericInputOptionCitysSelect(
@@ -200,37 +215,53 @@ class _SignUpFormState extends State<SignUpForm> {
               onValueChange: (text) => handleCity(text),
             ),
             SizedBox(height: size.height * 0.015),
-            TextFormField(
+            GenericTextField(
               keyboardType: TextInputType.phone,
               maxLength: 10,
-              decoration: const InputDecoration(
-                  prefixText: '+94',
-                  counterText: "",
-                  prefixStyle: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                  border: UnderlineInputBorder(),
-                  labelText: 'Enter your Phone number here',
-                  labelStyle: TextStyle(
-                    fontSize: 15,
-                  )),
+              prefixText: '+94',
+              labelText: 'Mobile Number',
+              prefixIcon: Icons.call,
               controller: phoneNumberController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter Your Phone number';
-                }
-                return null;
-              },
             ),
             SizedBox(height: size.height * 0.030),
             GenericInputOptionSelect(
               width: size.width,
               labelText: ' Role',
-              value: role,
+              dropDownValue: role,
               itemList: roleList,
               borderColor: AppColors.ash,
               onValueChange: (text) => handleRole(text),
             ),
             SizedBox(height: size.height * 0.015),
+            //Terms and conditions
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Checkbox(
+                  checkColor: Colors.white,
+                  value: isAcceptsTermsAndConditons,
+                  onChanged: (bool value) {
+                    setState(() {
+                      isAcceptsTermsAndConditons = value;
+                    });
+                  },
+                ),
+                TextButton(
+                  child: Text('Terms and condtions'),
+                  onPressed: () {
+                    showTermsAndConditions();
+                  },
+                  style: TextButton.styleFrom(
+                      textStyle: const TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: AppColors.grey,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold)),
+                ),
+              ],
+            ),
             GenericButton(
+              isDisabled: !isAcceptsTermsAndConditons,
               textColor: AppColors.white,
               backgroundColor: AppColors.Blue,
               paddingVertical: 20,
@@ -241,7 +272,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     addressController.text.isEmpty ||
                     phoneNumberController.text.isEmpty ||
                     role.toString().isEmpty ||
-                    city.city.toString().isEmpty) {
+                    city == null) {
                   fillRequiredFields('Fill All Required Fields');
                   return;
                 }

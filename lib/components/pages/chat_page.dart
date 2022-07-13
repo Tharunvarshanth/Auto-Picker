@@ -115,7 +115,7 @@ class _ChatPageState extends State<ChatPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: GenericTextField(
                       controller: _chatController,
-                      prefixIcon: Icon(Icons.message),
+                      prefixIcon: (Icons.message),
                       hintText: 'Type your message here...',
                       prefixText: '',
                       labelText: '',

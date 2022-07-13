@@ -1,10 +1,8 @@
 import 'package:auto_picker/store/cache/sharedPreferences/user_info.dart';
-import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:auto_picker/routes.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class SplashScreen extends StatelessWidget {
   var userInfo = new UserInfoCache();
@@ -33,7 +31,16 @@ class SplashScreen extends StatelessWidget {
             fit: BoxFit.fill,
           ),
         ),
-        child: null /* add child content here */,
+        child: SpinKitRipple(
+          size: 125,
+          itemBuilder: (BuildContext context, int index) {
+            return DecoratedBox(
+              decoration: BoxDecoration(
+                color: Colors.indigo,
+              ),
+            );
+          },
+        ) /* add child content here */,
       ),
     );
   }
