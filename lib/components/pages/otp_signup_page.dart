@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/generic_text_button.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
@@ -25,6 +26,7 @@ import 'package:auto_picker/utilities/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:otp_autofill/otp_autofill.dart';
 
 class OtpSignUpPage extends StatefulWidget {
   final Map<String, String> params;
@@ -62,9 +64,50 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
   var advertisementController = AdvertisementController();
   var mFeedbackController = FeedBackController();
 
+  //otp auto fill
+  OTPTextEditController controller;
+  OTPInteractor _otpInteractor;
+
   void initState() {
     super.initState();
     _verifyPhone();
+    _otpInteractor = OTPInteractor();
+    _otpInteractor
+        .getAppSignature()
+        //ignore: avoid_print
+        .then((value) => print('Application signature - $value'));
+  }
+
+  void autoFill() {
+    //autoOtpSubmit(code),
+    String code;
+    //OTP LISTENER
+    print("autoFill");
+    /*controller = OTPTextEditController(
+      codeLength: 6,
+      //ignore: avoid_print
+      onCodeReceive: (code) => {
+        print('Your Application receive code - $code'),
+        d1.text = code[0],
+        d2.text = code[1],
+        d3.text = code[2],
+        d4.text = code[3],
+        d5.text = code[4],
+        d6.text = code[5],
+        autoOtpSubmit(code),
+      },
+      otpInteractor: _otpInteractor,
+    )..startListenUserConsent(
+        (code) {
+          final exp = RegExp(r'(\d{6})');
+          return exp.stringMatch(code ?? '') ?? '';
+        },
+        strategies: [
+          //SampleStrategy(),
+        ],
+      );
+      */
+    //END
   }
 
   Future<bool> isNumberAlreadyHaveAccount() async {
@@ -244,28 +287,15 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
     }
   }
 
-  void autoFill() {
-    d1.text = _verificationCode[0];
-    d2.text = _verificationCode[1];
-    d3.text = _verificationCode[2];
-    d4.text = _verificationCode[3];
-    d5.text = _verificationCode[4];
-    d6.text = _verificationCode[5];
-    setState(() {
-      isLoading = true;
-    });
-    autoOtpSubmit();
-  }
-
 //testng devices
-  void autoOtpSubmit() async {
+  void autoOtpSubmit(String code) async {
     setState(() {
       isLoading = true;
     });
     try {
       await auth
           .signInWithCredential(PhoneAuthProvider.credential(
-              verificationId: _verificationCode, smsCode: '123456'))
+              verificationId: _verificationCode, smsCode: code))
           .then((user) async => {
                 //sign in was success
                 if (user != null)
@@ -313,10 +343,8 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
           timerCount = 0;
           isLoading = true;
         });
-        print("PhoneAuthCredential ${credential}");
         auth.signInWithCredential(credential).then((value) async {
           if (value.user != null) {
-            print("auth.signInWithCredential ${value}");
             storeDB(value.user.uid);
           }
         });
@@ -456,6 +484,23 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
                         controller: d6,
                       ),
                     ])),
+            SizedBox(height: 2),
+            GenericButton(
+              textColor: AppColors.white,
+              backgroundColor: AppColors.Blue,
+              paddingVertical: 20,
+              paddingHorizontal: 80,
+              text: 'Submit',
+              onPressed: () {
+                //validations ok
+                String code =
+                    d1.text + d2.text + d3.text + d4.text + d5.text + d6.text;
+                if (code.length == 6) {
+                  autoOtpSubmit(code);
+                }
+              },
+              isBold: true,
+            ),
             SizedBox(height: 2),
             GenericText(
               text: 'Resend timer ',

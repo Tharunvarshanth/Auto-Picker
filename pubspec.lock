@@ -644,6 +644,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.2.8"
+  otp_autofill:
+    dependency: "direct main"
+    description:
+      name: otp_autofill
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0"
   package_info_plus:
     dependency: transitive
     description:
