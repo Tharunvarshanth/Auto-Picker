@@ -48,6 +48,7 @@ class _OtpLoginPage extends State<OtpLoginPage> {
   OTPTextEditController controller;
   OTPInteractor _otpInteractor;
 
+  @override
   void initState() {
     super.initState();
     _numberController = TextEditingController();

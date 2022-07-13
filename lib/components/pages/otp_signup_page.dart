@@ -68,6 +68,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> {
   OTPTextEditController controller;
   OTPInteractor _otpInteractor;
 
+  @override
   void initState() {
     super.initState();
     _verifyPhone();
