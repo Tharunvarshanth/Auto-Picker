@@ -22,15 +22,15 @@ class DetailsCardDescription extends StatelessWidget {
         elevation: 4,
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(18),
         ),
         child: Container(
           alignment: Alignment.centerLeft,
           width: MediaQuery.of(context).size.width,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             //color: Colors.blue[100]
             gradient: LinearGradient(
-              colors: [
+              colors: const [
                 Color.fromARGB(255, 168, 203, 255),
                 Color.fromARGB(255, 168, 203, 255)
               ],

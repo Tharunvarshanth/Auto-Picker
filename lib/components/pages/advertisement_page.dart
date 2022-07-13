@@ -247,6 +247,24 @@ class _AdvertisementPageState extends State<AdvertisementPage> {
                                 textAlign: TextAlign.left,
                                 textSize: 18,
                               ),
+                            ]),
+                        Divider(
+                          thickness: 2,
+                        ),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              GenericText(
+                                text: "Created At  : ",
+                                textAlign: TextAlign.left,
+                                textSize: 18,
+                              ),
+                              GenericText(
+                                text:
+                                    "${widget.advertisement.createdDate.toString().substring(0, 16)}",
+                                textAlign: TextAlign.left,
+                                textSize: 18,
+                              ),
                             ])
                       ],
                     ),

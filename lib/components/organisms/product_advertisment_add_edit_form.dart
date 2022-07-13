@@ -86,11 +86,6 @@ class _ProductAdvertisementAddFormState
   }
 
   void handleAdd() async {
-    /*  widget.params['price'] = priceController.text;
-    widget.params['title'] = productTitleController.text;
-    widget.params['description'] = descriptionController.text;
-    widget.params['condition'] = condition;
-    widget.params['imageList'] = imageList;*/
     setState(() {
       isLoading = true;
     });

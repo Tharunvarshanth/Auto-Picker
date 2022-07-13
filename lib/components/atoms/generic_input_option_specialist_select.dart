@@ -86,7 +86,6 @@ class GenericInputOptionSpecialistSelect extends StatelessWidget {
                 dropdownSearchDecoration: InputDecoration(
                   filled: true,
                   focusColor: Colors.blue[100],
-                  prefixText: "Specialist",
                   counterText: "",
                   prefixIcon: Icon(
                     Icons.folder_special_sharp,
@@ -106,7 +105,7 @@ class GenericInputOptionSpecialistSelect extends StatelessWidget {
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),
-                  labelText: labelText != "" ? value : "",
+                  // labelText: labelText != "" ? value : "",
                   labelStyle: TextStyle(
                     color: Colors.blue[500],
                     fontSize: 16,

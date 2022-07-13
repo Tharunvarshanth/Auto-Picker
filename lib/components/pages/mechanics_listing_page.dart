@@ -288,7 +288,7 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
     return SafeArea(
         child: Scaffold(
       appBar: CustomAppBar(
-        title: 'Mechanics Listing',
+        title: 'Mechanics',
         isLogged: isLogged,
         showBackButton: true,
       ),
