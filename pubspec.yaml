@@ -82,6 +82,7 @@ dependencies:
   line_icons: ^2.0.1
   webview_flutter: ^3.0.4
   otp_autofill: ^2.1.0
+  sms_autofill: ^2.2.0
 
 dev_dependencies:
   flutter_test:

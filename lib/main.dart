@@ -119,3 +119,10 @@ class _MyAppBootState extends State<MyAppBoot> {
     );
   }
 }
+
+/*
+SMS CODE
+Auto Picker : Your code is 123456
+jDFUomnf9Pp
+
+*/
