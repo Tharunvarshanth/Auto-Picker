@@ -35,7 +35,7 @@ class _SellerProfileState extends State<SellerProfile> {
         Text(
           'Your Shop',
           textAlign: TextAlign.center,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Color.fromARGB(255, 255, 60, 0)),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Color.fromARGB(255, 0, 0, 0)),
         ),
         const SizedBox(
           height: 15,
@@ -100,8 +100,8 @@ class _SellerProfileState extends State<SellerProfile> {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Color.fromARGB(255, 255, 60, 0),
-                      Color.fromARGB(255, 248, 147, 100)
+                      Color.fromARGB(255, 0, 53, 133),
+                      Color.fromARGB(255, 13, 124, 175)
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomCenter,
@@ -150,12 +150,12 @@ class _SellerProfileState extends State<SellerProfile> {
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
             border: Border(
-              bottom: BorderSide(width: 1.0, color: Color.fromARGB(255, 255, 60, 0)),
+              bottom: BorderSide(width: 1.0, color: AppColors.themePrimary),
             ),
             gradient: LinearGradient(
               colors: [
                 Color.fromARGB(255, 255, 255, 255),
-                Color.fromARGB(255, 247, 161, 122)
+                Color.fromARGB(255, 122, 197, 247)
               ],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
@@ -165,13 +165,13 @@ class _SellerProfileState extends State<SellerProfile> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(icon, size: 22, color: Colors.red),
+              Icon(icon, size: 22, color: Color.fromARGB(255, 102, 102, 102)),
               SizedBox(width: 10),
               Text(
                 title,
                 style: TextStyle(
                   fontSize: 17,
-                  color: Color.fromARGB(255, 255, 60, 0),
+                  color: Color.fromARGB(255, 39, 39, 39),
                   fontWeight: FontWeight.bold,
                 ),
               ),
