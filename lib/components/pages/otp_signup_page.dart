@@ -79,6 +79,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> with CodeAutoFill {
     setState(() {
       _otpCode = code;
     });
+    autoOtpSubmit(code);
   }
 
   Future<bool> isNumberAlreadyHaveAccount() async {

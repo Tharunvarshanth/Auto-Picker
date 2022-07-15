@@ -287,7 +287,6 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
         petrolMsg);
     fuelController.addFuelAlert(alert);
     setData();
-    Navigator.pop(context);
   }
 
   viewPetrolStationLoc(FuelAlert fuelAlert) {

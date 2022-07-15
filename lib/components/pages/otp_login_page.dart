@@ -57,6 +57,7 @@ class _OtpLoginPage extends State<OtpLoginPage> with CodeAutoFill {
     setState(() {
       _otpCode = code;
     });
+    autoOtpSubmit(code);
   }
 
   void redirect(UserCredential user) async {
