@@ -35,7 +35,10 @@ class _SellerProfileState extends State<SellerProfile> {
         Text(
           'Your Shop',
           textAlign: TextAlign.center,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Color.fromARGB(255, 0, 0, 0)),
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: Color.fromARGB(255, 0, 0, 0)),
         ),
         const SizedBox(
           height: 15,
@@ -43,33 +46,56 @@ class _SellerProfileState extends State<SellerProfile> {
         Row(
           children: [
             shopControllerCard(
-              (MediaQuery.of(context).size.width) / 1.075,
+                (MediaQuery.of(context).size.width) / 1.075,
                 'Add Product',
                 'You can add new products to your shop collections',
-                Icons.add_shopping_cart_outlined, const AddNewProductPage()),
+                Icons.add_shopping_cart_outlined,
+                const AddNewProductPage()),
           ],
         ),
         Row(
           children: [
-            shopControllerCard((MediaQuery.of(context).size.width) / 2.19,'My Orders', 'You can view received order', Icons.production_quantity_limits_outlined, const OrdersSellerListPage()),
-            shopControllerCard((MediaQuery.of(context).size.width) / 2.19,'My Products', 'You can view and edit your own products', Icons.inventory_2_outlined, const MyOwnProductListingPage()),
+            shopControllerCard(
+                (MediaQuery.of(context).size.width) / 2.19,
+                'My Orders',
+                'You can view received order',
+                Icons.production_quantity_limits_outlined,
+                const OrdersSellerListPage()),
+            shopControllerCard(
+                (MediaQuery.of(context).size.width) / 2.19,
+                'My Products',
+                'You can view and edit your own products',
+                Icons.inventory_2_outlined,
+                const MyOwnProductListingPage()),
           ],
-
         ),
         Row(
           children: [
-            shopControllerCard((MediaQuery.of(context).size.width) / 2.19,'My ADS', 'You can view and edit your Advertisements', Icons.newspaper_outlined, const MyOwnAdvertismentListingPage()),
-            shopControllerCard((MediaQuery.of(context).size.width) / 2.19,'Add Ads', 'You can add advertisements to your product', Icons.add_card_outlined, const MyOwnAdvertismentListingPage()),
+            shopControllerCard(
+                (MediaQuery.of(context).size.width) / 2.19,
+                'My ADS',
+                'You can view and edit your Advertisements',
+                Icons.add_chart,
+                const MyOwnAdvertismentListingPage()),
+            shopControllerCard(
+                (MediaQuery.of(context).size.width) / 2.19,
+                'Add Ads',
+                'You can add advertisements to your product',
+                Icons.add_chart_outlined,
+                const MyOwnAdvertismentListingPage()),
           ],
-
         ),
         const SizedBox(
           height: 20,
         ),
-        shopDetailsCard(widget.seller.address, 'Shop Address', Icons.location_on_outlined),
-        shopDetailsCard(widget.seller.city, 'Shop City', Icons.apartment_outlined),
-        shopDetailsCard(widget.seller.shopName, 'Shop Name', Icons.store_outlined),
-        shopDetailsCard(widget.seller.contactDetails, 'Shop Contact Details', Icons.phone_outlined),
+        shopDetailsCard(
+            widget.seller.address, 'Shop Address', Icons.location_on_outlined),
+        shopDetailsCard(
+            widget.seller.city, 'Shop City', Icons.apartment_outlined),
+        shopDetailsCard(
+            widget.seller.shopName, 'Shop Name', Icons.store_outlined),
+        shopDetailsCard(widget.seller.contactDetails, 'Shop Contact Details',
+            Icons.phone_outlined),
         const SizedBox(
           height: 20,
         ),
@@ -91,8 +117,7 @@ class _SellerProfileState extends State<SellerProfile> {
             InkWell(
               onTap: () => Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => tap),
+                MaterialPageRoute(builder: (context) => tap),
               ),
               child: Container(
                 alignment: Alignment.centerLeft,
@@ -137,7 +162,7 @@ class _SellerProfileState extends State<SellerProfile> {
         ),
       );
 
-      // Shop Deatails Card Common component
+  // Shop Deatails Card Common component
   Widget shopDetailsCard(title, description, icon) => Card(
         shadowColor: AppColors.themePrimary,
         elevation: 2,
