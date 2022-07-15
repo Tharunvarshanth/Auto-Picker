@@ -3,7 +3,6 @@ import 'package:auto_picker/components/organisms/mechanics_sign_up_edit_form.dar
 import 'package:auto_picker/models/Location.dart';
 import 'package:auto_picker/models/mechanic.dart';
 import 'package:auto_picker/models/user_model.dart';
-import 'package:auto_picker/themes/colors.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

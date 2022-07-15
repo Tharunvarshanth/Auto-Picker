@@ -18,7 +18,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-            child: Stack(
+            child: SingleChildScrollView(
+                child: Stack(
       children: [
         IconButton(
           padding: EdgeInsets.all(12),
@@ -150,6 +151,6 @@ class _LoginPageState extends State<LoginPage> {
           ),
         )
       ],
-    )));
+    ))));
   }
 }

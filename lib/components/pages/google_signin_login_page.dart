@@ -30,7 +30,7 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
     super.initState();
     setState(() {
       isLinkingPage = widget.isLinkingPage;
-      isAlreadyLinked = existingUser.email == null ? false : true;
+      isAlreadyLinked = existingUser?.email == null ? false : true;
     });
   }
 

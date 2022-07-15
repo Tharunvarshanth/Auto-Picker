@@ -62,6 +62,7 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
   bool dieselMsg = false;
   bool petrolMsg = false;
   DateFormat dateFormat = DateFormat("yyyy-MM-dd");
+  bool isMapClicked = false;
 
   static CameraPosition _kGooglePlex = const CameraPosition(
     target: LatLng(6.9271, 79.8612),
@@ -78,6 +79,7 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
 
   void buildWidget() {
     setState(() {
+      isMapClicked = true;
       dieselMsg = widget.params["diesel"];
       petrolMsg = widget.params["petrol"];
       messageController.text = widget.params["messsage"];
@@ -216,7 +218,9 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
                         Container(
                           width: 150,
                           child: GenericTextButton(
-                              text: 'Choose Gas Station location',
+                              text: !isMapClicked
+                                  ? 'Choose Gas Station location'
+                                  : 'Update',
                               onPressed: () {
                                 Map<String, dynamic> m = {
                                   'petrol': petrolMsg,
@@ -345,7 +349,7 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
               )
             : Padding(
                 padding: !isShowMap
-                    ? const EdgeInsets.fromLTRB(5, 5, 5, 40)
+                    ? const EdgeInsets.fromLTRB(5, 5, 5, 20)
                     : const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                 child: Stack(children: <Widget>[
                   !isShowMap
@@ -400,6 +404,7 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
           ? FloatingActionButton.extended(
               onPressed: () {
                 setState(() {
+                  isMapClicked = true;
                   isShowMap = !isShowMap;
                 });
               },
