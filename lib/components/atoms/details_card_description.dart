@@ -28,13 +28,16 @@ class DetailsCardDescription extends StatelessWidget {
           alignment: Alignment.centerLeft,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
+            border: Border(
+      bottom: BorderSide(width: 1.0, color: AppColors.themePrimary),
+    ),
             //color: Colors.blue[100]
             gradient: LinearGradient(
               colors: const [
-                Color.fromARGB(255, 168, 203, 255),
+                Color.fromARGB(255, 255, 255, 255),
                 Color.fromARGB(255, 168, 203, 255)
               ],
-              begin: Alignment.topLeft,
+              begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
           ),

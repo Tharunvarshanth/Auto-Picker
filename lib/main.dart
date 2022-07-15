@@ -103,6 +103,7 @@ class _MyAppBootState extends State<MyAppBoot> {
       supportedLocales: [Locale('en', 'LK')],
       title: 'Auto Picker',
       theme: ThemeData(
+          backgroundColor: Colors.white.withOpacity(0.25),
           highlightColor: Colors.white.withOpacity(0.25),
           floatingActionButtonTheme: FloatingActionButtonThemeData(
             backgroundColor: AppColors.themePrimary.withOpacity(0.8),
@@ -119,3 +120,10 @@ class _MyAppBootState extends State<MyAppBoot> {
     );
   }
 }
+
+/*
+SMS CODE
+Auto Picker : Your code is 123456
+jDFUomnf9Pp
+
+*/
