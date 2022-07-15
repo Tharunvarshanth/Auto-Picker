@@ -17,7 +17,6 @@ import 'package:auto_picker/components/pages/sign_up_page.dart';
 import 'package:auto_picker/components/pages/splash_page.dart';
 import 'package:auto_picker/components/pages/vehicle_service_add_page.dart';
 import 'package:auto_picker/components/pages/vehicle_service_date_listing_page.dart';
-import 'package:auto_picker/models/fuelManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
