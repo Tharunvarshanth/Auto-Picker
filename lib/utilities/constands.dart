@@ -81,6 +81,8 @@ const ORDER_CANCELLED_BODY = 'Your order was cancelled';
 const ADVERTISEMENT_TITLE = 'Order Cancelled';
 const ADVERTISEMENT_BODY = 'Your order was cancelled';
 
+const APP_SIGNATURE = "jDFUomnf9Pp";
+
 const TERMS_AND_CONDITIONS = '''
 <h4>Last updated: 10/07/2022</h4>
 

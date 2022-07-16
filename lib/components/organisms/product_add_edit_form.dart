@@ -39,8 +39,9 @@ class _ProductAddEditFormState extends State<ProductAddEditForm> {
   String _error = 'No Error Dectected';
   bool isButtonDisabled = true;
   var productController = ProductController();
-  bool isLoading;
+  bool isLoading = false;
 
+  @override
   void initState() {
     super.initState();
     if (widget.product != null) {

@@ -10,6 +10,7 @@ class AddNewProductPage extends StatefulWidget {
 }
 
 class _AddNewProductPageState extends State<AddNewProductPage> {
+  @override
   Widget build(BuildContext context) {
     return const Scaffold(
         appBar: CustomAppBar(
@@ -18,7 +19,7 @@ class _AddNewProductPageState extends State<AddNewProductPage> {
           showBackButton: true,
         ),
         body: SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(10, 25, 10, 100),
+            padding: EdgeInsets.fromLTRB(10, 25, 10, 25),
             child: ProductAddEditForm()));
   }
 }

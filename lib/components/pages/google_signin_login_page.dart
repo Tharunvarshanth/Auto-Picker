@@ -174,6 +174,7 @@ class _GoogleLinkingPageState extends State<GoogleLinkingPage> {
                       : Center(
                           child: Text(
                             "Aleady you linked with ${existingUser?.email}",
+                            maxLines: 3,
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 18,
