@@ -82,7 +82,7 @@ class _SellerProfileState extends State<SellerProfile> {
                 'Add Ads',
                 'You can add advertisements to your product',
                 Icons.add_chart_outlined,
-                const MyOwnAdvertismentListingPage()),
+                const AddNewAdvertisementPage()),
           ],
         ),
         const SizedBox(
