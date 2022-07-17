@@ -46,7 +46,7 @@ dependencies:
   firebase_storage: ^10.2.4
   firebase_messaging: ^11.2.4
   google_sign_in: ^5.2.1
-  payhere_mobilesdk_flutter: ^1.2.1
+  payhere_mobilesdk_flutter: ^3.0.1
   super_tooltip: ^1.0.1
   carousel_slider: ^4.0.0
   date_time_picker: ^2.1.0

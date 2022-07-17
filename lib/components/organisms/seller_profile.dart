@@ -57,7 +57,7 @@ class _SellerProfileState extends State<SellerProfile> {
           children: [
             shopControllerCard(
                 (MediaQuery.of(context).size.width) / 2.19,
-                'Received Orders',
+                'Rec Orders',
                 'You can view received order',
                 Icons.production_quantity_limits_outlined,
                 const OrdersSellerListPage()),
