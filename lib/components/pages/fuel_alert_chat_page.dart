@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:auto_picker/components/atoms/custom_app_bar.dart';
 import 'package:auto_picker/components/atoms/fuel_alert_tile.dart';
 import 'package:auto_picker/components/atoms/generic_button.dart';
