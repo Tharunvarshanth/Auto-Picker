@@ -54,6 +54,7 @@ class _OtpLoginPage extends State<OtpLoginPage> with CodeAutoFill {
 
   @override
   void codeUpdated() {
+    print("code Updated");
     setState(() {
       _otpCode = code;
     });
@@ -246,7 +247,7 @@ class _OtpLoginPage extends State<OtpLoginPage> with CodeAutoFill {
       child: SingleChildScrollView(
         child: Stack(children: [
           if (isLoading)
-            Container(
+            Align(
                 alignment: Alignment.center,
                 child: CircularProgressIndicator(
                   color: AppColors.blue,

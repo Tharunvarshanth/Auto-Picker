@@ -1,20 +1,15 @@
 import 'dart:async';
-
 import 'package:auto_picker/components/atoms/custom_app_bar.dart';
-import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/components/atoms/popup_modal_message.dart';
 import 'package:auto_picker/components/atoms/service_card_nearby_mechanic.dart';
 import 'package:auto_picker/components/organisms/footer.dart';
 import 'package:auto_picker/components/pages/mechanic_profile_page.dart';
 import 'package:auto_picker/models/mechanic.dart';
-import 'package:auto_picker/models/product.dart';
 import 'package:auto_picker/services/mechanic_controller.dart';
 import 'package:auto_picker/services/product_controller.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:auto_picker/services/location_services.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:latlong/latlong.dart' as LatLonManager;
@@ -55,7 +50,6 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     _controller.addListener(() {});
     super.initState();
     setPageData();

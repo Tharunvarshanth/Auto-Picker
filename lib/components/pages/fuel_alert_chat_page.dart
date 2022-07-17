@@ -361,8 +361,16 @@ class _FuelAlertChatPageState extends State<FuelAlertChatPage> {
                                 width: screenSize.width / 5,
                                 height: 40,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: AppColors.Blue),
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Color.fromARGB(255, 0, 53, 133),
+                                      Color.fromARGB(255, 13, 124, 175)
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomCenter,
+                                  ),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(

@@ -1,4 +1,3 @@
-import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:flutter/material.dart';
@@ -21,11 +20,26 @@ class VehicleServiceRecord extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return LayoutBuilder(builder: (context, constraints) {
       return Container(
+        color: Colors.blue[100],
         width: constraints.maxWidth * 1,
-        child: SingleChildScrollView(
-          child: Card(
+        child: Card(
+          child: Container(
+            alignment: Alignment.centerLeft,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(width: 1.0, color: AppColors.themePrimary),
+              ),
+              //color: Colors.blue[100]
+              gradient: LinearGradient(
+                colors: [Colors.blue[300], Colors.blue[100]],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
             child: Padding(
               padding: EdgeInsets.all(10),
               child: Column(
@@ -42,14 +56,15 @@ class VehicleServiceRecord extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           GenericText(
+                            maxLines: 3,
                             text: title,
                             textAlign: TextAlign.start,
-                            textSize: 16,
+                            textSize: 18,
                           ),
                           GenericText(
                             text: "Mileage : ${desciption}",
                             textAlign: TextAlign.start,
-                            textSize: 14,
+                            textSize: 18,
                           ),
                         ],
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +85,7 @@ class VehicleServiceRecord extends StatelessWidget {
                           Text(
                             'Serviced Date - ${date}',
                             textAlign: TextAlign.start,
-                            style: TextStyle(fontSize: 12),
+                            style: TextStyle(fontSize: 14),
                           ),
                         ],
                         crossAxisAlignment: CrossAxisAlignment.start,
