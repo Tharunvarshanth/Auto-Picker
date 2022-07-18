@@ -329,8 +329,8 @@ class _ProductPageState extends State<ProductPage> {
                               GenericButton(
                                 isBold: true,
                                 text: _hasCallSupport
-                                    ? 'CALL'
-                                    : 'Calling not supported',
+                                    ? CALL
+                                    : CALLING_NOT_SUPPORTED,
                                 paddingHorizontal: 4,
                                 paddingVertical: 2,
                                 onPressed: _hasCallSupport
@@ -343,18 +343,6 @@ class _ProductPageState extends State<ProductPage> {
                                 backgroundColor: Colors.blue,
                                 borderRadius: 14,
                               ),
-                              /* GenericButton(
-                                text: 'CHAT',
-                                isBold: true,
-                                paddingHorizontal: 4,
-                                backgroundColor: AppColors.white,
-                                paddingVertical: 2,
-                                onPressed: () {},
-                                elevation: 0,
-                                textColor: Colors.blue,
-                                shadowColor: Colors.transparent,
-                                borderRadius: 14,
-                              ),*/
                               GenericButton(
                                 text: 'ORDER',
                                 isBold: true,

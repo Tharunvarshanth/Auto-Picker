@@ -62,7 +62,7 @@ dependencies:
   multi_image_picker2: ^5.0.02
   simple_moment: ^1.1.1
   intl: ^0.17.0
-  url_launcher: ^6.0.18
+  url_launcher: ^6.1.5
   flutter_local_notifications: ^9.2.0
   onesignal_flutter: ^3.0.0
   latlong: ^0.6.1

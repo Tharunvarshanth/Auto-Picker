@@ -7,6 +7,7 @@ import 'package:auto_picker/models/user_model.dart';
 import 'package:auto_picker/services/feedback_controller.dart';
 import 'package:auto_picker/services/user_controller.dart';
 import 'package:auto_picker/themes/colors.dart';
+import 'package:auto_picker/utilities/constands.dart';
 import 'package:auto_picker/utilities/utils.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -296,7 +297,7 @@ class _MechanicProfilePageState extends State<MechanicProfilePage> {
                 Wrap(
                   children: [
                     GenericButton(
-                      text: _hasCallSupport ? 'Call' : 'Calling not supported',
+                      text: _hasCallSupport ? CALL : CALLING_NOT_SUPPORTED,
                       textColor: AppColors.white,
                       backgroundColor: Colors.blue,
                       paddingHorizontal: 2,

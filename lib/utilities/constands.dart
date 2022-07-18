@@ -81,6 +81,9 @@ const ORDER_CANCELLED_BODY = 'Your order was cancelled';
 const ADVERTISEMENT_TITLE = 'Order Cancelled';
 const ADVERTISEMENT_BODY = 'Your order was cancelled';
 
+const CALLING_NOT_SUPPORTED = "Calling not supported for this device";
+const CALL = "Call";
+
 const APP_SIGNATURE = "jDFUomnf9Pp";
 
 const TERMS_AND_CONDITIONS = '''
