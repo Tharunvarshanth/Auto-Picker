@@ -202,7 +202,8 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
   }
 
   Widget mapWindow() {
-    return Expanded(
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: GoogleMap(
         mapType: MapType.normal,
         onMapCreated: _onMapCreated,
@@ -230,82 +231,73 @@ class _FindNearByMechanicsPageState extends State<FindNearByMechanicsPage> {
       resizeToAvoidBottomInset: false,
       body: isLoading
           ? const Center(child: (CircularProgressIndicator()))
-          : SafeArea(
-              child: Padding(
-                  padding: !isShowMap
-                      ? const EdgeInsets.symmetric(horizontal: 10, vertical: 20)
-                      : const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                  child: !isShowMap
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Expanded(
-                                  child: TextFormField(
-                                    maxLength: 4,
-                                    keyboardType: TextInputType.number,
-                                    controller: distanceController,
-                                    decoration: const InputDecoration(
-                                        counterText: "",
-                                        hintText: 'Enter distance in KM ',
-                                        suffixText: ' Km'),
-                                    onChanged: (text) {},
-                                  ),
-                                ),
-                                IconButton(
-                                    onPressed: () {
-                                      if (distanceController.text != null &&
-                                          (distanceController.text).trim() !=
-                                              '' &&
-                                          (distanceController.text)
-                                              .isNotEmpty) {
-                                        nearByDistance = double.parse(
-                                            distanceController.text);
-                                        handleNearByMechanics();
-                                      }
-                                    },
-                                    icon: const Icon(Icons.search))
-                              ],
+          : !isShowMap
+              ? Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              maxLength: 4,
+                              keyboardType: TextInputType.number,
+                              controller: distanceController,
+                              decoration: const InputDecoration(
+                                  counterText: "",
+                                  hintText: 'Enter distance in KM ',
+                                  suffixText: ' Km'),
+                              onChanged: (text) {},
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                GenericText(
-                                  text:
-                                      "Current Distance : ${nearByDistance} Km",
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height:
-                                  MediaQuery.of(context).size.height * 3 / 5,
-                              child: ListView.builder(
-                                controller: _controller,
-                                itemCount: mechanicListFiltered.length,
-                                itemBuilder: (context, index) {
-                                  return ServiceCardNearByMechanic(
-                                    padding: 20,
-                                    miniTitle:
-                                        mechanicListFiltered[index].specialist,
-                                    miniSubTitle: 'Specialist Field',
-                                    location:
-                                        mechanicListFiltered[index].workingCity,
-                                    buttonTitle: 'More Info',
-                                    distance: distanceList[index],
-                                    buttonPressed: () =>
-                                        navigateToMechanicProfilePage(index),
-                                    openHours:
-                                        "${TwentryFourTo12HourFormat(mechanicListFiltered[index].workingTime_From)} - ${TwentryFourTo12HourFormat(mechanicListFiltered[index].workingTime_To)}",
-                                  );
-                                },
-                              ),
-                            )
-                          ],
-                        )
-                      : mapWindow()),
-            ),
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                if (distanceController.text != null &&
+                                    (distanceController.text).trim() != '' &&
+                                    (distanceController.text).isNotEmpty) {
+                                  nearByDistance =
+                                      double.parse(distanceController.text);
+                                  handleNearByMechanics();
+                                }
+                              },
+                              icon: const Icon(Icons.search))
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          GenericText(
+                            text: "Current Distance : ${nearByDistance} Km",
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 3 / 5,
+                        child: ListView.builder(
+                          controller: _controller,
+                          itemCount: mechanicListFiltered.length,
+                          itemBuilder: (context, index) {
+                            return ServiceCardNearByMechanic(
+                              padding: 20,
+                              miniTitle: mechanicListFiltered[index].specialist,
+                              miniSubTitle: 'Specialist Field',
+                              location: mechanicListFiltered[index].workingCity,
+                              buttonTitle: 'More Info',
+                              distance: distanceList[index],
+                              buttonPressed: () =>
+                                  navigateToMechanicProfilePage(index),
+                              openHours:
+                                  "${TwentryFourTo12HourFormat(mechanicListFiltered[index].workingTime_From)} - ${TwentryFourTo12HourFormat(mechanicListFiltered[index].workingTime_To)}",
+                            );
+                          },
+                        ),
+                      )
+                    ],
+                  ))
+              : mapWindow(),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           setState(() {
