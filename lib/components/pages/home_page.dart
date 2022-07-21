@@ -292,135 +292,199 @@ class _HomePageState extends State<HomePage> {
     }
 
     getLogged();
+    bool _pinned = true;
+    bool _snap = false;
+    bool _floating = false;
 
     return SafeArea(
         child: isLoading
             ? Center(child: CircularProgressIndicator())
             : Scaffold(
-                appBar: CustomAppBar(
+                /* appBar: CustomAppBar(
                   showBackButton: false,
                   title: 'Home',
                   isLogged: isLogged,
-                ),
-                body: Padding(
+                ),*/
+                body:
+                    /*Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: SingleChildScrollView(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (advertisementList.isNotEmpty)
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              GenericText(
-                                text: 'Advertisements',
-                                isBold: true,
-                                textSize: 24,
+                  child:*/
+                    CustomScrollView(slivers: <Widget>[
+                  SliverAppBar(
+                    pinned: _pinned,
+                    snap: _snap,
+                    floating: _floating,
+                    backgroundColor: AppColors.themePrimary,
+                    automaticallyImplyLeading: false,
+                    expandedHeight: 140.0,
+                    flexibleSpace: FlexibleSpaceBar(
+                        centerTitle: false,
+                        titlePadding: EdgeInsets.fromLTRB(20, 15, 0, 10),
+                        title: Text('Welcome To Auto Picker'),
+                        background: Container(
+                          padding: EdgeInsets.all(25),
+                          child: null,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image:
+                                  ExactAssetImage("assets/images/Asset-2.png"),
+                              fit: BoxFit.none,
+                            ),
+                          ),
+                        )),
+                    actions: <Widget>[
+                      if (!isLogged)
+                        Padding(
+                          padding: EdgeInsets.all(15),
+                          child: GestureDetector(
+                            onTap: () => Navigator.of(context)
+                                ?.pushNamed(RouteGenerator.loginPage),
+                            child: const Text(
+                              'Login',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        )
+                    ],
+                  ),
+                  SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (advertisementList.isNotEmpty)
+                              Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    GenericText(
+                                      text: 'Advertisements',
+                                      isBold: true,
+                                      textSize: 24,
+                                    ),
+                                    GenericTextButton(
+                                      isBold: true,
+                                      color: AppColors.darkBlue,
+                                      text: 'See All',
+                                      onPressed: () {
+                                        navigate(
+                                            context,
+                                            RouteGenerator
+                                                .advertisementListingPage);
+                                      },
+                                    ),
+                                  ]),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            if (advertisementList.isNotEmpty)
+                              CustomCarouselAdvertisement(
+                                items: advertisementList,
+                                onPressedAd: (index) =>
+                                    navigateToAdvertisementPage(index),
                               ),
-                              GenericTextButton(
-                                isBold: true,
-                                color: AppColors.darkBlue,
-                                text: 'See All',
-                                onPressed: () {
-                                  navigate(context,
-                                      RouteGenerator.advertisementListingPage);
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  GenericText(
+                                      text: 'Mechanics',
+                                      isBold: true,
+                                      textSize: 24),
+                                  GenericTextButton(
+                                    isBold: true,
+                                    color: AppColors.darkBlue,
+                                    text: 'See All',
+                                    onPressed: () {
+                                      if (isLogged) {
+                                        navigate(
+                                            context,
+                                            RouteGenerator
+                                                .mechanicsListingPage);
+                                      } else {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) =>
+                                                ItemDialogMessage(
+                                                  icon:
+                                                      'assets/images/x-circle.svg',
+                                                  titleText: 'Need to Signin',
+                                                  bodyText:
+                                                      "Auto picker terms & conditions without an account user's cann't see detail view",
+                                                  primaryButtonText: 'Ok',
+                                                  onPressedPrimary: () =>
+                                                      Navigator.pop(
+                                                          context, 'Cancel'),
+                                                ));
+                                      }
+                                    },
+                                  ),
+                                ]),
+                            const SizedBox(
+                              height: 0,
+                            ),
+                            MechanicsHorizontalItemScroll(
+                                ImageTileList: mechanicList,
+                                onReachMax: () {
+                                  return Future.value([]);
+                                }),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  GenericText(
+                                    text: 'Products',
+                                    isBold: true,
+                                    textSize: 24,
+                                  ),
+                                  GenericTextButton(
+                                    text: "See All",
+                                    isBold: true,
+                                    color: AppColors.darkBlue,
+                                    onPressed: () {
+                                      navigate(context,
+                                          RouteGenerator.productsListingPage);
+                                    },
+                                  ),
+                                ]),
+                            Container(
+                              margin: EdgeInsets.symmetric(
+                                  vertical: 20, horizontal: 5),
+                              height: productList.length < 4 ? 250 : 400,
+                              child: ListView.builder(
+                                controller: controller,
+                                itemCount: productList.length ?? 0,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () => navigateToProductPage(index),
+                                    child: ProductTile(
+                                      imgUrl: productList[index].imagesList[0],
+                                      title: productList[index].title,
+                                      description:
+                                          productList[index].description,
+                                      price: "${productList[index].price} rs",
+                                    ),
+                                  );
                                 },
                               ),
-                            ]),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      if (advertisementList.isNotEmpty)
-                        CustomCarouselAdvertisement(
-                          items: advertisementList,
-                          onPressedAd: (index) =>
-                              navigateToAdvertisementPage(index),
+                            ),
+                          ],
                         ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GenericText(
-                                text: 'Mechanics', isBold: true, textSize: 24),
-                            GenericTextButton(
-                              isBold: true,
-                              color: AppColors.darkBlue,
-                              text: 'See All',
-                              onPressed: () {
-                                if (isLogged) {
-                                  navigate(context,
-                                      RouteGenerator.mechanicsListingPage);
-                                } else {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) => ItemDialogMessage(
-                                            icon: 'assets/images/x-circle.svg',
-                                            titleText: 'Need to Signin',
-                                            bodyText:
-                                                "Auto picker terms & conditions without an account user's cann't see detail view",
-                                            primaryButtonText: 'Ok',
-                                            onPressedPrimary: () =>
-                                                Navigator.pop(
-                                                    context, 'Cancel'),
-                                          ));
-                                }
-                              },
-                            ),
-                          ]),
-                      const SizedBox(
-                        height: 0,
-                      ),
-                      MechanicsHorizontalItemScroll(
-                          ImageTileList: mechanicList,
-                          onReachMax: () {
-                            return Future.value([]);
-                          }),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GenericText(
-                              text: 'Products',
-                              isBold: true,
-                              textSize: 24,
-                            ),
-                            GenericTextButton(
-                              text: "See All",
-                              isBold: true,
-                              color: AppColors.darkBlue,
-                              onPressed: () {
-                                navigate(context,
-                                    RouteGenerator.productsListingPage);
-                              },
-                            ),
-                          ]),
-                      Container(
-                        margin:
-                            EdgeInsets.symmetric(vertical: 20, horizontal: 5),
-                        height: productList.length < 4 ? 250 : 400,
-                        child: ListView.builder(
-                          controller: controller,
-                          itemCount: productList.length ?? 0,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTap: () => navigateToProductPage(index),
-                              child: ProductTile(
-                                imgUrl: productList[index].imagesList[0],
-                                title: productList[index].title,
-                                description: productList[index].description,
-                                price: "${productList[index].price} rs",
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  )),
-                ),
+                      );
+                    },
+                    childCount: 1,
+                  ))
+                ]),
                 bottomNavigationBar: Footer(
                   isLogged: isLogged,
                   currentIndex: 0,
