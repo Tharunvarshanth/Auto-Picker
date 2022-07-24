@@ -300,16 +300,7 @@ class _HomePageState extends State<HomePage> {
         child: isLoading
             ? Center(child: CircularProgressIndicator())
             : Scaffold(
-                /* appBar: CustomAppBar(
-                  showBackButton: false,
-                  title: 'Home',
-                  isLogged: isLogged,
-                ),*/
-                body:
-                    /*Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child:*/
-                    CustomScrollView(slivers: <Widget>[
+                body: CustomScrollView(slivers: <Widget>[
                   SliverAppBar(
                     pinned: _pinned,
                     snap: _snap,
@@ -318,11 +309,36 @@ class _HomePageState extends State<HomePage> {
                     automaticallyImplyLeading: false,
                     expandedHeight: 140.0,
                     flexibleSpace: FlexibleSpaceBar(
-                        centerTitle: false,
-                        titlePadding: EdgeInsets.fromLTRB(20, 15, 0, 10),
-                        title: Text('Welcome To Auto Picker'),
-                        background: Container(
-                          padding: EdgeInsets.all(25),
+                      /*centerTitle: false,
+                        titlePadding: EdgeInsets.fromLTRB(20, 0, 0, 10),
+                        title: Text('Welcome To Auto Picker'),*/
+                      background: Column(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.fromLTRB(25, 90, 25, 0),
+                            child: null,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: ExactAssetImage(
+                                    "assets/images/Asset-2.png"),
+                                fit: BoxFit.none,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(20, 5, 0, 10),
+                            child: GenericText(
+                              isBold: true,
+                              textAlign: TextAlign.left,
+                              textSize: 22,
+                              color: AppColors.ashWhite,
+                              text: 'Welcome To Auto Picker',
+                            ),
+                          )
+                        ],
+                      ),
+                      /*Container(
+                          padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
                           child: null,
                           decoration: const BoxDecoration(
                             image: DecorationImage(
@@ -331,7 +347,8 @@ class _HomePageState extends State<HomePage> {
                               fit: BoxFit.none,
                             ),
                           ),
-                        )),
+                        )*/
+                    ),
                     actions: <Widget>[
                       if (!isLogged)
                         Padding(
