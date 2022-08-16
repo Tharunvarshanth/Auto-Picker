@@ -61,23 +61,35 @@ class _MenuMoreState extends State<MenuMorePage> {
           children: [
             if (isLogged) ...[
               getTile("Personal Controller",
-                  () => {navigate(context, RouteGenerator.profilePage)}),
+                  () => {navigate(context, RouteGenerator.profilePage)},
+                  borderColor: Color.fromARGB(255, 44, 124, 243),
+                  insideColor: Color.fromARGB(255, 168, 203, 255)),
               getTile("Find Mechanics Nearby", () {
                 navigate(context, RouteGenerator.findNearByMechanicsPage);
-              }),
+              },
+                  borderColor: Color.fromARGB(255, 44, 124, 243),
+                  insideColor: Color.fromARGB(255, 168, 203, 255)),
               getTile("Vehicle Service Records Maintainence", () {
                 navigate(
                     context, RouteGenerator.vehicleServiceMaintainancePage);
-              }),
+              },
+                  borderColor: Color.fromARGB(255, 44, 124, 243),
+                  insideColor: Color.fromARGB(255, 168, 203, 255)),
               getTile("Mechanics", () {
                 navigate(context, RouteGenerator.mechanicsListingPage);
-              }),
+              },
+                  borderColor: Color.fromARGB(255, 44, 124, 243),
+                  insideColor: Color.fromARGB(255, 168, 203, 255)),
               getTile("Products", () {
                 navigate(context, RouteGenerator.productsListingPage);
-              }),
+              },
+                  borderColor: Color.fromARGB(255, 44, 124, 243),
+                  insideColor: Color.fromARGB(255, 168, 203, 255)),
               getTile("My Orders", () {
                 navigate(context, RouteGenerator.myOrdersPage);
-              }),
+              },
+                  borderColor: Color.fromARGB(255, 44, 124, 243),
+                  insideColor: Color.fromARGB(255, 168, 203, 255)),
               getTile("Link Google Account", () {
                 Navigator.push(
                   context,
@@ -87,19 +99,27 @@ class _MenuMoreState extends State<MenuMorePage> {
                     ),
                   ),
                 );
-              }),
+              },
+                  borderColor: Color.fromARGB(255, 44, 124, 243),
+                  insideColor: Color.fromARGB(255, 168, 203, 255)),
             ],
             /*  getTile("Mileage Calculator", () {}),*/
             /*   getTile("Vehicle Information", () {}),*/
             getTile("Fuel Alert Chat", () {
               navigate(context, RouteGenerator.fuelAlertPage);
-            }),
+            },
+                borderColor: Color.fromARGB(255, 44, 124, 243),
+                insideColor: Color.fromARGB(255, 168, 203, 255)),
             getTile("About Us", () {
               navigate(context, RouteGenerator.aboutUsPage);
-            }, borderColor: Colors.transparent),
+            },
+                borderColor: Color.fromARGB(255, 44, 124, 243),
+                insideColor: Color.fromARGB(255, 168, 203, 255)),
             isLogged
                 ? getTile("Logout", () => {signOut()},
-                    textColor: AppColors.blue, borderColor: Colors.transparent)
+                    textColor: Color.fromARGB(199, 0, 0, 0),
+                    borderColor: Color.fromARGB(255, 255, 0, 0),
+                    insideColor: Color.fromARGB(255, 255, 147, 147))
                 : getTile(
                     "Login",
                     () => {
@@ -107,7 +127,8 @@ class _MenuMoreState extends State<MenuMorePage> {
                               ?.pushNamed(RouteGenerator.loginPage)
                         },
                     textColor: AppColors.blue,
-                    borderColor: Colors.transparent)
+                    borderColor: Color.fromARGB(255, 0, 155, 8),
+                    insideColor: Color.fromARGB(255, 96, 253, 104))
           ],
         ),
       ),
@@ -116,14 +137,30 @@ class _MenuMoreState extends State<MenuMorePage> {
 }
 
 Widget getTile(String text, void Function() onPressed,
-    {Color textColor = AppColors.black, Color borderColor = Colors.grey}) {
+    {Color textColor = AppColors.black,
+    Color borderColor = Colors.grey,
+    Color insideColor = Colors.grey}) {
   return GestureDetector(
     onTap: onPressed,
     child: Container(
-      decoration:
-          BoxDecoration(border: Border(bottom: BorderSide(color: borderColor))),
-      margin: EdgeInsets.symmetric(vertical: 4),
-      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+      decoration: BoxDecoration(
+        // gradient: LinearGradient(
+        //   colors: const [
+        //     Color.fromARGB(255, 255, 255, 255),
+        //     Color.fromARGB(255, 168, 203, 255)
+        //   ],
+        //   begin: Alignment.topCenter,
+        //   end: Alignment.bottomCenter,
+        // ),
+        color: insideColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: borderColor,
+          width: 2,
+        ),
+      ),
+      margin: EdgeInsets.symmetric(vertical: 6, horizontal: 2),
+      padding: EdgeInsets.symmetric(horizontal: 18, vertical: 18),
       child: Row(
         children: [
           Expanded(
@@ -132,11 +169,6 @@ Widget getTile(String text, void Function() onPressed,
             style: TextStyle(
                 fontSize: 18, color: textColor, fontWeight: FontWeight.w600),
           )),
-          IconButton(
-            icon: SvgPicture.asset('assets/images/chevron-right.svg'),
-            onPressed: onPressed,
-            color: Colors.cyan,
-          )
         ],
       ),
     ),
