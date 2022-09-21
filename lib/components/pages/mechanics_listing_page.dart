@@ -292,26 +292,26 @@ class _MechanicsListingPageState extends State<MechanicsListingPage> {
         isLogged: isLogged,
         showBackButton: true,
       ),
-      bottomNavigationBar: Footer(
-        isLogged: true,
-        currentIndex: -1,
-      ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               child: Column(
                 children: [
                   const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                   ),
-                  GenericTextButton(
+                  TextButton(
                     onPressed: () => {
                       navigate(context, RouteGenerator.findNearByMechanicsPage)
                     },
-                    text: 'Find Nearby Mechanics',
+                    style: TextButton.styleFrom(
+                        padding: EdgeInsets.symmetric(horizontal: 118),
+                        backgroundColor: Color.fromARGB(255, 0, 134, 11)),
+                    child: const Text('Find Nearby Mechanics',
+                        style: TextStyle(color: Colors.white)),
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

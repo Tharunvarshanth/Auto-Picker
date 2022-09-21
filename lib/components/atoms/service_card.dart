@@ -1,5 +1,6 @@
 import 'package:auto_picker/components/atoms/generic_button.dart';
 import 'package:auto_picker/components/atoms/generic_text.dart';
+import 'package:auto_picker/components/ui/backgroud.dart';
 import 'package:auto_picker/themes/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -32,9 +33,10 @@ class ServiceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       return Container(
-        margin: EdgeInsets.fromLTRB(0, 15, 0, 5),
+        margin: EdgeInsets.fromLTRB(0, 10, 0, 5),
         width: constraints.maxWidth * 1,
         child: Card(
+          color: Color.fromARGB(255, 14, 71, 161),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
@@ -54,11 +56,13 @@ class ServiceCard extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         GenericText(
+                          color: Colors.white,
                           text: miniTitle,
                           textAlign: TextAlign.start,
                           textSize: titleSize ?? 16,
                         ),
                         GenericText(
+                          color: Colors.white,
                           text: miniSubTitle,
                           textAlign: TextAlign.start,
                           textSize: subTitleSize ?? 14,
@@ -72,15 +76,12 @@ class ServiceCard extends StatelessWidget {
                       textColor: AppColors.primaryVariant,
                       onPressed: buttonPressed,
                       borderColor: AppColors.primaryVariant,
-                      backgroundColor: AppColors.skyBlue,
+                      backgroundColor: Color.fromARGB(255, 255, 255, 255),
                       paddingVertical: 5,
                       elevation: 0,
                     )
                   ],
                 ),
-                const Divider(
-                  color: Colors.black45,
-                ),
                 Wrap(
                   direction: Axis.horizontal,
                   alignment: WrapAlignment.spaceBetween,
@@ -89,42 +90,22 @@ class ServiceCard extends StatelessWidget {
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          'Location -',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(fontSize: titleSize),
-                        ),
-                      ],
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                    ),
-                    TextButton(
-                        onPressed: locationPressed,
-                        child:
-                            GenericText(text: location, textSize: subTitleSize))
-                  ],
-                ),
-                const Divider(
-                  color: Colors.black45,
-                ),
-                Wrap(
-                  direction: Axis.horizontal,
-                  alignment: WrapAlignment.spaceBetween,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Working Hours -',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(fontSize: titleSize),
-                        ),
+                        TextButton(
+                            onPressed: locationPressed,
+                            child: GenericText(
+                              text: location,
+                              textSize: subTitleSize,
+                              color: Colors.white,
+                            ))
                       ],
                       crossAxisAlignment: CrossAxisAlignment.start,
                     ),
                     Text(
                       openHours,
-                      style: TextStyle(fontSize: subTitleSize),
+                      style: TextStyle(
+                        fontSize: subTitleSize,
+                        color: Colors.white,
+                      ),
                     )
                   ],
                 ),
@@ -132,6 +113,14 @@ class ServiceCard extends StatelessWidget {
             ),
           ),
         ),
+        // decoration: new BoxDecoration(
+        //   boxShadow: [
+        //     new BoxShadow(
+        //       color: Color.fromARGB(255, 165, 165, 165),
+        //       blurRadius: 0,
+        //     ),
+        //   ],
+        // ),
       );
     });
   }
