@@ -301,6 +301,14 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> with CodeAutoFill {
     return null;
   }
 
+  void authCredential(credential) async {
+    await auth.signInWithCredential(credential).then((value) async {
+      if (value.user != null) {
+        storeDB(value.user.uid);
+      }
+    });
+  }
+
   void _verifyPhone() async {
     setState(() {
       timerCount = 60;
@@ -315,11 +323,14 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> with CodeAutoFill {
           timerCount = 0;
           isLoading = true;
         });
+        print("signup success " + credential.toString());
+        authCredential(credential);
+        /*
         auth.signInWithCredential(credential).then((value) async {
           if (value.user != null) {
             storeDB(value.user.uid);
           }
-        });
+        });*/
       },
       verificationFailed: (FirebaseAuthException e) {
         if (e.code == 'invalid-phone-number') {

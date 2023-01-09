@@ -159,6 +159,15 @@ class _UserSignUpPaymentPageState extends State<UserSignUpPaymentPage> {
               textAlign: TextAlign.center,
               isBold: true,
               textSize: 24,
+              text: 'Please pay and complete your account creation process',
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            GenericText(
+              textAlign: TextAlign.center,
+              isBold: true,
+              textSize: 24,
               text: 'Your account charge $payment',
             ),
             GenericButton(
