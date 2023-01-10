@@ -117,6 +117,13 @@ class _ProductPageState extends State<ProductPage> {
     }
   }
 
+  bool isNumeric(String s) {
+    if (s == null) {
+      return false;
+    }
+    return double.parse(s, (e) => null) != null;
+  }
+
   void makeOrder() {
     showDialog(
         context: context,
@@ -127,9 +134,12 @@ class _ProductPageState extends State<ProductPage> {
                   "You can order your products we will send a notification seller's mobile",
               primaryButtonText: "Done",
               onPressedPrimary: () {
-                if (noOfItemsController.text != null)
-                  print("no of Items ${noOfItemsController.text}");
-                processOrder(noOfItemsController.text);
+                if (noOfItemsController.text != null &&
+                    isNumeric(noOfItemsController.text)) {
+                  print("no of Items ${isNumeric(noOfItemsController.text)}");
+                  processOrder(noOfItemsController.text);
+                }
+                ;
               },
               secondaryButtonText: "Cancel",
               controller: noOfItemsController,
