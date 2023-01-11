@@ -31,8 +31,12 @@ class NotificationTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => {
-        if (messageType == NOTIFICATIONTYPES[0])
+        if (title == ORDERTITLTE)
           {navigate(context, RouteGenerator.orderSellerPage)}
+        else
+          {
+            {navigate(context, RouteGenerator.myOrdersPage)}
+          }
       },
       child: Card(
         shadowColor: read ? Colors.grey : Colors.cyan,

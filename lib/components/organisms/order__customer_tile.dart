@@ -147,7 +147,7 @@ class OrderCustomerTile extends StatelessWidget {
                         ),
                         Text(
                           itemPrice,
-                          style: const TextStyle(fontSize: 16),
+                          style: const TextStyle(fontSize: 12),
                         ),
                       ],
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -164,7 +164,7 @@ class OrderCustomerTile extends StatelessWidget {
                               children: [
                                 const Text(
                                   'Order Status :',
-                                  style: TextStyle(fontSize: 16),
+                                  style: TextStyle(fontSize: 12),
                                 ),
                                 if (!cancelled && !isCompleted && !isConfirmed)
                                   const Text(
@@ -176,12 +176,12 @@ class OrderCustomerTile extends StatelessWidget {
                                     'Cancelled',
                                     style: TextStyle(fontSize: 16),
                                   ),
-                                if (isCompleted)
+                                if (isCompleted && !cancelled)
                                   const Text(
                                     'Completed',
                                     style: TextStyle(fontSize: 16),
                                   ),
-                                if (isConfirmed)
+                                if (isConfirmed && !cancelled)
                                   const Text(
                                     'Confirmed',
                                     style: TextStyle(fontSize: 16),
