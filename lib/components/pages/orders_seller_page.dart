@@ -50,6 +50,9 @@ class _OrdersSellerListState extends State<OrdersSellerListPage> {
   }
 
   void getList() async {
+    setState(() {
+      isLoading = true;
+    });
     ordersList = [];
 
     var user = await userControlller.getUser(auth.currentUser.uid);
@@ -77,13 +80,17 @@ class _OrdersSellerListState extends State<OrdersSellerListPage> {
             productList.add(Product.fromEmptyJson());
           });
         }
-        UserModel _user = (UserModel.fromJson(
-            await userControlller.getUser(element['customerId'])));
-        setState(() {
-          userList.add(_user);
-        });
+        print("customer Id " + element['customerId']);
+        var tempUser = await userControlller
+            .getUserForCustomerOrder(element['customerId']);
+        if (tempUser["fullName"] != null) {
+          UserModel _user = (UserModel.fromJson(tempUser));
+          setState(() {
+            userList.add(_user);
+          });
+        }
       });
-
+      print(auth.currentUser.uid);
       currentUser = UserModel.fromJson(
           await userControlller.getUser(auth.currentUser.uid));
     }

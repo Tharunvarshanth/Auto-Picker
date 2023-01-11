@@ -161,32 +161,33 @@ class OrderTile extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Column(
                       children: [
-                        (!cancelled)
-                            ? ListTile(
-                                trailing: const Text(
-                                  'Completed',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                leading: Checkbox(
-                                  splashRadius: 20,
-                                  materialTapTargetSize:
-                                      MaterialTapTargetSize.padded,
-                                  value: isCompleted,
-                                  onChanged: (bool value) {
-                                    handleIsCompleted();
-                                  },
-                                ))
-                            : const ListTile(
-                                trailing: Text(
-                                  'Cancelled',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                leading: Checkbox(
-                                  splashRadius: 20,
-                                  materialTapTargetSize:
-                                      MaterialTapTargetSize.padded,
-                                  value: true,
-                                )),
+                        if (isConfirmed && !cancelled)
+                          ListTile(
+                              trailing: const Text(
+                                'Completed',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              leading: Checkbox(
+                                splashRadius: 20,
+                                materialTapTargetSize:
+                                    MaterialTapTargetSize.padded,
+                                value: isCompleted,
+                                onChanged: (bool value) {
+                                  handleIsCompleted();
+                                },
+                              )),
+                        if (cancelled)
+                          const ListTile(
+                              trailing: Text(
+                                'Cancelled',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              leading: Checkbox(
+                                splashRadius: 20,
+                                materialTapTargetSize:
+                                    MaterialTapTargetSize.padded,
+                                value: true,
+                              )),
                         if (!isConfirmed)
                           GenericButton(
                             text: 'Confirm Order',
@@ -220,7 +221,7 @@ class OrderTile extends StatelessWidget {
                 children: [
                   Expanded(
                       child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Row(
                       children: [
                         const Text(
@@ -229,7 +230,7 @@ class OrderTile extends StatelessWidget {
                         ),
                         Text(
                           createdTimeStamp,
-                          style: const TextStyle(fontSize: 16),
+                          style: const TextStyle(fontSize: 14),
                         ),
                       ],
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

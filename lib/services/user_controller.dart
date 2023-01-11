@@ -42,12 +42,14 @@ class UserController {
 
   getUser(String uid) async {
     var res;
+    print("Tharunu" + uid);
     await users.doc(uid).get().then((DocumentSnapshot documentSnapshot) {
+      print(documentSnapshot.exists);
       if (documentSnapshot.exists) {
         print('Document data: ${documentSnapshot.data()}');
         res = documentSnapshot.data();
       } else {
-        print('Document does not exist on the database');
+        print('Document does not exist on the database thaun');
         res = false;
       }
     });
@@ -103,5 +105,22 @@ class UserController {
       }
       return null;
     });
+  }
+
+  getUserForCustomerOrder(String uid) async {
+    var res;
+    print("Tharun " + uid);
+    await users.doc(uid).get().then((DocumentSnapshot documentSnapshot) {
+      print(documentSnapshot.exists);
+      if (documentSnapshot.exists) {
+        print('Document data: ${documentSnapshot.data()}');
+        res = documentSnapshot.data();
+        return res;
+      } else {
+        print('Document does not exist on the database thaun');
+        res = false;
+      }
+    });
+    return res;
   }
 }
