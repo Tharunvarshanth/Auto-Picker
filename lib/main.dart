@@ -128,3 +128,8 @@ jDFUomnf9Pp
 release apk +uPgVW2VutO
 flutter build apk
 */
+/*
+Visa : 4916217501611292
+MasterCard : 5307732125531191
+AMEX : 346781005510225
+*/

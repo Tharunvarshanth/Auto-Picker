@@ -1,8 +1,9 @@
 import 'package:payhere_mobilesdk_flutter/payhere_mobilesdk_flutter.dart';
 
 class PayhereService {
-  static const merchant_secret = "4vQwllmb0NO4p87A3Cflp94jqtXX8939W4p5XcHaDpZr";
-  static const merchant_id = "1215483";
+  static const merchant_secret =
+      "MTAzNzY5Mzk5MzIwODg3NjgxNzAxMDkzNzg1MzE2ODQ0MjcyMTA1";
+  static const merchant_id = "1221939";
 
   Map paymentObject = {
     "sandbox": true, // true if using Sandbox Merchant ID
