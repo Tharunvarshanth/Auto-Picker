@@ -37,7 +37,7 @@ class OtpSignUpPage extends StatefulWidget {
   _OtpSignUpPageState createState() => _OtpSignUpPageState();
 }
 
-class _OtpSignUpPageState extends State<OtpSignUpPage> with CodeAutoFill {
+class _OtpSignUpPageState extends State<OtpSignUpPage> {
   FirebaseAuth auth = FirebaseAuth.instance;
   String _verificationCode;
   var userController = UserController();
@@ -58,28 +58,24 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> with CodeAutoFill {
   var advertisementController = AdvertisementController();
   var mFeedbackController = FeedBackController();
 
-  String _otpCode = "";
-  String Appsignature = "{{ app signature }}";
+  var d1 = TextEditingController();
+  var d2 = TextEditingController();
+  var d3 = TextEditingController();
+  var d4 = TextEditingController();
+  var d5 = TextEditingController();
+  var d6 = TextEditingController();
+
+  FocusNode nodeFirst = FocusNode();
+  FocusNode nodeSecond = FocusNode();
+  FocusNode nodeThird = FocusNode();
+  FocusNode nodeFourth = FocusNode();
+  FocusNode nodeFifth = FocusNode();
+  FocusNode nodeSixth = FocusNode();
 
   @override
   void initState() {
     super.initState();
     _verifyPhone();
-    listenForCode();
-
-    SmsAutoFill().getAppSignature.then((signature) {
-      setState(() {
-        Appsignature = signature;
-      });
-    });
-  }
-
-  @override
-  void codeUpdated() {
-    setState(() {
-      _otpCode = code;
-    });
-    autoOtpSubmit(code);
   }
 
   Future<bool> isNumberAlreadyHaveAccount() async {
@@ -289,6 +285,13 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> with CodeAutoFill {
     }
   }
 
+  void autoFill() {
+    setState(() {
+      isLoading = true;
+    });
+    autoOtpSubmit(d1.text + d2.text + d3.text + d4.text + d5.text + d6.text);
+  }
+
   String formattedPhone(String text) {
     String phonenumber = text.trim();
     if (phonenumber.length == 10) {
@@ -303,6 +306,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> with CodeAutoFill {
 
   void authCredential(credential) async {
     await auth.signInWithCredential(credential).then((value) async {
+      print("value" + value.toString());
       if (value.user != null) {
         storeDB(value.user.uid);
       }
@@ -324,6 +328,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> with CodeAutoFill {
           isLoading = true;
         });
         print("signup success " + credential.toString());
+        _timer.cancel();
         authCredential(credential);
         /*
         auth.signInWithCredential(credential).then((value) async {
@@ -389,9 +394,8 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> with CodeAutoFill {
 
   @override
   void dispose() {
-    SmsAutoFill().unregisterListener();
-    _timer.cancel();
     super.dispose();
+    _timer.cancel();
   }
 
   Widget build(BuildContext context) {
@@ -432,23 +436,71 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> with CodeAutoFill {
               textSize: 18,
             ),
             SizedBox(height: 2),
-            PinFieldAutoFill(
-                decoration: UnderlineDecoration(
-                  gapSpace: 10,
-                  textStyle: TextStyle(fontSize: 20, color: Colors.black),
-                  colorBuilder:
-                      FixedColorBuilder(Colors.black.withOpacity(0.3)),
-                ),
-                currentCode: _otpCode,
-                onCodeSubmitted: (prop) => {}, //code submitted callback
-                onCodeChanged: (prop) {
-                  if (prop.length == 6) {
-                    FocusScope.of(context).requestFocus(FocusNode());
-                  }
-                },
-                codeLength: 6 //code length, default 6
-                ),
-            SizedBox(height: 2),
+            Padding(
+                padding: EdgeInsets.fromLTRB(0, 50, 0, 50),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SingleDigitField(
+                        focusNode: nodeFirst,
+                        widthPercentage: 0.1,
+                        fontSize: 16,
+                        controller: d1,
+                        onChanged: (value) => {
+                          if (value != '')
+                            {FocusScope.of(context).requestFocus(nodeSecond)}
+                        },
+                      ),
+                      SingleDigitField(
+                        focusNode: nodeSecond,
+                        widthPercentage: 0.1,
+                        fontSize: 16,
+                        controller: d2,
+                        onChanged: (value) => {
+                          if (value != '')
+                            {FocusScope.of(context).requestFocus(nodeThird)}
+                        },
+                      ),
+                      SingleDigitField(
+                        focusNode: nodeThird,
+                        widthPercentage: 0.1,
+                        fontSize: 16,
+                        controller: d3,
+                        onChanged: (value) => {
+                          if (value != '')
+                            {FocusScope.of(context).requestFocus(nodeFourth)}
+                        },
+                      ),
+                      SingleDigitField(
+                        focusNode: nodeFourth,
+                        widthPercentage: 0.1,
+                        fontSize: 16,
+                        controller: d4,
+                        onChanged: (value) => {
+                          if (value != '')
+                            {FocusScope.of(context).requestFocus(nodeFifth)}
+                        },
+                      ),
+                      SingleDigitField(
+                        focusNode: nodeFifth,
+                        widthPercentage: 0.1,
+                        fontSize: 16,
+                        controller: d5,
+                        onChanged: (value) => {
+                          if (value != '')
+                            {FocusScope.of(context).requestFocus(nodeSixth)}
+                        },
+                      ),
+                      SingleDigitField(
+                        focusNode: nodeSixth,
+                        widthPercentage: 0.1,
+                        fontSize: 16,
+                        controller: d6,
+                        onChanged: (value) => {
+                          if (value != '') {autoFill()}
+                        },
+                      ),
+                    ])),
             GenericText(
               text: 'Resend timer ',
             ),
@@ -456,6 +508,7 @@ class _OtpSignUpPageState extends State<OtpSignUpPage> with CodeAutoFill {
               text: timerCount.toString(),
               isBold: true,
             ),
+            SizedBox(height: 2),
             if (timerCount == 0)
               GenericTextButton(
                 text: ' Resend',

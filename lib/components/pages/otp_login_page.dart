@@ -13,6 +13,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:sms_autofill/sms_autofill.dart';
+import 'package:auto_picker/components/atoms/single_digit_field.dart';
 
 class OtpLoginPage extends StatefulWidget {
   const OtpLoginPage();
@@ -20,7 +21,7 @@ class OtpLoginPage extends StatefulWidget {
   _OtpLoginPage createState() => _OtpLoginPage();
 }
 
-class _OtpLoginPage extends State<OtpLoginPage> with CodeAutoFill {
+class _OtpLoginPage extends State<OtpLoginPage> {
   final scaffoldKey = GlobalKey();
   var userInfo = UserInfoCache();
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -36,29 +37,24 @@ class _OtpLoginPage extends State<OtpLoginPage> with CodeAutoFill {
   Timer _timer;
   String formattedNumber;
 
-  String _otpCode = "";
-  String Appsignature = "{{ app signature }}";
+  var d1 = TextEditingController();
+  var d2 = TextEditingController();
+  var d3 = TextEditingController();
+  var d4 = TextEditingController();
+  var d5 = TextEditingController();
+  var d6 = TextEditingController();
+
+  FocusNode nodeFirst = FocusNode();
+  FocusNode nodeSecond = FocusNode();
+  FocusNode nodeThird = FocusNode();
+  FocusNode nodeFourth = FocusNode();
+  FocusNode nodeFifth = FocusNode();
+  FocusNode nodeSixth = FocusNode();
 
   @override
   void initState() {
     super.initState();
     _numberController = TextEditingController();
-    listenForCode();
-
-    SmsAutoFill().getAppSignature.then((signature) {
-      setState(() {
-        Appsignature = signature;
-      });
-    });
-  }
-
-  @override
-  void codeUpdated() {
-    print("code Updated");
-    setState(() {
-      _otpCode = code;
-    });
-    autoOtpSubmit(code);
   }
 
   void redirect(UserCredential user) async {
@@ -71,6 +67,7 @@ class _OtpLoginPage extends State<OtpLoginPage> with CodeAutoFill {
 
   //testng devices
   void autoOtpSubmit(String code) async {
+    print("auto otp submit");
     setState(() {
       isLoading = true;
     });
@@ -231,13 +228,19 @@ class _OtpLoginPage extends State<OtpLoginPage> with CodeAutoFill {
     return null;
   }
 
+  void autoFill() {
+    setState(() {
+      isLoading = true;
+    });
+    autoOtpSubmit(d1.text + d2.text + d3.text + d4.text + d5.text + d6.text);
+  }
+
   @override
   Future<void> dispose() async {
-    SmsAutoFill().unregisterListener();
+    super.dispose();
     if (_timer != null) {
       _timer.cancel();
     }
-    super.dispose();
   }
 
   @override
@@ -343,24 +346,86 @@ class _OtpLoginPage extends State<OtpLoginPage> with CodeAutoFill {
                         ),
                       ),
                       SizedBox(height: 2),
-                      PinFieldAutoFill(
-                          decoration: UnderlineDecoration(
-                            gapSpace: 10,
-                            textStyle:
-                                TextStyle(fontSize: 20, color: Colors.black),
-                            colorBuilder: FixedColorBuilder(
-                                Colors.black.withOpacity(0.3)),
-                          ),
-                          currentCode: _otpCode,
-                          onCodeSubmitted: (prop) =>
-                              {}, //code submitted callback
-                          onCodeChanged: (prop) {
-                            if (prop.length == 6) {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                            }
-                          },
-                          codeLength: 6 //code length, default 6
-                          ),
+                      Padding(
+                          padding: EdgeInsets.fromLTRB(0, 50, 0, 50),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                SingleDigitField(
+                                  focusNode: nodeFirst,
+                                  widthPercentage: 0.1,
+                                  fontSize: 16,
+                                  controller: d1,
+                                  onChanged: (value) => {
+                                    if (value != '')
+                                      {
+                                        FocusScope.of(context)
+                                            .requestFocus(nodeSecond)
+                                      }
+                                  },
+                                ),
+                                SingleDigitField(
+                                  focusNode: nodeSecond,
+                                  widthPercentage: 0.1,
+                                  fontSize: 16,
+                                  controller: d2,
+                                  onChanged: (value) => {
+                                    if (value != '')
+                                      {
+                                        FocusScope.of(context)
+                                            .requestFocus(nodeThird)
+                                      }
+                                  },
+                                ),
+                                SingleDigitField(
+                                  focusNode: nodeThird,
+                                  widthPercentage: 0.1,
+                                  fontSize: 16,
+                                  controller: d3,
+                                  onChanged: (value) => {
+                                    if (value != '')
+                                      {
+                                        FocusScope.of(context)
+                                            .requestFocus(nodeFourth)
+                                      }
+                                  },
+                                ),
+                                SingleDigitField(
+                                  focusNode: nodeFourth,
+                                  widthPercentage: 0.1,
+                                  fontSize: 16,
+                                  controller: d4,
+                                  onChanged: (value) => {
+                                    if (value != '')
+                                      {
+                                        FocusScope.of(context)
+                                            .requestFocus(nodeFifth)
+                                      }
+                                  },
+                                ),
+                                SingleDigitField(
+                                  focusNode: nodeFifth,
+                                  widthPercentage: 0.1,
+                                  fontSize: 16,
+                                  controller: d5,
+                                  onChanged: (value) => {
+                                    if (value != '')
+                                      {
+                                        FocusScope.of(context)
+                                            .requestFocus(nodeSixth)
+                                      }
+                                  },
+                                ),
+                                SingleDigitField(
+                                  focusNode: nodeSixth,
+                                  widthPercentage: 0.1,
+                                  fontSize: 16,
+                                  controller: d6,
+                                  onChanged: (value) => {
+                                    if (value != '') {autoFill()}
+                                  },
+                                ),
+                              ])),
                       SizedBox(height: 2),
                       GenericText(
                         text: 'Resend timer ',

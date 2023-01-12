@@ -5,12 +5,16 @@ class SingleDigitField extends StatelessWidget {
   double fontSize;
   double borderRadius;
   TextEditingController controller;
+  Function onChanged;
+  FocusNode focusNode;
   SingleDigitField(
       {Key key,
       this.borderRadius = 5,
       this.fontSize = 16,
       this.widthPercentage = 0.10,
-      this.controller})
+      this.controller,
+      this.onChanged,
+      this.focusNode})
       : super(key: key);
 
   @override
@@ -18,6 +22,8 @@ class SingleDigitField extends StatelessWidget {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.12,
       child: TextField(
+        onChanged: onChanged,
+        focusNode: focusNode,
         controller: controller,
         textAlign: TextAlign.center,
         maxLength: 1,
