@@ -67,7 +67,6 @@ class _OtpLoginPage extends State<OtpLoginPage> {
 
   //testng devices
   void autoOtpSubmit(String code) async {
-    print("auto otp submit");
     setState(() {
       isLoading = true;
     });
@@ -170,13 +169,11 @@ class _OtpLoginPage extends State<OtpLoginPage> {
         });
       },
       codeSent: (String verificationId, int resendToken) {
-        print("codeSent ${verificationId}");
         setState(() {
           _verificationCode = verificationId;
         });
       },
       codeAutoRetrievalTimeout: (String verificationId) {
-        print("codeAutoRetrievalTimeout ${verificationId}");
         setState(() {
           timerCount = 0;
           _verificationCode = '';

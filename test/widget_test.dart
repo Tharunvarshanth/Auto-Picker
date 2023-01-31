@@ -5,26 +5,37 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:auto_picker/components/pages/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_driver/flutter_driver.dart' as d;
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:flutter_driver/driver_extension.dart';
 import 'package:auto_picker/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+  enableFlutterDriverExtension();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  group('Home Screen Test', () {
+    d.FlutterDriver driver;
+    setUpAll(() async {
+      // Connects to the app
+      driver = await d.FlutterDriver.connect();
+    });
+    tearDownAll(() async {
+      if (driver != null) {
+        // Closes the connection
+        driver.close();
+      }
+    });
+    testWidgets('Home Page has a title and message', (tester) async {
+      await tester.pumpWidget(const HomePage());
+      final titleFinder = find.text('Mechanics');
+      final messageFinder = find.text('M');
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+      // Use the `findsOneWidget` matcher provided by flutter_test to verify
+      // that the Text widgets appear exactly once in the widget tree.
+      expect(titleFinder, findsOneWidget);
+      expect(messageFinder, findsOneWidget);
+    });
   });
 }
