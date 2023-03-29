@@ -10,6 +10,9 @@ class LocationServices {
     var response = await http.get(Uri.parse(url));
     var json = convert.jsonDecode(response.body);
     print("LocationServices:getPlaceId ${json}");
+    if (json["candidates"].length == 0) {
+      return "";
+    }
     var placeId = json["candidates"][0]['place_id'] as String;
     return placeId;
   }

@@ -88,6 +88,9 @@ class MapLatLonPageState extends State<MapLatLonPage> {
                     onPressed: () async {
                       var place = await LocationServices()
                           .getPlace(searchController.text);
+                      if (place == "" || place == null) {
+                        return;
+                      }
                       _goToPlaces(place);
                     },
                     icon: Icon(Icons.search))
