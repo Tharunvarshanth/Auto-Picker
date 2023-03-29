@@ -188,7 +188,7 @@ class OrderTile extends StatelessWidget {
                                     MaterialTapTargetSize.padded,
                                 value: true,
                               )),
-                        if (!isConfirmed)
+                        if (!isConfirmed && !cancelled)
                           GenericButton(
                             text: 'Confirm Order',
                             paddingVertical: 0,

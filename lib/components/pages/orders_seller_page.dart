@@ -116,6 +116,12 @@ class _OrdersSellerListState extends State<OrdersSellerListPage> {
     notificationController.addNotification(no, ordersList[index].customerId);
     var res = await orderController.updateOrderField(
         ordersList[index], 'isConfirmed', true);
+
+    Future.delayed(const Duration(milliseconds: 4000), () {
+      setState(() {
+        getList();
+      });
+    });
   }
 
   void cancelOrder(int index) async {
